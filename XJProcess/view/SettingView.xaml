@@ -1,0 +1,169 @@
+﻿<Window x:Class="XJProcess.view.SettingView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CẤU HÌNH HỆ THỐNG CHI TIẾT" Height="700" Width="1000"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Transparent"
+        WindowState="Maximized">
+
+    <Border Background="#F8FAFC" CornerRadius="8" BorderBrush="#0284C7" BorderThickness="2">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="0,0,0,15">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Width="8" Height="26" Background="#0284C7" Margin="0,0,10,0"/>
+                    <TextBlock Text="THÔNG SỐ CÀI ĐẶT HỆ THỐNG BỒN QUAY" Foreground="#0F172A" FontSize="20" FontWeight="Bold"/>
+                </StackPanel>
+            </Grid>
+
+            <Border Grid.Row="1" Background="#FFFFFF" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="6" Padding="20">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+
+                        <!-- NHÓM 1: CẤU HÌNH THIẾT BỊ & KẾT NỐI -->
+                        <TextBlock Text="1. CẤU HÌNH THIẾT BỊ &amp; MẠNG (CONNECTIVITY)" Style="{StaticResource SectionHeaderStyle}"/>
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Mã bồn quay" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtDrumId" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Địa chỉ IP" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtIpAddress" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="4">
+                                <TextBlock Text="WebSocket (Port)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtWebSocketPort" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="URL API Backend" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtApiUrl" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Tần số gửi tin (ms)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtPingInterval" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="4">
+                                <TextBlock Text="Thời gian Timeout (s)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtTimeout" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Separator Background="#E2E8F0" Margin="0,0,0,15"/>
+
+                        <!-- NHÓM 2: THÔNG SỐ VẬN HÀNH BỒN QUAY -->
+                        <TextBlock Text="2. THÔNG SỐ VẬN HÀNH BỒN QUAY (MOTOR &amp; DRUM)" Style="{StaticResource SectionHeaderStyle}"/>
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Tốc độ xoay mặc định (RPM)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtDefaultSpeed" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Thời gian đảo chiều (giây)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtReverseDelay" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="4">
+                                <TextBlock Text="Gia tốc Motor (Acceleration)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtMotorAccel" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Góc xoay thủ công Up/Down (°)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtStepAngle" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Thời gian dừng khẩn cấp (s)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtStopDelay" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="4">
+                                <TextBlock Text="Chế độ chạy mặc định" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtDefaultMode" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Separator Background="#E2E8F0" Margin="0,0,0,15"/>
+
+                        <!-- NHÓM 3: NGUYÊN LIỆU & GIỚI HẠN AN TOÀN -->
+                        <TextBlock Text="3. GIỚI HẠN AN TOÀN &amp; CẢNH BÁO (SAFETY LIMITS)" Style="{StaticResource SectionHeaderStyle}"/>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Giới hạn nhiệt độ tối đa (°C)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtMaxTemp" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Áp suất tối đa cho phép (Bar)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtMaxPressure" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="4">
+                                <TextBlock Text="Tải trọng tối đa bồn (Kg)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="TxtMaxWeight" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                            </StackPanel>
+                        </Grid>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+                <Button Content="Hủy" Width="120" Height="42" Margin="0,0,10,0" FontSize="14" FontWeight="SemiBold"
+                        Background="#C62828" Style="{StaticResource OverViewButtonStyle}" Click="BtnClose_Click"/>
+                <Button Content="💾 Lưu cấu hình" Width="180" Height="42" FontSize="14" FontWeight="SemiBold"
+                        Background="#FF4169E1" Style="{StaticResource OverViewButtonStyle}" Click="BtnSave_Click"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
