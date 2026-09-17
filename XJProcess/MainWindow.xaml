@@ -3,11 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:helix="http://helix-toolkit.org/wpf"
-        xmlns:local="clr-namespace:XJProcess"
         xmlns:view="clr-namespace:XJProcess.view"
         mc:Ignorable="d"
-        Title="XJProcess - Industrial Dashboard" Height="1080" Width="1920"
+        Title="XJProcess - Industrial Dashboard" Height="768" Width="1024"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         WindowStyle="None"
@@ -15,42 +13,48 @@
         Closed="Window_Closed">
 
     <Grid>
-        <Grid x:Name="MainContentGrid">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="480"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <Viewbox Stretch="Uniform">
+            <Grid x:Name="MainContentGrid" Width="1920" Height="1080">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="480"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="200"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="200"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <!-- Background Image -->
-            <Image Source="/Images/background.png" 
-                   Stretch="UniformToFill" 
-                   Grid.RowSpan="2" 
-                   Grid.ColumnSpan="2"
-                   RenderTransformOrigin="0.5,0.5">
-                <Image.RenderTransform>
-                    <ScaleTransform ScaleX="1.05" ScaleY="1.05"/>
-                </Image.RenderTransform>
-                <Image.Effect>
-                    <BlurEffect Radius="90" KernelType="Gaussian"/>
-                </Image.Effect>
-            </Image>
+                <!-- Background Image -->
+                <Image Source="/Images/background.png" 
+                       Stretch="UniformToFill" 
+                       Grid.RowSpan="2" 
+                       Grid.ColumnSpan="2"
+                       RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
+                        <ScaleTransform ScaleX="1.05" ScaleY="1.05"/>
+                    </Image.RenderTransform>
+                    <Image.Effect>
+                        <BlurEffect Radius="90" KernelType="Gaussian"/>
+                    </Image.Effect>
+                </Image>
 
-            <!-- HEADER CONFIG -->
-            <view:HeaderConfig Grid.Row="0" Grid.ColumnSpan="2" x:Name="HeaderConfigControl"/>
+                <!-- HEADER CONFIG -->
+                <Border Grid.Row="0" Grid.ColumnSpan="2">
+                    <view:HeaderConfig x:Name="HeaderConfigControl"/>
+                </Border>
 
-            <!-- BOTTOM-LEFT -->
-            <Border Grid.Row="1" Grid.Column="0">
-                <view:DrumConfig x:Name="DrumConfig"/>
-            </Border>
+                <!-- BOTTOM-LEFT -->
+                <Border Grid.Row="1" Grid.Column="0">
+                    <view:DrumConfig x:Name="DrumConfig"/>
+                </Border>
 
-            <!-- BOTTOM-RIGHT -->
-            <view:DataGridView Grid.Row="1" Grid.Column="1" x:Name="DataGridViewControl"/>
-        </Grid>
+                <!-- BOTTOM-RIGHT -->
+                <Border Grid.Row="1" Grid.Column="1">
+                    <view:DataGridView x:Name="DataGridViewControl"/>
+                </Border>
+            </Grid>
+        </Viewbox>
 
         <Grid x:Name="OverlayBlurGrid" Visibility="Collapsed">
             <Border Background="#A0FFFFFF" />
