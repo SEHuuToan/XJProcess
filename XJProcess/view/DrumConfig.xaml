@@ -8,7 +8,6 @@
              d:DesignHeight="800" d:DesignWidth="480">
 
     <UserControl.Resources>
-        <!-- Style nút bấm dùng riêng cho DrumConfig -->
         <Style x:Key="OverViewButtonStyle" TargetType="Button">
             <Setter Property="Foreground" Value="#FFFFFF"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -43,9 +42,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Border BorderBrush="#33FFFFFF" 
-            BorderThickness="0,0,1,0" 
-            Padding="15">
+    <Border BorderBrush="#33FFFFFF" BorderThickness="0,0,1,0" Padding="15">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
@@ -88,7 +85,7 @@
                 </Grid>
             </Grid>
 
-            <!-- Khối Điều khiển & Bút bấm -->
+            <!-- Khối Điều khiển & Nút bấm -->
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="35"/>
@@ -113,6 +110,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
+                    <!-- Toggle Mode Switch -->
                     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="12,0,0,12">
                         <ToggleButton x:Name="TglMode" 
                                       Style="{StaticResource ModernToggleSwitch}" 
@@ -120,6 +118,7 @@
                                       Unchecked="TglMode_Unchecked"/>
                     </StackPanel>
 
+                    <!-- Hàng 1: Thời gian vận hành -->
                     <Grid Grid.Row="1" Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="155"/>
@@ -132,6 +131,7 @@
                                  DataObject.Pasting="TextBox_Pasting"/>
                     </Grid>
 
+                    <!-- Hàng 2: Thời gian đảo chiều -->
                     <Grid Grid.Row="2" Margin="0,0,0,12">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="155"/>
@@ -144,23 +144,16 @@
                                  DataObject.Pasting="TextBox_Pasting"/>
                     </Grid>
 
+                    <!-- Hàng 3: Trạng thái bồn quay -->
                     <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2,0,0,0">
                         <TextBlock Text="Chế độ:                            " FontSize="14" Foreground="#FFFFFF" VerticalAlignment="Center"/>
                         <Border Background="#00C853" CornerRadius="6" Padding="8,4" VerticalAlignment="Center">
                             <TextBlock x:Name="TxtButtonStatus" Text="" FontSize="14" FontWeight="SemiBold" Foreground="#FFFFFF"/>
                         </Border>
                     </StackPanel>
-
-                    <StackPanel Grid.Row="4" Grid.Column="0" Margin="10">
-                        <TextBlock Text="Mã đơn quét được:" FontWeight="Bold" FontSize="14" />
-                        <TextBlock x:Name="txtScannedResult" 
-                                   Text="Chưa có dữ liệu..." 
-                                   FontSize="16" 
-                                   Foreground="Blue" 
-                                   Margin="0,5,0,0" />
-                    </StackPanel>
                 </Grid>
 
+                <!-- Các nút CHẠY / DỪNG / XOAY -->
                 <WrapPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Button x:Name="BtnStart" 
                             Width="95" Height="90"

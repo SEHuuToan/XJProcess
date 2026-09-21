@@ -7,9 +7,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
-using System.Windows.Threading;
 using HelixToolkit.Wpf;
 using XJProcess.service;
+using XJProcess.services;
 
 namespace XJProcess.view
 {
@@ -18,16 +18,7 @@ namespace XJProcess.view
         private readonly View3DService _view3DService = new View3DService();
         private readonly AxisAngleRotation3D _spinnerRotation = new AxisAngleRotation3D(new Vector3D(1, 0, 0), 0);
 
-        private DispatcherTimer _reverseTimer;
-        private bool _isSpinning = false;
-        private bool _isForwardDirection = true;
-        private bool _isAutoMode = false;
-
-        public event EventHandler<int>? ManualStartRequested;
-        public event EventHandler? StartRequested;
-        public event EventHandler? StopRequested;
-
-        public bool IsSpinning => _isSpinning;
+        public MainService? Service { get; set; }
 
         public DrumConfig()
         {
@@ -36,16 +27,10 @@ namespace XJProcess.view
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) return;
 
             Init3DScene();
-            InitReverseTimer();
 
             if (TxtButtonStatus != null) TxtButtonStatus.Text = "Xoay Xuống";
-            SetReverseInputState(false);
-        }
 
-        private void InitReverseTimer()
-        {
-            _reverseTimer = new DispatcherTimer();
-            _reverseTimer.Tick += ReverseTimer_Tick;
+            SetInputControlsState(false);
         }
 
         private void Init3DScene()
@@ -68,45 +53,48 @@ namespace XJProcess.view
             }
         }
 
-        #region Drum Animation & Display API
+        #region Render & Animation UI
 
-        public void StartDrumSpin()
+        public void StartSpinAnimation(bool isForward, bool isAutoMode)
         {
-            ApplySpinAnimation();
-            _isSpinning = true;
-
+            ApplySpinAnimation(isForward);
+            // KHI BỒN ĐANG QUAY: Luôn khóa 2 nút xoay (cả Auto lẫn Thủ công)
             if (BtnRotateUp != null) BtnRotateUp.IsEnabled = false;
             if (BtnRotateDown != null) BtnRotateDown.IsEnabled = false;
             if (TglMode != null) TglMode.IsEnabled = false;
-
-            if (_isAutoMode && int.TryParse(TxtReverseTimeInput?.Text, out int reverseSec) && reverseSec > 0)
+            if (isAutoMode)
             {
-                _reverseTimer.Interval = TimeSpan.FromSeconds(reverseSec);
-                _reverseTimer.Start();
+                Brush disabledBrush = new SolidColorBrush(Color.FromRgb(220, 220, 220));
+                if (TxtRunTimeInput != null) { TxtRunTimeInput.IsEnabled = false; TxtRunTimeInput.Background = disabledBrush; }
+                if (TxtReverseTimeInput != null) { TxtReverseTimeInput.IsEnabled = false; TxtReverseTimeInput.Background = disabledBrush; }
             }
         }
 
-        public void StopDrumSpin()
-        {
-            _reverseTimer?.Stop();
-
-            if (_isSpinning)
-            {
-                double currentAngle = _spinnerRotation.Angle;
-                _spinnerRotation.BeginAnimation(AxisAngleRotation3D.AngleProperty, null);
-                _spinnerRotation.Angle = currentAngle;
-
-                _isSpinning = false;
-                if (BtnRotateUp != null) BtnRotateUp.IsEnabled = !_isAutoMode;
-                if (BtnRotateDown != null) BtnRotateDown.IsEnabled = !_isAutoMode;
-                if (TglMode != null) TglMode.IsEnabled = true;
-            }
-        }
-
-        private void ApplySpinAnimation()
+        public void StopSpinAnimation(bool isAutoMode)
         {
             double currentAngle = _spinnerRotation.Angle;
-            double targetAngle = _isForwardDirection ? currentAngle + 360 : currentAngle - 360;
+            _spinnerRotation.BeginAnimation(AxisAngleRotation3D.AngleProperty, null);
+            _spinnerRotation.Angle = currentAngle;
+
+            // KHI BỒN DỪNG: Chỉ mở lại 2 nút xoay nếu KHÔNG ở AutoMode VÀ KHÔNG có bước DataGrid nào đang chạy
+            bool isDataGridStepActive = Service?.CurrentRunningItem != null;
+            bool disableRotate = isAutoMode || isDataGridStepActive;
+
+            if (BtnRotateUp != null) BtnRotateUp.IsEnabled = !disableRotate;
+            if (BtnRotateDown != null) BtnRotateDown.IsEnabled = !disableRotate;
+            if (TglMode != null) TglMode.IsEnabled = true;
+
+            if (isAutoMode && (TglMode?.IsChecked ?? false))
+            {
+                if (TxtRunTimeInput != null) { TxtRunTimeInput.IsEnabled = true; TxtRunTimeInput.Background = Brushes.White; }
+                if (TxtReverseTimeInput != null) { TxtReverseTimeInput.IsEnabled = true; TxtReverseTimeInput.Background = Brushes.White; }
+            }
+        }
+
+        private void ApplySpinAnimation(bool isForward)
+        {
+            double currentAngle = _spinnerRotation.Angle;
+            double targetAngle = isForward ? currentAngle + 360 : currentAngle - 360;
 
             var spinAnimation = new DoubleAnimation
             {
@@ -119,14 +107,8 @@ namespace XJProcess.view
 
             if (TxtButtonStatus != null)
             {
-                TxtButtonStatus.Text = _isForwardDirection ? "Xoay Xuống" : "Xoay Lên";
+                TxtButtonStatus.Text = isForward ? "Xoay Lên" : "Xoay Xuống";
             }
-        }
-
-        private void ReverseTimer_Tick(object? sender, EventArgs e)
-        {
-            _isForwardDirection = !_isForwardDirection;
-            ApplySpinAnimation();
         }
 
         public void UpdateCountdownDisplay(int remainingSeconds, int? customTotalSeconds = null)
@@ -157,73 +139,133 @@ namespace XJProcess.view
 
         public void UpdateScannedCode(string code)
         {
-            if (txtScannedResult != null)
+            var txt = FindName("txtScannedResult") as TextBlock ?? FindName("TxtScannedResult") as TextBlock;
+            if (txt != null)
             {
-                txtScannedResult.Text = string.IsNullOrEmpty(code) ? "Chưa có dữ liệu..." : code;
+                txt.Text = string.IsNullOrEmpty(code) ? "Chưa có dữ liệu..." : code;
             }
         }
 
         #endregion
 
-        #region Event Handlers UI
+        #region UI Handlers
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            if (TxtRunTimeInput != null && int.TryParse(TxtRunTimeInput.Text, out int inputMinutes) && inputMinutes > 0)
+            if (Service == null) return;
+
+            // 1. Ưu tiên chạy tự động datagridview
+            if (Service.CurrentRunningItem != null)
             {
-                ManualStartRequested?.Invoke(this, inputMinutes);
+                if (Service.IsAutoMode)
+                {
+                    MessageBox.Show("Bạn đang trong một tiến trình, không thể chạy tự động lúc này",
+                                    "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                if (!Service.IsDrumSpinning)
+                {
+                    Service.ToggleStepAction(Service.CurrentRunningItem);
+                }
+                return;
             }
+
+            // 2. Chạy tự động (Auto Mode)
+            if (Service.IsAutoMode)
+            {
+                if (TxtRunTimeInput == null || !int.TryParse(TxtRunTimeInput.Text, out int runMinutes) || runMinutes <= 0)
+                {
+                    MessageBox.Show("Vui lòng nhập thời gian vận hành hợp lệ (số phút > 0)!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                int reverseTime = 0;
+                if (TxtReverseTimeInput != null && int.TryParse(TxtReverseTimeInput.Text, out reverseTime) && reverseTime > 0)
+                {
+                    if (reverseTime >= runMinutes)
+                    {
+                        MessageBox.Show("Thời gian đảo chiều phải nhỏ hơn thời gian vận hành!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                }
+
+                if (Service.IsAutoPaused)
+                {
+                    if (Service.ConvertTime(runMinutes) == Service.TotalTimer)
+                    {
+                        Service.ResumeAuto();
+                    }
+                    else
+                    {
+                        Service.StartAuto(runMinutes, reverseTime);
+                    }
+                    return;
+                }
+                Service.StartAuto(runMinutes, reverseTime);
+            }
+            // 3. Chạy thủ công (Manual Mode)
             else
             {
-                StartRequested?.Invoke(this, EventArgs.Empty);
+                Service.StartManual();
             }
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
-            StopRequested?.Invoke(this, EventArgs.Empty);
+            Service?.StopCurrentStep();
         }
 
         private void BtnRotateUp_Click(object sender, RoutedEventArgs e)
         {
-            if (_isAutoMode) return;
-            _isForwardDirection = false;
-            if (_isSpinning) ApplySpinAnimation();
+            if (Service == null || Service.IsAutoMode || Service.CurrentRunningItem != null || Service.IsDrumSpinning) return;
+            Service.ToggleDirection(true);
             if (TxtButtonStatus != null) TxtButtonStatus.Text = "Xoay Lên";
         }
 
         private void BtnRotateDown_Click(object sender, RoutedEventArgs e)
         {
-            if (_isAutoMode) return;
-            _isForwardDirection = true;
-            if (_isSpinning) ApplySpinAnimation();
+            if (Service == null || Service.IsAutoMode || Service.CurrentRunningItem != null || Service.IsDrumSpinning) return;
+            Service.ToggleDirection(false);
             if (TxtButtonStatus != null) TxtButtonStatus.Text = "Xoay Xuống";
         }
 
         private void TglMode_Checked(object sender, RoutedEventArgs e)
         {
-            _isAutoMode = true;
+            if (Service != null) Service.IsAutoMode = true;
+            SetInputControlsState(true);
             if (BtnRotateUp != null) BtnRotateUp.IsEnabled = false;
             if (BtnRotateDown != null) BtnRotateDown.IsEnabled = false;
-            SetReverseInputState(true);
         }
 
         private void TglMode_Unchecked(object sender, RoutedEventArgs e)
         {
-            _isAutoMode = false;
-            if (BtnRotateUp != null) BtnRotateUp.IsEnabled = true;
-            if (BtnRotateDown != null) BtnRotateDown.IsEnabled = true;
-            SetReverseInputState(false);
+            if (Service != null)
+            {
+                Service.IsAutoMode = false;
+                Service.IsAutoPaused = false;
+            }
+            SetInputControlsState(false);
+            bool isStepActive = Service?.CurrentRunningItem != null;
+            bool isSpinning = Service?.IsDrumSpinning ?? false;
+            // Chỉ mở lại nút xoay khi không chạy bước DataGrid và bồn đang dừng
+            if (BtnRotateUp != null) BtnRotateUp.IsEnabled = !isStepActive && !isSpinning;
+            if (BtnRotateDown != null) BtnRotateDown.IsEnabled = !isStepActive && !isSpinning;
         }
 
-        private void SetReverseInputState(bool isEnabled)
+        private void SetInputControlsState(bool isAuto)
         {
+            Brush bgBrush = isAuto ? Brushes.White : new SolidColorBrush(Color.FromRgb(220, 220, 220));
+
+            if (TxtRunTimeInput != null)
+            {
+                TxtRunTimeInput.IsEnabled = isAuto;
+                TxtRunTimeInput.Background = bgBrush;
+            }
+
             if (TxtReverseTimeInput != null)
             {
-                TxtReverseTimeInput.IsEnabled = isEnabled;
-                TxtReverseTimeInput.Background = isEnabled
-                    ? Brushes.White
-                    : new SolidColorBrush(Color.FromRgb(220, 220, 220));
+                TxtReverseTimeInput.IsEnabled = isAuto;
+                TxtReverseTimeInput.Background = bgBrush;
             }
         }
 

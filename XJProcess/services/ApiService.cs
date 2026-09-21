@@ -49,7 +49,7 @@ namespace XJProcess.services
             return true;
         }
 
-        public static async Task<string> LoadDataChemical(string orderCode)
+        public async Task<List<ChemicalDetail>> LoadDataChemical(string orderCode)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace XJProcess.services
                 Console.WriteLine($"Đang gọi LoadDataChemical với mã đơn: {orderCode}");
                 await Task.Delay(500);
 
-                return "Kết quả dữ liệu hóa chất cho mã: " + orderCode;
+                return new List<ChemicalDetail>();
             }
             catch (Exception ex)
             {

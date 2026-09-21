@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using XJProcess.service;
 using XJProcess.services;
+using XJProcess.ultis;
 
 namespace XJProcess
 {
@@ -18,25 +19,29 @@ namespace XJProcess
 
         private void InitServicesAndViews()
         {
-            // 1. Gán MainService cho các UserControl
             HeaderConfigControl.Service = _mainService;
             DataGridViewControl.Service = _mainService;
 
-            // 2. Đăng ký các View vào MainService để lắng nghe & điều khiển tập trung
+            var initialOrder = DataGridViewService.GetFakeOrderHeaderInfo();
+            var initFakeDataDetail = DataGridViewService.GetFakeTechnicalSheetData();
+
+            _mainService.ChemicalList.Clear();
+            foreach (var detail in initFakeDataDetail)
+            {
+                _mainService.ChemicalList.Add(detail);
+            }
+
             _mainService.RegisterViews(HeaderConfigControl, DrumConfig, DataGridViewControl);
 
-            // 3. Nạp dữ liệu mẫu ban đầu qua MainService
-            var initialOrder = DataGridViewService.GetFakeOrderHeaderInfo();
-            HeaderConfigControl.CurrentOrder = initialOrder;
+            _mainService.CurrentOrder = initialOrder;
             HeaderConfigControl.OrderHeaderGrid.DataContext = initialOrder;
-
-            _mainService.LoadOrderData(initialOrder);
         }
 
         #region Window LifeCycle & Scanner
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            _ = _mainService.ConnectPlcAsync("192.168.2.1");
             ScanService.ScanerEvent += ScanService_ScanerEvent;
             bool isStarted = ScanService.Start();
             if (!isStarted)
@@ -55,7 +60,7 @@ namespace XJProcess
         {
             base.OnClosed(e);
             HeaderConfigControl?.StopClockTimer();
-            _mainService?.StopStepTimer();
+            _mainService?.StopOrder();
         }
 
         private void ScanService_ScanerEvent(ScanService.ScanerCodes codes)
@@ -67,7 +72,9 @@ namespace XJProcess
             {
                 try
                 {
-                    var chemicalData = await ApiService.LoadDataChemical(orderCode);
+                    var apiService = new ApiService();
+                    var chemicalData = await apiService.LoadDataChemical(orderCode);
+
                     Dispatcher.Invoke(() =>
                     {
                         DrumConfig.UpdateScannedCode(orderCode);

@@ -9,7 +9,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
-        <!-- STYLE NÚT BẤM OVERVIEW BUTTON -->
+        <!-- STYLE NÚT BẤM -->
         <Style x:Key="OverViewButtonStyle" TargetType="Button">
             <Setter Property="Foreground" Value="#FFFFFF"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -54,13 +54,14 @@
             <TextBlock x:Name="TxtNoOrderMessage" 
                        Grid.Row="1" 
                        Text="Chưa quét đơn bồn quay" 
-                       FontSize="18" 
+                       FontSize="26" 
                        FontWeight="SemiBold" 
-                       Foreground="#888888" 
+                       Foreground="#FFFFFF" 
                        HorizontalAlignment="Center" 
                        VerticalAlignment="Center" 
                        Visibility="Visible"/>
 
+            <!-- OPTIMIZED DATAGRID -->
             <DataGrid Grid.Row="1" 
                       x:Name="MainDataGrid"
                       AutoGenerateColumns="False"
@@ -79,8 +80,17 @@
                       FontSize="16"
                       Foreground="#FFFFFF"
                       SelectionMode="Single"
+                      
+              
+                VirtualizingStackPanel.IsVirtualizing="True"
+                      VirtualizingStackPanel.VirtualizationMode="Recycling"
+                      VirtualizingStackPanel.CacheLength="2,2"
+                      VirtualizingStackPanel.CacheLengthUnit="Page"
+                      ScrollViewer.CanContentScroll="True"
                       ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      EnableRowVirtualization="True"
+                      EnableColumnVirtualization="True">
 
                 <DataGrid.Resources>
                     <Style TargetType="DataGridColumnHeader">
@@ -120,20 +130,19 @@
                 </DataGrid.Resources>
 
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="NO" Width="110">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid VerticalAlignment="Center">
-                                    <TextBlock Text="{Binding StepNo}" 
-                                               HorizontalAlignment="Center" 
-                                               VerticalAlignment="Center" 
-                                               FontWeight="SemiBold" 
-                                               Foreground="#FFFFFF"/>
-                                </Grid>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <!-- NO -->
+                    <DataGridTextColumn Header="NO" Binding="{Binding StepNo}" Width="110">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
 
+                    <!-- CODE -->
                     <DataGridTextColumn Header="CODE" Binding="{Binding Code}" Width="110">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
@@ -143,7 +152,8 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Header="CHEM" Binding="{Binding ChemName}" Width="*">
+                    <!-- CHEM -->
+                    <DataGridTextColumn Header="CHEM" Binding="{Binding ChemicalName}" Width="*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="Padding" Value="8,0"/>
@@ -153,7 +163,8 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Header="KG" Binding="{Binding Kg}" Width="110">
+                    <!-- KG -->
+                    <DataGridTextColumn Header="KG" Binding="{Binding Weight}" Width="110">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -162,38 +173,31 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTemplateColumn Header="°C" Width="110">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Temp}" 
-                                           HorizontalAlignment="Center" 
-                                           VerticalAlignment="Center" 
-                                           Foreground="#FFFFFF" 
-                                           FontWeight="Bold"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <!-- °C -->
+                    <DataGridTextColumn Header="°C" Binding="{Binding Temperature}" Width="110">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
 
-                    <DataGridTemplateColumn Header="h" Width="110">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid VerticalAlignment="Center" HorizontalAlignment="Stretch">
-                                    <TextBlock Text="{Binding DurationDisplay}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FFFFFF">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Style.Triggers>
-                                                    <Trigger Property="Text" Value="">
-                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                </Grid>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <!-- h -->
+                    <DataGridTextColumn Header="h" Binding="{Binding DurationMinutes}" Width="110">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
 
+                    <!-- CHECK -->
                     <DataGridTextColumn Header="CHECK" Binding="{Binding CheckInfo}" Width="110">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
@@ -205,15 +209,12 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
+                    <!-- Status -->
                     <DataGridTemplateColumn Header="Status" Width="160">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border x:Name="myBadge" Background="#00C853" CornerRadius="6" Padding="8, 4" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
-                                    <TextBlock Text="{Binding Status}"
-                                               Foreground="#FFFFFF"
-                                               FontWeight="SemiBold"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Status}" Foreground="#FFFFFF" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding Status}" Value="Đã hoàn thành">
@@ -224,20 +225,19 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
+                    <!-- THAO TÁC -->
                     <DataGridTemplateColumn Header="THAO TÁC" Width="160">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Button Content="{Binding ActionButtonText}" 
-                                            Width="100" Height="40" 
-                                            FontSize="16" FontWeight="Bold"
-                                            Background="{Binding ActionButtonBackground}" 
-                                            Foreground="#FFFFFF"
-                                            Style="{StaticResource OverViewButtonStyle}"
-                                            Click="BtnAction_Click"
-                                            IsEnabled="{Binding IsButtonEnabled}"
-                                            Visibility="{Binding HasAction, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                </Grid>
+                                <Button Content="{Binding ActionButtonText}" 
+                                        Width="100" Height="40" 
+                                        FontSize="16" FontWeight="Bold"
+                                        Background="{Binding ActionButtonBackground}" 
+                                        Foreground="#FFFFFF"
+                                        Style="{StaticResource OverViewButtonStyle}"
+                                        Click="BtnAction_Click"
+                                        IsEnabled="{Binding IsButtonEnabled}"
+                                        Visibility="{Binding HasAction, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
