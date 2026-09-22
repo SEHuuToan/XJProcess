@@ -94,7 +94,7 @@ namespace XJProcess.view
         private void ApplySpinAnimation(bool isForward)
         {
             double currentAngle = _spinnerRotation.Angle;
-            double targetAngle = isForward ? currentAngle + 360 : currentAngle - 360;
+            double targetAngle = isForward ? currentAngle - 360 : currentAngle + 360;
 
             var spinAnimation = new DoubleAnimation
             {

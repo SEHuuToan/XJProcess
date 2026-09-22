@@ -307,6 +307,42 @@ namespace XJProcess.services
             }
         }
 
+        //private void StepTimer_Tick(object? sender, EventArgs e)
+        //{
+        //    if (IsManualRunning)
+        //    {
+        //        return;
+        //    }
+
+        //    if (Timer > 0)
+        //    {
+        //        Timer--;
+        //        _drumConfig?.UpdateCountdownDisplay(Timer, TotalTimer);
+        //        if (ReversePlcTimer > 0)
+        //        {
+        //            _reverseCounter++;
+        //            if (_reverseCounter >= ReversePlcTimer)
+        //            {
+        //                _reverseCounter = 0; // Reset bộ đếm chu kỳ
+        //                ReverseDrum(); // Thực hiện dừng ➔ Đổi chiều ➔ Chạy lại
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        _reverseCounter = 0;
+        //        StopEngine();
+
+        //        if (IsManualRunning)
+        //        {
+        //            IsManualRunning = false;
+        //        }
+        //        else if (CurrentRunningItem != null)
+        //        {
+        //            UnlockAndEnableNextStep(CurrentRunningItem);
+        //        }
+        //    }
+        //}
         private void StepTimer_Tick(object? sender, EventArgs e)
         {
             if (IsManualRunning)
@@ -318,6 +354,8 @@ namespace XJProcess.services
             {
                 Timer--;
                 _drumConfig?.UpdateCountdownDisplay(Timer, TotalTimer);
+
+                // Vẫn thực hiện đếm và đảo chiều bình thường trong suốt quá trình Timer > 0
                 if (ReversePlcTimer > 0)
                 {
                     _reverseCounter++;
@@ -330,6 +368,7 @@ namespace XJProcess.services
             }
             else
             {
+                // Khi Timer đã về 0, ở nhịp Tick tiếp theo mới thực hiện Dừng & Chuyển Step
                 _reverseCounter = 0;
                 StopEngine();
 
@@ -343,41 +382,6 @@ namespace XJProcess.services
                 }
             }
         }
-        //private void StepTimer_Tick(object? sender, EventArgs e)
-        //{
-        //    if (IsManualRunning)
-        //    {
-        //        return;
-        //    }
-
-        //    if (Timer > 0)
-        //    {
-        //        Timer--;
-        //        _drumConfig?.UpdateCountdownDisplay(Timer, TotalTimer);
-
-        //        // TH1: Thời gian vừa đếm về 0 -> Dừng hẳn bồn NGAY LẬP TỨC và chuyển Step
-        //        if (Timer == 0)
-        //        {
-        //            _reverseCounter = 0;
-        //            StopEngine();
-
-        //            if (CurrentRunningItem != null)
-        //            {
-        //                UnlockAndEnableNextStep(CurrentRunningItem);
-        //            }
-        //        }
-        //        // TH2: Vẫn còn thời gian chạy -> Mới xét đến việc đảo chiều
-        //        else if (ReversePlcTimer > 0)
-        //        {
-        //            _reverseCounter++;
-        //            if (_reverseCounter >= ReversePlcTimer)
-        //            {
-        //                _reverseCounter = 0; // Reset bộ đếm chu kỳ
-        //                ReverseDrum(); // Thực hiện dừng ➔ Đổi chiều ➔ Chạy lại
-        //            }
-        //        }
-        //    }
-        //}
 
         public void StopCurrentStep()
         {
