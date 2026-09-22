@@ -112,13 +112,16 @@ namespace XJProcess.services
         private void StartEngine()
         {
             // 1. Cài đặt chiều quay sang PLC
-            if (IsForwardDirection)
+            if (IsManualRunning)
             {
-                PlcUtils.Up();
-            }
-            else
-            {
-                PlcUtils.Down();
+                if (IsForwardDirection)
+                {
+                    PlcUtils.Up();
+                }
+                else
+                {
+                    PlcUtils.Down();
+                }
             }
 
             // 2. Gửi thời gian cài đặt tổng sang PLC
@@ -307,6 +310,42 @@ namespace XJProcess.services
             }
         }
 
+        //private void StepTimer_Tick(object? sender, EventArgs e)
+        //{
+        //    if (IsManualRunning)
+        //    {
+        //        return;
+        //    }
+
+        //    if (Timer > 0)
+        //    {
+        //        Timer--;
+        //        _drumConfig?.UpdateCountdownDisplay(Timer, TotalTimer);
+        //        if (ReversePlcTimer > 0)
+        //        {
+        //            _reverseCounter++;
+        //            if (_reverseCounter >= ReversePlcTimer)
+        //            {
+        //                _reverseCounter = 0; // Reset bộ đếm chu kỳ
+        //                ReverseDrum(); // Thực hiện dừng ➔ Đổi chiều ➔ Chạy lại
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        _reverseCounter = 0;
+        //        StopEngine();
+
+        //        if (IsManualRunning)
+        //        {
+        //            IsManualRunning = false;
+        //        }
+        //        else if (CurrentRunningItem != null)
+        //        {
+        //            UnlockAndEnableNextStep(CurrentRunningItem);
+        //        }
+        //    }
+        //}
         private void StepTimer_Tick(object? sender, EventArgs e)
         {
             if (IsManualRunning)
@@ -318,6 +357,25 @@ namespace XJProcess.services
             {
                 Timer--;
                 _drumConfig?.UpdateCountdownDisplay(Timer, TotalTimer);
+
+                // KHI TIMER VỀ 0 (00:00): Tắt quay bồn ngay lập tức và dừng tiến trình
+                if (Timer == 0)
+                {
+                    _reverseCounter = 0;
+                    StopEngine(); // Tắt bồn, dừng PLC và cập nhật trạng thái IsDrumSpinning = false
+
+                    if (IsManualRunning)
+                    {
+                        IsManualRunning = false;
+                    }
+                    else if (CurrentRunningItem != null)
+                    {
+                        UnlockAndEnableNextStep(CurrentRunningItem);
+                    }
+                    return; // Thoát ngay để không lọt xuống đoạn đảo chiều bên dưới
+                }
+
+                // Timer vẫn còn > 0 thì mới đếm chu kỳ đảo chiều
                 if (ReversePlcTimer > 0)
                 {
                     _reverseCounter++;
