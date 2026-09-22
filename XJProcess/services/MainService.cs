@@ -152,7 +152,7 @@ namespace XJProcess.services
         /// <summary>
         /// Thực hiện quy trình dừng -> Đổi chiều UI & PLC -> Chạy lại
         /// </summary>
-        private void PerformReverseSequence()
+        private void ReverseDrum()
         {
             StopEngine();
             IsForwardDirection = !IsForwardDirection;
@@ -324,7 +324,7 @@ namespace XJProcess.services
         //            if (_reverseCounter >= ReversePlcTimer)
         //            {
         //                _reverseCounter = 0; // Reset bộ đếm chu kỳ
-        //                PerformReverseSequence(); // Thực hiện dừng ➔ Đổi chiều ➔ Chạy lại
+        //                ReverseDrum(); // Thực hiện dừng ➔ Đổi chiều ➔ Chạy lại
         //            }
         //        }
         //    }
@@ -373,7 +373,7 @@ namespace XJProcess.services
                     if (_reverseCounter >= ReversePlcTimer)
                     {
                         _reverseCounter = 0; // Reset bộ đếm chu kỳ
-                        PerformReverseSequence(); // Thực hiện dừng ➔ Đổi chiều ➔ Chạy lại
+                        ReverseDrum(); // Thực hiện dừng ➔ Đổi chiều ➔ Chạy lại
                     }
                 }
             }
