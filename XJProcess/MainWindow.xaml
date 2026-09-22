@@ -17,13 +17,13 @@
     <Grid>
         <Grid x:Name="MainContentGrid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="480"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="35*"/>
+                <ColumnDefinition Width="65*"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="200"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="80*"/>
             </Grid.RowDefinitions>
 
             <!-- Background Image -->

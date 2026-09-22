@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:helix="http://helix-toolkit.org/wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="480">
+             d:DesignHeight="648" d:DesignWidth="360">
 
     <UserControl.Resources>
         <Style x:Key="OverViewButtonStyle" TargetType="Button">
