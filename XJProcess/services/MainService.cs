@@ -307,78 +307,43 @@ namespace XJProcess.services
             }
         }
 
-        //private void StepTimer_Tick(object? sender, EventArgs e)
-        //{
-        //    if (IsManualRunning)
-        //    {
-        //        return;
-        //    }
-
-        //    if (Timer > 0)
-        //    {
-        //        Timer--;
-        //        _drumConfig?.UpdateCountdownDisplay(Timer, TotalTimer);
-        //        if (ReversePlcTimer > 0)
-        //        {
-        //            _reverseCounter++;
-        //            if (_reverseCounter >= ReversePlcTimer)
-        //            {
-        //                _reverseCounter = 0; // Reset bộ đếm chu kỳ
-        //                ReverseDrum(); // Thực hiện dừng ➔ Đổi chiều ➔ Chạy lại
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        _reverseCounter = 0;
-        //        StopEngine();
-
-        //        if (IsManualRunning)
-        //        {
-        //            IsManualRunning = false;
-        //        }
-        //        else if (CurrentRunningItem != null)
-        //        {
-        //            UnlockAndEnableNextStep(CurrentRunningItem);
-        //        }
-        //    }
-        //}
         private void StepTimer_Tick(object? sender, EventArgs e)
         {
             if (IsManualRunning)
             {
                 return;
             }
+
             if (Timer > 0)
             {
                 Timer--;
                 _drumConfig?.UpdateCountdownDisplay(Timer, TotalTimer);
-                if (Timer == 0)
-                {
-                    _reverseCounter = 0;
-                    StopEngine();
-
-                    if (IsManualRunning)
-                    {
-                        IsManualRunning = false;
-                    }
-                    else if (CurrentRunningItem != null)
-                    {
-                        UnlockAndEnableNextStep(CurrentRunningItem);
-                    }
-                    return; 
-                }
                 if (ReversePlcTimer > 0)
                 {
                     _reverseCounter++;
                     if (_reverseCounter >= ReversePlcTimer)
                     {
-                        _reverseCounter = 0; 
-                        ReverseDrum();
+                        _reverseCounter = 0; // Reset bộ đếm chu kỳ
+                        ReverseDrum(); // Thực hiện dừng ➔ Đổi chiều ➔ Chạy lại
                     }
                 }
             }
+            else
+            {
+                _reverseCounter = 0;
+                StopEngine();
+
+                if (IsManualRunning)
+                {
+                    IsManualRunning = false;
+                }
+                else if (CurrentRunningItem != null)
+                {
+                    UnlockAndEnableNextStep(CurrentRunningItem);
+                }
+            }
         }
+
 
         public void StopCurrentStep()
         {
