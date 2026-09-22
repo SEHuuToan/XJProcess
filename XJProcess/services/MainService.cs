@@ -349,36 +349,33 @@ namespace XJProcess.services
             {
                 return;
             }
-
             if (Timer > 0)
             {
                 Timer--;
                 _drumConfig?.UpdateCountdownDisplay(Timer, TotalTimer);
+                if (Timer == 0)
+                {
+                    _reverseCounter = 0;
+                    StopEngine();
 
-                // Vẫn thực hiện đếm và đảo chiều bình thường trong suốt quá trình Timer > 0
+                    if (IsManualRunning)
+                    {
+                        IsManualRunning = false;
+                    }
+                    else if (CurrentRunningItem != null)
+                    {
+                        UnlockAndEnableNextStep(CurrentRunningItem);
+                    }
+                    return; 
+                }
                 if (ReversePlcTimer > 0)
                 {
                     _reverseCounter++;
                     if (_reverseCounter >= ReversePlcTimer)
                     {
-                        _reverseCounter = 0; // Reset bộ đếm chu kỳ
-                        ReverseDrum(); // Thực hiện dừng ➔ Đổi chiều ➔ Chạy lại
+                        _reverseCounter = 0; 
+                        ReverseDrum();
                     }
-                }
-            }
-            else
-            {
-                // Khi Timer đã về 0, ở nhịp Tick tiếp theo mới thực hiện Dừng & Chuyển Step
-                _reverseCounter = 0;
-                StopEngine();
-
-                if (IsManualRunning)
-                {
-                    IsManualRunning = false;
-                }
-                else if (CurrentRunningItem != null)
-                {
-                    UnlockAndEnableNextStep(CurrentRunningItem);
                 }
             }
         }

@@ -14,8 +14,8 @@ namespace XJProcess.utils
             if (progress < 0) progress = 0;
             if (progress > 1) progress = 1;
             double angle = progress * 360;
-            double radius = 57.5;
-            Point center = new Point(63.5, 63.5);
+            double radius = 51;
+            Point center = new Point(59, 59);
             double rad = (angle - 90) * (Math.PI / 180.0);
             Point endPoint = new Point(
                 center.X + radius * Math.Cos(rad),

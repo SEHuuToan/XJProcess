@@ -79,7 +79,7 @@
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Height="120">
                         <Ellipse Stroke="#FFFFFF" StrokeThickness="10" Margin="4"/>
-                        <Path x:Name="ProgressArc" Stroke="#05a630" StrokeThickness="10" Margin="4" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <Path x:Name="ProgressArc" Stroke="#05a630" StrokeThickness="10.5" Margin="4"/>
                         <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock x:Name="TxtCountdownTime" Text="00:00" FontSize="16" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Center"/>
                         </Grid>
