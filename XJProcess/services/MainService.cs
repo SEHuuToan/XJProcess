@@ -157,10 +157,10 @@ namespace XJProcess.services
         /// </summary>
         private void ReverseDrum()
         {
-            StopEngine();
+            //StopEngine();
             IsForwardDirection = !IsForwardDirection;
             PlcUtils.Reverse(true);
-            StartEngine();
+            //StartEngine();
         }
 
         public void ToggleDirection(bool isForward)
@@ -357,12 +357,10 @@ namespace XJProcess.services
             {
                 Timer--;
                 _drumConfig?.UpdateCountdownDisplay(Timer, TotalTimer);
-
-                // KHI TIMER VỀ 0 (00:00): Tắt quay bồn ngay lập tức và dừng tiến trình
                 if (Timer == 0)
                 {
                     _reverseCounter = 0;
-                    StopEngine(); // Tắt bồn, dừng PLC và cập nhật trạng thái IsDrumSpinning = false
+                    StopEngine();
 
                     if (IsManualRunning)
                     {
@@ -372,17 +370,15 @@ namespace XJProcess.services
                     {
                         UnlockAndEnableNextStep(CurrentRunningItem);
                     }
-                    return; // Thoát ngay để không lọt xuống đoạn đảo chiều bên dưới
+                    return;
                 }
-
-                // Timer vẫn còn > 0 thì mới đếm chu kỳ đảo chiều
                 if (ReversePlcTimer > 0)
                 {
                     _reverseCounter++;
                     if (_reverseCounter >= ReversePlcTimer)
                     {
-                        _reverseCounter = 0; // Reset bộ đếm chu kỳ
-                        ReverseDrum(); // Thực hiện dừng ➔ Đổi chiều ➔ Chạy lại
+                        _reverseCounter = 0;
+                        ReverseDrum();
                     }
                 }
             }
