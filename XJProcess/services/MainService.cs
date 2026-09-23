@@ -13,9 +13,9 @@ namespace XJProcess.services
 {
     public class MainService
     {
-        private HeaderConfig? _headerConfig;
-        private DrumConfig? _drumConfig;
-        private DataGridView? _dataGridView;
+        private HeaderConfig _headerConfig;
+        private DrumConfig _drumConfig;
+        private DataGridView _dataGridView;
 
         private readonly DispatcherTimer _stepTimer;
 
@@ -133,7 +133,7 @@ namespace XJProcess.services
             if (!IsDrumSpinning)
             {
                 IsDrumSpinning = true;
-                _drumConfig?.StartSpinAnimation(IsForwardDirection, IsAutoMode);
+                _drumConfig.StartSpinAnimation(IsForwardDirection, IsAutoMode);
             }
 
             if (!_stepTimer.IsEnabled) _stepTimer.Start();
@@ -147,7 +147,7 @@ namespace XJProcess.services
             PlcUtils.Stop();
 
             IsDrumSpinning = false;
-            _drumConfig?.StopSpinAnimation(IsAutoMode);
+            _drumConfig.StopSpinAnimation(IsAutoMode);
 
             if (_stepTimer.IsEnabled) _stepTimer.Stop();
         }
@@ -160,6 +160,10 @@ namespace XJProcess.services
             //StopEngine();
             IsForwardDirection = !IsForwardDirection;
             PlcUtils.Reverse(true);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _drumConfig.StartSpinAnimation(IsForwardDirection, IsAutoMode);
+            });
             //StartEngine();
         }
 
@@ -193,7 +197,7 @@ namespace XJProcess.services
             TotalTimer = 0;
             _reverseCounter = 0;
             ReversePlcTimer = 0;
-            _drumConfig?.ResetCountdownDisplay();
+            _drumConfig.ResetCountdownDisplay();
             StartEngine();
         }
 
@@ -208,7 +212,7 @@ namespace XJProcess.services
             ReversePlcTimer = ConvertTime(reverseIntervalMinutes); // Quy đổi thời gian đảo chiều sang giây
             TotalTimer = Timer = ConvertTime(inputMinutes);
 
-            _drumConfig?.UpdateCountdownDisplay(Timer, TotalTimer);
+            _drumConfig.UpdateCountdownDisplay(Timer, TotalTimer);
             StartEngine();
         }
 
@@ -295,7 +299,7 @@ namespace XJProcess.services
                     //ReversePlcTimer = ConvertTime(clickedItem.ReverseIntervalMinutes); tạm thời chưa cấu hình thời gian đảo chiều ở setting nên comment 
                 }
 
-                _drumConfig?.UpdateCountdownDisplay(Timer, TotalTimer);
+                _drumConfig.UpdateCountdownDisplay(Timer, TotalTimer);
                 StartEngine();
             }
         }
@@ -356,7 +360,7 @@ namespace XJProcess.services
             if (Timer > 0)
             {
                 Timer--;
-                _drumConfig?.UpdateCountdownDisplay(Timer, TotalTimer);
+                _drumConfig.UpdateCountdownDisplay(Timer, TotalTimer);
                 if (Timer == 0)
                 {
                     _reverseCounter = 0;
@@ -423,9 +427,9 @@ namespace XJProcess.services
             ReversePlcTimer = 0;
             CurrentRunningItem = null;
             _completedItems.Clear();
-            _drumConfig?.ResetCountdownDisplay();
+            _drumConfig.ResetCountdownDisplay();
             ClearOrderHeaderInfo();
-            if (_dataGridView?.MainDataGrid != null)
+            if (_dataGridView.MainDataGrid != null)
             {
                 _dataGridView.MainDataGrid.Visibility = System.Windows.Visibility.Collapsed;
                 _dataGridView.MainDataGrid.ItemsSource = null;
@@ -450,7 +454,7 @@ namespace XJProcess.services
                 CurrentOrder.Line1Col1 = CurrentOrder.Line2Col1 = CurrentOrder.Line3Col1 = CurrentOrder.Line4Col1 = string.Empty;
                 CurrentOrder.TechnicianName = CurrentOrder.DrumNo = CurrentOrder.StartTime = CurrentOrder.EndTime = string.Empty;
             }
-            _headerConfig?.ClearOrderHeaderInfo();
+            _headerConfig.ClearOrderHeaderInfo();
         }
 
         private void UnlockAndEnableNextStep(ChemicalDetail currentItem)
