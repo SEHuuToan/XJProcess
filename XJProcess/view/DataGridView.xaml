@@ -75,9 +75,9 @@
                       VerticalGridLinesBrush="#22FFFFFF"
                       BorderBrush="#0284C7"
                       BorderThickness="1"
-                      RowHeight="30"
+                      RowHeight="32"
                       ColumnHeaderHeight="20"
-                      FontSize="12"
+                      FontSize="11"
                       Foreground="#FFFFFF"
                       SelectionMode="Single"
                       
@@ -96,7 +96,7 @@
                         <Setter Property="Background" Value="#FFFFFF"/>
                         <Setter Property="Foreground" Value="#000000"/>
                         <Setter Property="FontWeight" Value="Bold"/>
-                        <Setter Property="FontSize" Value="11"/>
+                        <Setter Property="FontSize" Value="9"/>
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
                         <Setter Property="VerticalContentAlignment" Value="Center"/>
                         <Setter Property="BorderBrush" Value="#33FFFFFF"/>
@@ -131,7 +131,7 @@
 
                 <DataGrid.Columns>
                     <!-- NO -->
-                    <DataGridTextColumn Header="NO" Binding="{Binding StepNo}" Width="*">
+                    <DataGridTextColumn Header="NO" Binding="{Binding StepNo}" Width="55">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -143,7 +143,7 @@
                     </DataGridTextColumn>
 
                     <!-- CODE -->
-                    <DataGridTextColumn Header="CODE" Binding="{Binding Code}" Width="*">
+                    <DataGridTextColumn Header="CODE" Binding="{Binding Code}" Width="85">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -153,7 +153,7 @@
                     </DataGridTextColumn>
 
                     <!-- CHEM -->
-                    <DataGridTextColumn Header="CHEM" Binding="{Binding ChemicalName}" Width="*">
+                    <DataGridTextColumn Header="CHEM" Binding="{Binding ChemicalName}" Width="140">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="Padding" Value="8,0"/>
@@ -164,7 +164,7 @@
                     </DataGridTextColumn>
 
                     <!-- KG -->
-                    <DataGridTextColumn Header="KG" Binding="{Binding Weight}" Width="*">
+                    <DataGridTextColumn Header="KG" Binding="{Binding Weight}" Width="55">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -174,7 +174,7 @@
                     </DataGridTextColumn>
 
                     <!-- °C -->
-                    <DataGridTextColumn Header="°C" Binding="{Binding Temperature}" Width="*">
+                    <DataGridTextColumn Header="°C" Binding="{Binding Temperature}" Width="55">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -186,7 +186,7 @@
                     </DataGridTextColumn>
 
                     <!-- h -->
-                    <DataGridTextColumn Header="h" Binding="{Binding DurationMinutes}" Width="*">
+                    <DataGridTextColumn Header="h" Binding="{Binding DurationMinutes}" Width="55">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -198,7 +198,7 @@
                     </DataGridTextColumn>
 
                     <!-- CHECK -->
-                    <DataGridTextColumn Header="CHECK" Binding="{Binding CheckInfo}" Width="*">
+                    <DataGridTextColumn Header="CHECK" Binding="{Binding CheckInfo}" Width="45">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -210,14 +210,14 @@
                     </DataGridTextColumn>
 
                     <!-- Status -->
-                    <DataGridTemplateColumn Header="Status" Width="*">
+                    <DataGridTemplateColumn Header="Status" Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border x:Name="myBadge" Background="#00C853" CornerRadius="5" Padding="8,3" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
                                     <TextBlock Text="{Binding Status}" Foreground="#FFFFFF" FontWeight="SemiBold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                                 <DataTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding Status}" Value="Đã hoàn thành">
+                                    <DataTrigger Binding="{Binding Status}" Value="Hoàn thành">
                                         <Setter TargetName="myBadge" Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </DataTemplate.Triggers>
@@ -226,11 +226,11 @@
                     </DataGridTemplateColumn>
 
                     <!-- THAO TÁC -->
-                    <DataGridTemplateColumn Header="THAO TÁC" Width="*">
+                    <DataGridTemplateColumn Header="THAO TÁC" Width="80">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="{Binding ActionButtonText}" 
-                                        Width="65" Height="22" 
+                                        Width="70" Height="24" 
                                         FontSize="11" FontWeight="Bold"
                                         Background="{Binding ActionButtonBackground}" 
                                         Foreground="#FFFFFF"

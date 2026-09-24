@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Threading;
 using XJProcess.modal;
 using XJProcess.service;
-using XJProcess.ultis; // Namespace chứa PlcUtils
+using XJProcess.ultis;
 using XJProcess.view;
 
 namespace XJProcess.services
@@ -18,26 +18,31 @@ namespace XJProcess.services
         private DataGridView _dataGridView;
 
         private readonly DispatcherTimer _stepTimer;
-
-        // Quản lý các step đã hoàn thành bằng HashSet ngay tại MainService
         private readonly HashSet<ChemicalDetail> _completedItems = new();
 
-        // Biến toàn cục thời gian
+        /// <summary>
+        /// Trạng thái hoạt động của bồn:
+        /// 0 = Stop (Bồn dừng)
+        /// 1 = Start (Bồn đang quay tự động / chạy bước từ DataGridView)
+        /// 2 = Pause (Tạm dừng)
+        /// 3 = Finish (Hoàn thành chu trình quay)
+        /// 4 = User Manual Override (Can thiệp thời gian -> Bước DataGridView chuyển "Hoàn tất" & Unlock bước tiếp)
+        /// </summary>
+        public int IsRunning { get; set; } = 0;
+
         public int Timer { get; set; }
         public int TotalTimer { get; set; }
-        public int TimerPLC { get; set; }
 
-        // Biến quản lý chu kỳ đảo chiều
-        public int ReversePlcTimer { get; set; } // Chu kỳ thời gian đảo chiều (Giây)
-        private int _reverseCounter = 0;               // Bộ đếm đếm ngược/tiến để kích hoạt đảo chiều
+        public int ReversePlcTimer { get; set; }
+        private int _reverseCounter = 0;
 
         public bool IsPlcConnected { get; set; } = false;
 
-        // Trạng thái Bồn
-        public bool IsDrumSpinning { get; private set; }
+        // Bồn đang quay khi trạng thái ở 1 (Start) hoặc 4 (User Override)
+        public bool IsDrumSpinning => IsRunning == 1 || IsRunning == 4;
         public bool IsForwardDirection { get; set; } = true;
         public bool IsAutoMode { get; set; }
-        public bool IsAutoPaused { get; set; }
+        public bool IsAutoPaused => IsRunning == 2;
 
         public ObservableCollection<ChemicalDetail> ChemicalList { get; private set; } = new ObservableCollection<ChemicalDetail>();
         public ChemicalDetail? CurrentRunningItem { get; set; }
@@ -55,13 +60,11 @@ namespace XJProcess.services
             while (true)
             {
                 IsPlcConnected = await Task.Run(() => PlcUtils.ConnectPlc(ipAddress));
-                if (IsPlcConnected)
-                {
-                    break;
-                }
+                if (IsPlcConnected) break;
+
                 await Application.Current.Dispatcher.InvokeAsync(() =>
                 {
-                    MessageBox.Show("Lỗi kết nối đến PLC, vui lòng kiểm tra lại thiết bị","Lỗi kết nối PLC",MessageBoxButton.OK,MessageBoxImage.Error);
+                    MessageBox.Show("Lỗi kết nối đến PLC, vui lòng kiểm tra lại thiết bị", "Lỗi kết nối PLC", MessageBoxButton.OK, MessageBoxImage.Error);
                 });
             }
         }
@@ -98,11 +101,11 @@ namespace XJProcess.services
 
                 if (ChemicalList != null && ChemicalList.Count > 0 && _dataGridView.MainDataGrid != null)
                 {
-                    _dataGridView.MainDataGrid.Visibility = System.Windows.Visibility.Visible;
+                    _dataGridView.MainDataGrid.Visibility = Visibility.Visible;
                     _dataGridView.MainDataGrid.ItemsSource = ChemicalList;
 
                     if (_dataGridView.TxtNoOrderMessage != null)
-                        _dataGridView.TxtNoOrderMessage.Visibility = System.Windows.Visibility.Collapsed;
+                        _dataGridView.TxtNoOrderMessage.Visibility = Visibility.Collapsed;
                 }
             }
         }
@@ -111,60 +114,43 @@ namespace XJProcess.services
 
         private void StartEngine()
         {
-            // 1. Cài đặt chiều quay sang PLC
             if (IsManualRunning)
             {
-                if (IsForwardDirection)
-                {
-                    PlcUtils.Up();
-                }
-                else
-                {
-                    PlcUtils.Down();
-                }
+                if (IsForwardDirection) PlcUtils.Up();
+                else PlcUtils.Down();
             }
 
-            // 2. Gửi thời gian cài đặt tổng sang PLC
-            SendTimeToPLC(Timer);
-
-            // 3. Kích hoạt lệnh chạy PLC
             PlcUtils.Start();
 
-            if (!IsDrumSpinning)
+            if (IsDrumSpinning)
             {
-                IsDrumSpinning = true;
                 _drumConfig.StartSpinAnimation(IsForwardDirection, IsAutoMode);
-            }
 
-            if (!_stepTimer.IsEnabled) _stepTimer.Start();
+                if (!IsManualRunning && !_stepTimer.IsEnabled)
+                {
+                    _stepTimer.Start();
+                }
+            }
         }
 
         private void StopEngine()
         {
             if (!ConfirmPlcConnection()) return;
 
-            // Ngắt tín hiệu quay bồn ở PLC
             PlcUtils.Stop();
-
-            IsDrumSpinning = false;
             _drumConfig.StopSpinAnimation(IsAutoMode);
 
             if (_stepTimer.IsEnabled) _stepTimer.Stop();
         }
 
-        /// <summary>
-        /// Thực hiện quy trình dừng -> Đổi chiều UI & PLC -> Chạy lại
-        /// </summary>
         private void ReverseDrum()
         {
-            //StopEngine();
             IsForwardDirection = !IsForwardDirection;
             PlcUtils.Reverse(true);
             Application.Current.Dispatcher.Invoke(() =>
             {
                 _drumConfig.StartSpinAnimation(IsForwardDirection, IsAutoMode);
             });
-            //StartEngine();
         }
 
         public void ToggleDirection(bool isForward)
@@ -172,17 +158,11 @@ namespace XJProcess.services
             if (!ConfirmPlcConnection()) return;
             IsForwardDirection = isForward;
 
-            // Nếu bồn đang quay thì cập nhật PLC & UI ngay lập tức
             if (IsDrumSpinning)
             {
-                if (IsForwardDirection)
-                {
-                    PlcUtils.Up();
-                }
-                else
-                {
-                    PlcUtils.Down();
-                }
+                if (IsForwardDirection) PlcUtils.Up();
+                else PlcUtils.Down();
+
                 PlcUtils.Reverse(true);
                 _drumConfig.StartSpinAnimation(IsForwardDirection, IsAutoMode);
             }
@@ -191,26 +171,67 @@ namespace XJProcess.services
         public void StartManual()
         {
             if (!ConfirmPlcConnection()) return;
+
             IsManualRunning = true;
+            IsAutoMode = false;
+            IsRunning = 1;
+
             CurrentRunningItem = null;
-            Timer = 0;
-            TotalTimer = 0;
-            _reverseCounter = 0;
-            ReversePlcTimer = 0;
+            Timer = TotalTimer = ReversePlcTimer = _reverseCounter = 0;
+
             _drumConfig.ResetCountdownDisplay();
             StartEngine();
         }
 
+        //public void StartAuto(int inputMinutes, int reverseIntervalMinutes = 0)
+        //{
+        //    if (!ConfirmPlcConnection()) return;
+
+        //    IsManualRunning = false;
+        //    IsAutoMode = true;
+
+        //    _reverseCounter = 0;
+        //    ReversePlcTimer = ConvertTime(reverseIntervalMinutes);
+        //    TotalTimer = Timer = ConvertTime(inputMinutes);
+
+        //    if (CurrentRunningItem != null && !IsCompleted(CurrentRunningItem))
+        //    {
+        //        IsRunning = 4;
+        //        UnlockAndEnableNextStep(CurrentRunningItem);
+        //    }
+        //    else
+        //    {
+        //        IsRunning = 1;
+        //    }
+
+        //    _drumConfig.UpdateCountdownDisplay(Timer, TotalTimer);
+        //    StartEngine();
+        //}
         public void StartAuto(int inputMinutes, int reverseIntervalMinutes = 0)
         {
             if (!ConfirmPlcConnection()) return;
+
             IsManualRunning = false;
-            IsAutoPaused = false;
-            CurrentRunningItem = null;
+            IsAutoMode = true;
 
             _reverseCounter = 0;
-            ReversePlcTimer = ConvertTime(reverseIntervalMinutes); // Quy đổi thời gian đảo chiều sang giây
+            ReversePlcTimer = ConvertTime(reverseIntervalMinutes);
             TotalTimer = Timer = ConvertTime(inputMinutes);
+
+            // CHỈ ép "Hoàn tất" bước cũ NẾU bước đó ĐANG THỰC SỰ CHẠY HOẶC PAUSE (IsRunning = 1, 2, 4)
+            if (CurrentRunningItem != null && !IsCompleted(CurrentRunningItem) && (IsRunning == 1 || IsRunning == 4))
+            {
+                IsRunning = 4; // User Override thời gian bước đang chạy
+                UnlockAndEnableNextStep(CurrentRunningItem);
+            }
+            else
+            {
+                IsRunning = 1;
+                if (CurrentRunningItem != null)
+                {
+                    CurrentRunningItem.IsRunning = 1;
+                }
+            }
 
             _drumConfig.UpdateCountdownDisplay(Timer, TotalTimer);
             StartEngine();
@@ -218,10 +239,14 @@ namespace XJProcess.services
 
         public void ResumeAuto()
         {
-            if (!IsAutoPaused) return;
+            if (IsRunning != 2) return;
             if (!ConfirmPlcConnection()) return;
 
-            IsAutoPaused = false;
+            IsRunning = 1;
+            if (CurrentRunningItem != null)
+            {
+                CurrentRunningItem.IsRunning = 1;
+            }
             StartEngine();
         }
 
@@ -252,14 +277,17 @@ namespace XJProcess.services
 
             foreach (var item in ChemicalList)
             {
-                if (!isFirstActionFound && item.HasAction && !IsCompleted(item) && item.Status != "Đã hoàn thành")
+                if (!isFirstActionFound && item.HasAction && !IsCompleted(item) && item.Status != "Hoàn tất")
                 {
                     item.IsEnabled = true;
+                    item.IsRunning = 0;
+                    item.IsPaused = false;
                     isFirstActionFound = true;
                 }
                 else
                 {
                     item.IsEnabled = false;
+                    item.IsRunning = 0;
                 }
             }
         }
@@ -267,41 +295,79 @@ namespace XJProcess.services
         public void ToggleStepAction(ChemicalDetail clickedItem)
         {
             if (clickedItem == null || !clickedItem.HasAction) return;
-
-            if (CurrentRunningItem == clickedItem && IsDrumSpinning)
+            // 1. Đang CHẠY -> Bấm để TẠM DỪNG
+            if (CurrentRunningItem == clickedItem && (IsRunning == 1 || IsRunning == 4))
             {
-                clickedItem.IsRunning = false;
-                clickedItem.IsPaused = true;
+                IsRunning = 2;
                 StopEngine();
+                clickedItem.IsRunning = 2;
+                return;
             }
-            else
+            // 2. Đang TẠM DỪNG -> Bấm để TIẾP TỤC
+            if (CurrentRunningItem == clickedItem && IsRunning == 2)
             {
                 if (!ConfirmPlcConnection()) return;
-                if (IsDrumSpinning)
-                {
-                    StopEngine();
-                }
-                IsManualRunning = false;
-                bool isResuming = (CurrentRunningItem == clickedItem && clickedItem.IsPaused);
-                CurrentRunningItem = clickedItem;
-                CurrentRunningItem.IsRunning = true;
-                CurrentRunningItem.IsPaused = false;
-
-                LockAllOtherSteps(clickedItem);
-
-                if (!isResuming || Timer <= 0)
-                {
-                    TotalTimer = ConvertTime(clickedItem.DurationMinutes);
-                    Timer = TotalTimer;
-
-                    _reverseCounter = 0;
-                    // Lấy thời gian đảo chiều cấu hình riêng của step trong DataGridView (nếu có)
-                    //ReversePlcTimer = ConvertTime(clickedItem.ReverseIntervalMinutes); tạm thời chưa cấu hình thời gian đảo chiều ở setting nên comment 
-                }
-
-                _drumConfig.UpdateCountdownDisplay(Timer, TotalTimer);
+                IsRunning = 1;
                 StartEngine();
+                clickedItem.IsRunning = 1;
+                return;
             }
+            // 3. BẮT ĐẦU CHẠY BƯỚC MỚI TỪ DATAGRIDVIEW
+            if (!ConfirmPlcConnection()) return;
+
+            if (IsDrumSpinning) StopEngine();
+
+            IsAutoMode = true;
+            IsManualRunning = false;
+
+            // Gán bước đang chọn làm bước hiện tại
+            CurrentRunningItem = clickedItem;
+
+            // Cập nhật UI DataGridView: Highlight bước này, tạm để IsRunning = 0 (Chờ chạy)
+            foreach (var item in ChemicalList)
+            {
+                if (item == clickedItem)
+                {
+                    item.IsEnabled = true;
+                    item.IsRunning = 0; // Trạng thái chờ, chưa tính là đang quay
+                }
+                else
+                {
+                    item.IsEnabled = false;
+                }
+            }
+
+            int runMinutes = clickedItem.DurationMinutes;
+
+            // Đẩy thời gian của bước lên khung nhập DrumConfig
+            _drumConfig.SetAutoModeUI(true, runMinutes);
+
+            // --- KIỂM TRA ĐIỀU KIỆN ĐẢO CHIỀU ---
+            if (_drumConfig.reverseTime < 1)
+            {
+                IsRunning = 0; // Giữ trạng thái HOLD (Chờ người dùng nhập)
+                MessageBox.Show($"Vui lòng nhập 'Thời gian đảo chiều' rồi bấm Bắt đầu!",
+                                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return; // Dừng tại đây, CurrentRunningItem VẪN ĐƯỢC GIỮ NGUYÊN
+            }
+
+            if (_drumConfig.reverseTime >= runMinutes)
+            {
+                IsRunning = 0; // Giữ trạng thái HOLD
+                MessageBox.Show($"Thời gian đảo chiều phải nhỏ hơn thời gian chạy!",
+                                "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Nếu đã có sẵn thời gian đảo chiều hợp lệ -> Chạy luôn
+            IsRunning = 1;
+            clickedItem.IsRunning = 1;
+            TotalTimer = Timer = ConvertTime(runMinutes);
+            ReversePlcTimer = ConvertTime(_drumConfig.reverseTime);
+            _reverseCounter = 0;
+
+            _drumConfig.UpdateCountdownDisplay(Timer, TotalTimer);
+            StartEngine();
         }
 
         private void LockAllOtherSteps(ChemicalDetail activeItem)
@@ -314,68 +380,19 @@ namespace XJProcess.services
             }
         }
 
-        //private void StepTimer_Tick(object? sender, EventArgs e)
-        //{
-        //    if (IsManualRunning)
-        //    {
-        //        return;
-        //    }
-
-        //    if (Timer > 0)
-        //    {
-        //        Timer--;
-        //        _drumConfig?.UpdateCountdownDisplay(Timer, TotalTimer);
-        //        if (ReversePlcTimer > 0)
-        //        {
-        //            _reverseCounter++;
-        //            if (_reverseCounter >= ReversePlcTimer)
-        //            {
-        //                _reverseCounter = 0; // Reset bộ đếm chu kỳ
-        //                ReverseDrum(); // Thực hiện dừng ➔ Đổi chiều ➔ Chạy lại
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        _reverseCounter = 0;
-        //        StopEngine();
-
-        //        if (IsManualRunning)
-        //        {
-        //            IsManualRunning = false;
-        //        }
-        //        else if (CurrentRunningItem != null)
-        //        {
-        //            UnlockAndEnableNextStep(CurrentRunningItem);
-        //        }
-        //    }
-        //}
         private void StepTimer_Tick(object? sender, EventArgs e)
         {
-            if (IsManualRunning)
-            {
-                return;
-            }
-
             if (Timer > 0)
             {
                 Timer--;
                 _drumConfig.UpdateCountdownDisplay(Timer, TotalTimer);
+
                 if (Timer == 0)
                 {
-                    _reverseCounter = 0;
-                    StopEngine();
-
-                    if (IsManualRunning)
-                    {
-                        IsManualRunning = false;
-                    }
-                    else if (CurrentRunningItem != null)
-                    {
-                        UnlockAndEnableNextStep(CurrentRunningItem);
-                    }
+                    OnTimerFinished();
                     return;
                 }
+
                 if (ReversePlcTimer > 0)
                 {
                     _reverseCounter++;
@@ -388,31 +405,29 @@ namespace XJProcess.services
             }
             else
             {
-                _reverseCounter = 0;
-                StopEngine();
-
-                if (IsManualRunning)
-                {
-                    IsManualRunning = false;
-                }
-                else if (CurrentRunningItem != null)
-                {
-                    UnlockAndEnableNextStep(CurrentRunningItem);
-                }
+                OnTimerFinished();
             }
         }
 
+        private void OnTimerFinished()
+        {
+            _reverseCounter = 0;
+            StopEngine();
+
+            if (IsRunning == 1 && CurrentRunningItem != null)
+            {
+                UnlockAndEnableNextStep(CurrentRunningItem);
+            }
+
+            IsRunning = 3;
+        }
 
         public void StopCurrentStep()
         {
+            IsRunning = 2;
             if (CurrentRunningItem != null)
             {
-                CurrentRunningItem.IsRunning = false;
-                CurrentRunningItem.IsPaused = true;
-            }
-            else if (IsAutoMode && IsDrumSpinning)
-            {
-                IsAutoPaused = true;
+                CurrentRunningItem.IsRunning = 2;
             }
             StopEngine();
         }
@@ -420,29 +435,23 @@ namespace XJProcess.services
         public void StopOrder()
         {
             StopEngine();
+            IsRunning = 0;
             IsManualRunning = false;
-            IsAutoPaused = false;
-            Timer = TotalTimer = TimerPLC = 0;
+            Timer = TotalTimer = 0;
             _reverseCounter = 0;
             ReversePlcTimer = 0;
             CurrentRunningItem = null;
             _completedItems.Clear();
+
             _drumConfig.ResetCountdownDisplay();
             ClearOrderHeaderInfo();
-            if (_dataGridView.MainDataGrid != null)
+
+            if (_dataGridView?.MainDataGrid != null)
             {
-                _dataGridView.MainDataGrid.Visibility = System.Windows.Visibility.Collapsed;
+                _dataGridView.MainDataGrid.Visibility = Visibility.Collapsed;
                 _dataGridView.MainDataGrid.ItemsSource = null;
                 if (_dataGridView.TxtNoOrderMessage != null)
-                    _dataGridView.TxtNoOrderMessage.Visibility = System.Windows.Visibility.Visible;
-            }
-        }
-
-        public void SendTimeToPLC(int seconds)
-        {
-            if (seconds >= 0 && seconds <= short.MaxValue)
-            {
-                PlcUtils.Write((short)seconds);
+                    _dataGridView.TxtNoOrderMessage.Visibility = Visibility.Visible;
             }
         }
 
@@ -454,30 +463,36 @@ namespace XJProcess.services
                 CurrentOrder.Line1Col1 = CurrentOrder.Line2Col1 = CurrentOrder.Line3Col1 = CurrentOrder.Line4Col1 = string.Empty;
                 CurrentOrder.TechnicianName = CurrentOrder.DrumNo = CurrentOrder.StartTime = CurrentOrder.EndTime = string.Empty;
             }
-            _headerConfig.ClearOrderHeaderInfo();
+            _headerConfig?.ClearOrderHeaderInfo();
         }
 
         private void UnlockAndEnableNextStep(ChemicalDetail currentItem)
         {
-            if (ChemicalList == null) return;
-            currentItem.Status = "Đã hoàn thành";
-            currentItem.IsRunning = false;
-            currentItem.IsPaused = false;
-            currentItem.IsEnabled = false;
+            if (ChemicalList == null || currentItem == null) return;
 
+            currentItem.Status = "Hoàn tất";
+            currentItem.IsRunning = 3;
             _completedItems.Add(currentItem);
-            CurrentRunningItem = null;
 
             int currentIndex = ChemicalList.IndexOf(currentItem);
+            if (currentIndex < 0) return;
+
+            for (int i = 0; i <= currentIndex; i++)
+            {
+                ChemicalList[i].IsEnabled = false;
+            }
+
             for (int i = currentIndex + 1; i < ChemicalList.Count; i++)
             {
                 var nextItem = ChemicalList[i];
-                if (nextItem.HasAction && nextItem.Status != "Đã hoàn thành")
+                if (nextItem.HasAction && nextItem.Status != "Hoàn tất")
                 {
                     nextItem.IsEnabled = true;
-                    break;
+                    nextItem.IsRunning = 0;
                 }
             }
+
+            CurrentRunningItem = null;
         }
     }
 }

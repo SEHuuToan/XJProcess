@@ -20,9 +20,8 @@ namespace XJProcess.modal
         public string Temperature => Temp;
         public int h => DurationMinutes;
 
-
         private bool _isEnabled = true;
-        private bool _isRunning;
+        private int _isRunning; // 0=Stop, 1=Run, 2=Pause, 3=Finish, 4=Override
         private bool _isPaused;
         private string _status = string.Empty;
 
@@ -40,7 +39,7 @@ namespace XJProcess.modal
         }
         public bool IsButtonEnabled => IsEnabled;
 
-        public bool IsRunning
+        public int IsRunning
         {
             get => _isRunning;
             set
@@ -83,22 +82,24 @@ namespace XJProcess.modal
         {
             get
             {
-                if (IsRunning) return "Tạm dừng";
-                if (IsPaused) return "Tiếp tục";
-                if (Status == "Đã hoàn thành") return "Hoàn thành";
+                if (IsRunning == 1 || IsRunning == 4) return "Tạm dừng";
+                if (IsRunning == 2) return "Tiếp tục";
+                if (IsRunning == 3 || Status == "Đã hoàn thành") return "Hoàn thành";
                 return "Bắt đầu";
             }
         }
+
+        // Binding ở XAML ăn vào thuộc tính này
         public string ActionButtonText => ButtonText;
 
         public Brush ActionButtonBackground
         {
             get
             {
-                if (IsRunning) return (Brush)new BrushConverter().ConvertFrom("#EAB308")!; 
-                if (IsPaused) return (Brush)new BrushConverter().ConvertFrom("#0284C7")!;  
-                if (Status == "Đã hoàn thành") return (Brush)new BrushConverter().ConvertFrom("#22C55E")!;
-                return (Brush)new BrushConverter().ConvertFrom("#0284C7")!; 
+                if (IsRunning == 1 || IsRunning == 4) return (Brush)new BrushConverter().ConvertFrom("#EAB308")!; // Vàng
+                if (IsRunning == 2) return (Brush)new BrushConverter().ConvertFrom("#0284C7")!;  // Xanh dương
+                if (IsRunning == 3 || Status == "Đã hoàn thành") return (Brush)new BrushConverter().ConvertFrom("#22C55E")!; // Xanh lá
+                return (Brush)new BrushConverter().ConvertFrom("#0284C7")!;
             }
         }
 

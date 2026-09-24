@@ -18,7 +18,26 @@ namespace XJProcess.view
         private readonly View3DService _view3DService = new View3DService();
         private readonly AxisAngleRotation3D _spinnerRotation = new AxisAngleRotation3D(new Vector3D(1, 0, 0), 0);
 
-        public MainService? Service { get; set; }
+        // Biến kiểm soát việc thay đổi Text từ phía người dùng hay từ Code
+        private bool _isRunTimeInputChanged = false;
+        private bool _isProgrammaticChange = false;
+
+        public int reverseTime = 0;
+        private MainService? _service;
+        public MainService? Service
+        {
+            get => _service;
+            set
+            {
+                _service = value;
+                if (_service != null)
+                {
+                    // Đồng bộ mặc định ban đầu giữa Service và UI (false = Xoay Xuống)
+                    _service.IsForwardDirection = false;
+                    UpdateDirectionDisplay(false);
+                }
+            }
+        }
 
         public DrumConfig()
         {
@@ -28,8 +47,17 @@ namespace XJProcess.view
 
             Init3DScene();
 
-            if (TxtButtonStatus != null) TxtButtonStatus.Text = "Xoay Xuống";
+            // Đăng ký sự kiện theo dõi khi người dùng tự gõ/chỉnh sửa thời gian
+            if (TxtRunTimeInput != null)
+            {
+                TxtRunTimeInput.TextChanged += TxtRunTimeInput_TextChanged;
+            }
+            if (TxtReverseTimeInput != null)
+            {
+                TxtReverseTimeInput.TextChanged += TxtRunTimeInput_TextChanged;
+            }
 
+            UpdateDirectionDisplay(false);
             SetInputControlsState(false);
         }
 
@@ -53,15 +81,34 @@ namespace XJProcess.view
             }
         }
 
+        private void TxtRunTimeInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Chỉ đánh dấu người dùng thao tác khi không phải là cập nhật tự động từ Code UI
+            if (!_isProgrammaticChange)
+            {
+                _isRunTimeInputChanged = true;
+                reverseTime = int.TryParse(TxtReverseTimeInput?.Text, out int rev) ? rev : 0;
+            }
+        }
+
         #region Render & Animation UI
+
+        public void UpdateDirectionDisplay(bool isForward)
+        {
+            if (TxtButtonStatus != null)
+            {
+                TxtButtonStatus.Text = isForward ? "Xoay Lên" : "Xoay Xuống";
+            }
+        }
 
         public void StartSpinAnimation(bool isForward, bool isAutoMode)
         {
             ApplySpinAnimation(isForward);
-            // KHI BỒN ĐANG QUAY: Luôn khóa 2 nút xoay (cả Auto lẫn Thủ công)
+
             if (BtnRotateUp != null) BtnRotateUp.IsEnabled = false;
             if (BtnRotateDown != null) BtnRotateDown.IsEnabled = false;
             if (TglMode != null) TglMode.IsEnabled = false;
+
             if (isAutoMode)
             {
                 Brush disabledBrush = new SolidColorBrush(Color.FromRgb(220, 220, 220));
@@ -76,7 +123,6 @@ namespace XJProcess.view
             _spinnerRotation.BeginAnimation(AxisAngleRotation3D.AngleProperty, null);
             _spinnerRotation.Angle = currentAngle;
 
-            // KHI BỒN DỪNG: Chỉ mở lại 2 nút xoay nếu KHÔNG ở AutoMode VÀ KHÔNG có bước DataGrid nào đang chạy
             bool isDataGridStepActive = Service?.CurrentRunningItem != null;
             bool disableRotate = isAutoMode || isDataGridStepActive;
 
@@ -84,10 +130,15 @@ namespace XJProcess.view
             if (BtnRotateDown != null) BtnRotateDown.IsEnabled = !disableRotate;
             if (TglMode != null) TglMode.IsEnabled = true;
 
-            if (isAutoMode && (TglMode?.IsChecked ?? false))
+            if (isAutoMode)
             {
                 if (TxtRunTimeInput != null) { TxtRunTimeInput.IsEnabled = true; TxtRunTimeInput.Background = Brushes.White; }
                 if (TxtReverseTimeInput != null) { TxtReverseTimeInput.IsEnabled = true; TxtReverseTimeInput.Background = Brushes.White; }
+            }
+
+            if (Service != null)
+            {
+                UpdateDirectionDisplay(Service.IsForwardDirection);
             }
         }
 
@@ -104,10 +155,20 @@ namespace XJProcess.view
             };
 
             _spinnerRotation.BeginAnimation(AxisAngleRotation3D.AngleProperty, spinAnimation);
+            UpdateDirectionDisplay(isForward);
+        }
 
-            if (TxtButtonStatus != null)
+        public void SetAutoModeUI(bool isAuto, int minutes)
+        {
+            if (TglMode != null && TglMode.IsChecked != isAuto)
             {
-                TxtButtonStatus.Text = isForward ? "Xoay Lên" : "Xoay Xuống";
+                TglMode.IsChecked = isAuto;
+            }
+            if (TxtRunTimeInput != null)
+            {
+                _isProgrammaticChange = true;
+                TxtRunTimeInput.Text = minutes.ToString();
+                _isProgrammaticChange = false;
             }
         }
 
@@ -128,6 +189,16 @@ namespace XJProcess.view
             if (ProgressArc != null && totalSeconds > 0)
             {
                 XJProcess.utils.SystemUtils.UpdateProgressArc(ProgressArc, remainingSeconds, totalSeconds);
+            }
+
+            // Khi đang chạy Auto (ô Input đang bị khóa): Tính số phút tròn còn lại bằng phép chia nguyên
+            if (Service != null && Service.IsAutoMode && TxtRunTimeInput != null && !TxtRunTimeInput.IsEnabled)
+            {
+                int remainingMinutes = remainingSeconds / 60;
+
+                _isProgrammaticChange = true;
+                TxtRunTimeInput.Text = remainingMinutes.ToString();
+                _isProgrammaticChange = false;
             }
         }
 
@@ -154,56 +225,42 @@ namespace XJProcess.view
         {
             if (Service == null) return;
 
-            // 1. Ưu tiên chạy tự động datagridview
-            if (Service.CurrentRunningItem != null)
-            {
-                if (Service.IsAutoMode)
-                {
-                    MessageBox.Show("Bạn đang trong một tiến trình, không thể chạy tự động lúc này",
-                                    "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-                if (!Service.IsDrumSpinning)
-                {
-                    Service.ToggleStepAction(Service.CurrentRunningItem);
-                }
-                return;
-            }
-
-            // 2. Chạy tự động (Auto Mode)
             if (Service.IsAutoMode)
             {
-                if (TxtRunTimeInput == null || !int.TryParse(TxtRunTimeInput.Text, out int runMinutes) || runMinutes <= 0)
+                // 1. Kiểm tra Thời gian vận hành (Phải là số nguyên >= 2 phút)
+                if (!int.TryParse(TxtRunTimeInput?.Text, out int runMinutes) || runMinutes < 2)
                 {
-                    MessageBox.Show("Vui lòng nhập thời gian vận hành hợp lệ (số phút > 0)!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    string msg = (runMinutes == 1)
+                        ? "Thời gian vận hành 1 phút quá ngắn cho Auto! Vui lòng chuyển sang chế độ Thủ công (Manual)."
+                        : "Vui lòng nhập thời gian vận hành hợp lệ (từ 2 phút trở lên)!";
+
+                    MessageBox.Show(msg, "Cảnh báo vận hành", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                // 2. Kiểm tra Thời gian đảo chiều (Bắt buộc nhập, >= 1 phút và < Thời gian vận hành)
+                if (!int.TryParse(TxtReverseTimeInput?.Text, out int revMinutes) || revMinutes < 1)
+                {
+                    MessageBox.Show("Thời gian đảo chiều không được để trống và phải từ 1 phút trở lên!", "Cảnh báo cài đặt", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                int reverseTime = 0;
-                if (TxtReverseTimeInput != null && int.TryParse(TxtReverseTimeInput.Text, out reverseTime) && reverseTime > 0)
+                if (revMinutes >= runMinutes)
                 {
-                    if (reverseTime >= runMinutes)
-                    {
-                        MessageBox.Show("Thời gian đảo chiều phải nhỏ hơn thời gian vận hành!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return;
-                    }
-                }
-
-                if (Service.IsAutoPaused)
-                {
-                    if (Service.ConvertTime(runMinutes) == Service.TotalTimer)
-                    {
-                        Service.ResumeAuto();
-                    }
-                    else
-                    {
-                        Service.StartAuto(runMinutes, reverseTime);
-                    }
+                    MessageBox.Show($"Thời gian đảo chiều phải nhỏ hơn thời gian vận hành của bồn!", "Cảnh báo cài đặt", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-                Service.StartAuto(runMinutes, reverseTime);
+                reverseTime = revMinutes;
+                SetAutoModeUI(true, runMinutes);
+                if (Service.IsAutoPaused && !_isRunTimeInputChanged)
+                {
+                    Service.ResumeAuto();
+                }
+                else
+                {
+                    _isRunTimeInputChanged = false;
+                    Service.StartAuto(runMinutes, reverseTime);
+                }
             }
-            // 3. Chạy thủ công (Manual Mode)
             else
             {
                 Service.StartManual();
@@ -218,15 +275,17 @@ namespace XJProcess.view
         private void BtnRotateUp_Click(object sender, RoutedEventArgs e)
         {
             if (Service == null || Service.IsAutoMode || Service.CurrentRunningItem != null || Service.IsDrumSpinning) return;
+
             Service.ToggleDirection(true);
-            if (TxtButtonStatus != null) TxtButtonStatus.Text = "Xoay Lên";
+            UpdateDirectionDisplay(true);
         }
 
         private void BtnRotateDown_Click(object sender, RoutedEventArgs e)
         {
             if (Service == null || Service.IsAutoMode || Service.CurrentRunningItem != null || Service.IsDrumSpinning) return;
+
             Service.ToggleDirection(false);
-            if (TxtButtonStatus != null) TxtButtonStatus.Text = "Xoay Xuống";
+            UpdateDirectionDisplay(false);
         }
 
         private void TglMode_Checked(object sender, RoutedEventArgs e)
@@ -242,12 +301,11 @@ namespace XJProcess.view
             if (Service != null)
             {
                 Service.IsAutoMode = false;
-                Service.IsAutoPaused = false;
             }
             SetInputControlsState(false);
             bool isStepActive = Service?.CurrentRunningItem != null;
             bool isSpinning = Service?.IsDrumSpinning ?? false;
-            // Chỉ mở lại nút xoay khi không chạy bước DataGrid và bồn đang dừng
+
             if (BtnRotateUp != null) BtnRotateUp.IsEnabled = !isStepActive && !isSpinning;
             if (BtnRotateDown != null) BtnRotateDown.IsEnabled = !isStepActive && !isSpinning;
         }
