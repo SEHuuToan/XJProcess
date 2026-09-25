@@ -312,24 +312,17 @@ namespace XJProcess.services
                 clickedItem.IsRunning = 1;
                 return;
             }
-            // 3. BẮT ĐẦU CHẠY BƯỚC MỚI TỪ DATAGRIDVIEW
             if (!ConfirmPlcConnection()) return;
-
             if (IsDrumSpinning) StopEngine();
-
             IsAutoMode = true;
             IsManualRunning = false;
-
-            // Gán bước đang chọn làm bước hiện tại
             CurrentRunningItem = clickedItem;
-
-            // Cập nhật UI DataGridView: Highlight bước này, tạm để IsRunning = 0 (Chờ chạy)
             foreach (var item in ChemicalList)
             {
                 if (item == clickedItem)
                 {
                     item.IsEnabled = true;
-                    item.IsRunning = 0; // Trạng thái chờ, chưa tính là đang quay
+                    item.IsRunning = 0;
                 }
                 else
                 {
@@ -338,28 +331,22 @@ namespace XJProcess.services
             }
 
             int runMinutes = clickedItem.DurationMinutes;
-
-            // Đẩy thời gian của bước lên khung nhập DrumConfig
             _drumConfig.SetAutoModeUI(true, runMinutes);
-
             // --- KIỂM TRA ĐIỀU KIỆN ĐẢO CHIỀU ---
             if (_drumConfig.reverseTime < 1)
             {
-                IsRunning = 0; // Giữ trạng thái HOLD (Chờ người dùng nhập)
+                IsRunning = 0;
                 MessageBox.Show($"Vui lòng nhập 'Thời gian đảo chiều' rồi bấm Bắt đầu!",
                                 "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                return; // Dừng tại đây, CurrentRunningItem VẪN ĐƯỢC GIỮ NGUYÊN
+                return;
             }
-
             if (_drumConfig.reverseTime >= runMinutes)
             {
-                IsRunning = 0; // Giữ trạng thái HOLD
+                IsRunning = 0;
                 MessageBox.Show($"Thời gian đảo chiều phải nhỏ hơn thời gian chạy!",
                                 "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
-            // Nếu đã có sẵn thời gian đảo chiều hợp lệ -> Chạy luôn
             IsRunning = 1;
             clickedItem.IsRunning = 1;
             TotalTimer = Timer = ConvertTime(runMinutes);

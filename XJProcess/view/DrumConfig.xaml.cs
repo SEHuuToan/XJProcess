@@ -224,7 +224,7 @@ namespace XJProcess.view
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             if (Service == null) return;
-
+            if (Service.IsDrumSpinning) return;
             if (Service.IsAutoMode)
             {
                 // 1. Kiểm tra Thời gian vận hành (Phải là số nguyên >= 2 phút)
