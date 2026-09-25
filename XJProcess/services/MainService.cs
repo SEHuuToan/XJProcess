@@ -146,6 +146,10 @@ namespace XJProcess.services
         private void ReverseDrum()
         {
             IsForwardDirection = !IsForwardDirection;
+            if (IsForwardDirection)
+                PlcUtils.Up();
+            else
+                PlcUtils.Down();
             PlcUtils.Reverse(true);
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -480,6 +484,14 @@ namespace XJProcess.services
             }
 
             CurrentRunningItem = null;
+        }
+
+        public void SetDataGridEnabledState(bool isEnabled)
+        {
+            if (_dataGridView.MainDataGrid != null)
+            {
+                _dataGridView.MainDataGrid.IsEnabled = isEnabled;
+            }
         }
     }
 }

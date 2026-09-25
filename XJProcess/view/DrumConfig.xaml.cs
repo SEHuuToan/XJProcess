@@ -290,7 +290,12 @@ namespace XJProcess.view
 
         private void TglMode_Checked(object sender, RoutedEventArgs e)
         {
-            if (Service != null) Service.IsAutoMode = true;
+            if (TxtRunTimeInput != null) TxtRunTimeInput.Text = string.Empty;
+            if (Service != null)
+            {
+                Service.IsAutoMode = true;
+                Service.SetDataGridEnabledState(true);
+            }
             SetInputControlsState(true);
             if (BtnRotateUp != null) BtnRotateUp.IsEnabled = false;
             if (BtnRotateDown != null) BtnRotateDown.IsEnabled = false;
@@ -301,11 +306,12 @@ namespace XJProcess.view
             if (Service != null)
             {
                 Service.IsAutoMode = false;
+                bool isProcessRunningOrPaused = Service.IsDrumSpinning || Service.IsAutoPaused;
+                Service.SetDataGridEnabledState(!isProcessRunningOrPaused);
             }
             SetInputControlsState(false);
             bool isStepActive = Service?.CurrentRunningItem != null;
             bool isSpinning = Service?.IsDrumSpinning ?? false;
-
             if (BtnRotateUp != null) BtnRotateUp.IsEnabled = !isStepActive && !isSpinning;
             if (BtnRotateDown != null) BtnRotateDown.IsEnabled = !isStepActive && !isSpinning;
         }
