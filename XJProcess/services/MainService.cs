@@ -40,14 +40,14 @@ namespace XJProcess.services
 
         // Bồn đang quay khi trạng thái ở 1 (Start) hoặc 4 (User Override)
         public bool IsDrumSpinning => IsRunning == 1 || IsRunning == 4;
-        public bool IsForwardDirection { get; set; } = true;
+        public bool IsSpinUp { get; set; } = true;
         public bool IsAutoMode { get; set; }
         public bool IsAutoPaused => IsRunning == 2;
 
         public ObservableCollection<ChemicalDetail> ChemicalList { get; private set; } = new ObservableCollection<ChemicalDetail>();
         public ChemicalDetail? CurrentRunningItem { get; set; }
         public ChemicalHeader CurrentOrder { get; set; }
-        public bool IsManualRunning { get; set; }
+        public bool IsManualRunning { get; set; } = true;
 
         public MainService()
         {
@@ -114,17 +114,18 @@ namespace XJProcess.services
 
         private void StartEngine()
         {
-            if (IsManualRunning)
+            if (IsSpinUp)
             {
-                if (IsForwardDirection) PlcUtils.Up();
-                else PlcUtils.Down();
+                PlcUtils.Up();
             }
-
+            else
+            {
+                PlcUtils.Down();
+            }
             PlcUtils.Start();
-
             if (IsDrumSpinning)
             {
-                _drumConfig.StartSpinAnimation(IsForwardDirection, IsAutoMode);
+                _drumConfig.StartSpinAnimation(IsSpinUp, IsAutoMode);
 
                 if (!IsManualRunning && !_stepTimer.IsEnabled)
                 {
@@ -145,30 +146,26 @@ namespace XJProcess.services
 
         private void ReverseDrum()
         {
-            IsForwardDirection = !IsForwardDirection;
-            if (IsForwardDirection)
-                PlcUtils.Up();
-            else
-                PlcUtils.Down();
+            IsSpinUp = !IsSpinUp;
             PlcUtils.Reverse(true);
             Application.Current.Dispatcher.Invoke(() =>
             {
-                _drumConfig.StartSpinAnimation(IsForwardDirection, IsAutoMode);
+                _drumConfig.StartSpinAnimation(IsSpinUp, IsAutoMode);
             });
         }
 
         public void ToggleDirection(bool isForward)
         {
             if (!ConfirmPlcConnection()) return;
-            IsForwardDirection = isForward;
+            IsSpinUp = isForward;
 
             if (IsDrumSpinning)
             {
-                if (IsForwardDirection) PlcUtils.Up();
+                if (IsSpinUp) PlcUtils.Up();
                 else PlcUtils.Down();
 
                 PlcUtils.Reverse(true);
-                _drumConfig.StartSpinAnimation(IsForwardDirection, IsAutoMode);
+                _drumConfig.StartSpinAnimation(IsSpinUp, IsAutoMode);
             }
         }
 

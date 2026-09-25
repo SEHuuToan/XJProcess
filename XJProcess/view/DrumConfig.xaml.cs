@@ -33,7 +33,7 @@ namespace XJProcess.view
                 if (_service != null)
                 {
                     // Đồng bộ mặc định ban đầu giữa Service và UI (false = Xoay Xuống)
-                    _service.IsForwardDirection = false;
+                    _service.IsSpinUp = false;
                     UpdateDirectionDisplay(false);
                 }
             }
@@ -138,7 +138,7 @@ namespace XJProcess.view
 
             if (Service != null)
             {
-                UpdateDirectionDisplay(Service.IsForwardDirection);
+                UpdateDirectionDisplay(Service.IsSpinUp);
             }
         }
 
