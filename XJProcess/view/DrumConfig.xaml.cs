@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HelixToolkit.Wpf;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -7,9 +8,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
-using HelixToolkit.Wpf;
 using XJProcess.service;
 using XJProcess.services;
+using XJProcess.ultis;
 
 namespace XJProcess.view
 {
@@ -296,6 +297,7 @@ namespace XJProcess.view
                 Service.IsAutoMode = true;
                 Service.SetDataGridEnabledState(true);
             }
+            PlcUtils.Reverse(false);
             SetInputControlsState(true);
             if (BtnRotateUp != null) BtnRotateUp.IsEnabled = false;
             if (BtnRotateDown != null) BtnRotateDown.IsEnabled = false;

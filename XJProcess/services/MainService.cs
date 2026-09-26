@@ -144,14 +144,12 @@ namespace XJProcess.services
             if (_stepTimer.IsEnabled) _stepTimer.Stop();
         }
 
-        private void ReverseDrum()
+        private async void ReverseDrum()
         {
             IsSpinUp = !IsSpinUp;
             PlcUtils.Reverse(true);
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                _drumConfig.StartSpinAnimation(IsSpinUp, IsAutoMode);
-            });
+            await Task.Run(() => PlcUtils.Reverse(true));
+            _drumConfig.StartSpinAnimation(IsSpinUp, IsAutoMode);
         }
 
         public void ToggleDirection(bool isForward)
@@ -214,6 +212,7 @@ namespace XJProcess.services
 
             IsManualRunning = false;
             IsAutoMode = true;
+            IsSpinUp = true;
 
             _reverseCounter = 0;
             ReversePlcTimer = ConvertTime(reverseIntervalMinutes);
@@ -350,6 +349,7 @@ namespace XJProcess.services
             }
             IsRunning = 1;
             clickedItem.IsRunning = 1;
+            IsSpinUp = true;
             TotalTimer = Timer = ConvertTime(runMinutes);
             ReversePlcTimer = ConvertTime(_drumConfig.reverseTime);
             _reverseCounter = 0;
