@@ -1,5 +1,4 @@
-﻿using HelixToolkit.Wpf;
-using System;
+﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -8,9 +7,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
+using HelixToolkit.Wpf;
 using XJProcess.service;
 using XJProcess.services;
-using XJProcess.utils;
 
 namespace XJProcess.view
 {
@@ -353,10 +352,5 @@ namespace XJProcess.view
         }
 
         #endregion
-        private void TxtRunTimeInput_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-           
-            TouchKeyboardHelper.Show();
-        }
     }
 }
