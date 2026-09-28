@@ -129,7 +129,9 @@
                         <TextBox x:Name="TxtRunTimeInput" Grid.Column="1" Height="30" Background="#FFFFFF" Foreground="#000000" BorderBrush="#33FFFFFF" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" FontWeight="Bold"
                                  InputScope="Number"
                                  PreviewTextInput="NumberOnly_PreviewTextInput"
-                                 DataObject.Pasting="TextBox_Pasting"/>
+                                 DataObject.Pasting="TextBox_Pasting"
+                                 PreviewMouseDown="TxtRunTimeInput_PreviewMouseDown"
+                                 />
                     </Grid>
 
                     <!-- Hàng 2: Thời gian đảo chiều -->
