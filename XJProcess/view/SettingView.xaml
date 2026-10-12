@@ -64,16 +64,12 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="URL API Backend" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock Text="Mã UID cảm biến nhiệt độ" Style="{StaticResource FieldLabelStyle}"/>
                                 <TextBox x:Name="TxtApiUrl" Height="40" Style="{StaticResource HmiInputStyle}"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="Tần số gửi tin (ms)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock Text="SLAVE" Style="{StaticResource FieldLabelStyle}"/>
                                 <TextBox x:Name="TxtPingInterval" Height="40" Style="{StaticResource HmiInputStyle}"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="4">
-                                <TextBlock Text="Thời gian Timeout (s)" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBox x:Name="TxtTimeout" Height="40" Style="{StaticResource HmiInputStyle}"/>
                             </StackPanel>
                         </Grid>
 
@@ -128,31 +124,6 @@
                         </Grid>
 
                         <Separator Background="#E2E8F0" Margin="0,0,0,15"/>
-
-                        <!-- NHÓM 3: NGUYÊN LIỆU & GIỚI HẠN AN TOÀN -->
-                        <TextBlock Text="3. GIỚI HẠN AN TOÀN &amp; CẢNH BÁO (SAFETY LIMITS)" Style="{StaticResource SectionHeaderStyle}"/>
-                        <Grid Margin="0,0,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="15"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="15"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Text="Giới hạn nhiệt độ tối đa (°C)" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBox x:Name="TxtMaxTemp" Height="40" Style="{StaticResource HmiInputStyle}"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="Áp suất tối đa cho phép (Bar)" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBox x:Name="TxtMaxPressure" Height="40" Style="{StaticResource HmiInputStyle}"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="4">
-                                <TextBlock Text="Tải trọng tối đa bồn (Kg)" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBox x:Name="TxtMaxWeight" Height="40" Style="{StaticResource HmiInputStyle}"/>
-                            </StackPanel>
-                        </Grid>
 
                     </StackPanel>
                 </ScrollViewer>

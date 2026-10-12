@@ -143,7 +143,7 @@
                     </DataGridTextColumn>
 
                     <!-- CODE -->
-                    <DataGridTextColumn Header="CODE" Binding="{Binding Code}" Width="85">
+                    <DataGridTextColumn Header="CODE" Binding="{Binding Code}" Width="90">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -164,7 +164,7 @@
                     </DataGridTextColumn>
 
                     <!-- KG -->
-                    <DataGridTextColumn Header="KG" Binding="{Binding Weight}" Width="55">
+                    <DataGridTextColumn Header="KG" Binding="{Binding Weight}" Width="60">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -174,7 +174,7 @@
                     </DataGridTextColumn>
 
                     <!-- °C -->
-                    <DataGridTextColumn Header="°C" Binding="{Binding Temperature}" Width="55">
+                    <DataGridTextColumn Header="°C" Binding="{Binding Temperature}" Width="60">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -186,7 +186,7 @@
                     </DataGridTextColumn>
 
                     <!-- h -->
-                    <DataGridTextColumn Header="h" Binding="{Binding DurationMinutes}" Width="55">
+                    <DataGridTextColumn Header="h" Binding="{Binding DurationMinutes}" Width="60">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -198,7 +198,7 @@
                     </DataGridTextColumn>
 
                     <!-- CHECK -->
-                    <DataGridTextColumn Header="CHECK" Binding="{Binding CheckInfo}" Width="45">
+                    <DataGridTextColumn Header="CHECK" Binding="{Binding CheckInfo}" Width="65">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -210,7 +210,7 @@
                     </DataGridTextColumn>
 
                     <!-- Status -->
-                    <DataGridTemplateColumn Header="Status" Width="50">
+                    <!--<DataGridTemplateColumn Header="Status" Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border x:Name="myBadge" Background="#00C853" CornerRadius="5" Padding="8,3" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
@@ -223,10 +223,10 @@
                                 </DataTemplate.Triggers>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    </DataGridTemplateColumn>-->
 
                     <!-- THAO TÁC -->
-                    <DataGridTemplateColumn Header="THAO TÁC" Width="80">
+                    <DataGridTemplateColumn Header="THAO TÁC" Width="90">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="{Binding ActionButtonText}" 

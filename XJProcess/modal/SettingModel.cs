@@ -22,10 +22,5 @@ namespace XJProcess.modal
         public string StepAngle { get; set; } 
         public string StopDelay { get; set; }
         public string DefaultMode { get; set; } 
-
-        // Nhóm 3: Giới hạn an toàn
-        public string MaxTemp { get; set; } 
-        public string MaxPressure { get; set; } 
-        public string MaxWeight { get; set; }
     }
 }

@@ -70,48 +70,15 @@ namespace XJProcess.service
             EventMsg msg = (EventMsg)Marshal.PtrToStructure(lParam, typeof(EventMsg));
             codes.Add(msg);
 
-            // Kiểm tra điều kiện quét xong mã đơn
-            if (ScanerEvent != null && msg.message == 13 && msg.paramH > 0 && codes.Result.Length > 15
-                && !string.IsNullOrEmpty(codes.Result))
+            // Kiểm tra điều kiện quét xong (Nhấn Enter + Độ dài mã > 15)
+            if (ScanerEvent != null && msg.message == 13 && msg.paramH > 0
+                && codes.Result.Length > 15 && !string.IsNullOrEmpty(codes.Result))
             {
+                // Bắn sự kiện ra ngoài cho MainService / ViewModel / View xử lý
                 ScanerEvent(codes);
-
-                // Lấy data chuẩn xác để tiến hành gọi API ngầm
-                string scannedData = codes.Result;
-                Task.Run(async () =>
-                {
-                    await CallApiProcessOrderAsync(scannedData);
-                });
             }
+
             return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
-        }
-
-        /// <summary>
-        /// Hàm gọi API xử lý mã đơn hàng sau khi quét thành công
-        /// </summary>
-        private static async Task CallApiProcessOrderAsync(string orderCode)
-        {
-            try
-            {
-                // TODO: Viết code gọi API thực tế của bạn ở đây
-                // Ví dụ:
-                // using (var client = new HttpClient())
-                // {
-                //     var response = await client.GetAsync($"https://api.yourdomain.com/check?code={orderCode}");
-                //     if (response.IsSuccessStatusCode)
-                //     {
-                //         string result = await response.Content.ReadAsStringAsync();
-                //         // Xử lý kết quả trả về
-                //     }
-                // }
-
-                Console.WriteLine($"Đã gọi API thành công cho mã đơn: {orderCode}");
-                await Task.CompletedTask;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Lỗi gọi API: {ex.Message}");
-            }
         }
 
         public class ScanerCodes

@@ -63,35 +63,11 @@ namespace XJProcess
             _mainService?.StopOrder();
         }
 
-        private void ScanService_ScanerEvent(ScanService.ScanerCodes codes)
+        private async void ScanService_ScanerEvent(ScanService.ScanerCodes codes)
         {
-            string orderCode = codes.Result;
-            if (string.IsNullOrEmpty(orderCode)) return;
-
-            Task.Run(async () =>
-            {
-                try
-                {
-                    var apiService = new ApiService();
-                    var chemicalData = await apiService.LoadDataChemical(orderCode);
-
-                    Dispatcher.Invoke(() =>
-                    {
-                        DrumConfig.UpdateScannedCode(orderCode);
-                        if (chemicalData == null)
-                        {
-                            MessageBox.Show($"Không tìm thấy dữ liệu, vui lòng kiểm tra lại: {orderCode}", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        }
-                    });
-                }
-                catch (Exception ex)
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        MessageBox.Show($"Lỗi hệ thống không thể tải dữ liệu lên: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                    });
-                }
-            });
+            string rawQr = codes.Result;
+            if (string.IsNullOrEmpty(rawQr)) return;
+            await _mainService.ProcessQrCodeAsync(rawQr);
         }
 
         #endregion

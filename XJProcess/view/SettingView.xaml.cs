@@ -26,7 +26,6 @@ namespace XJProcess.view
                 TxtWebSocketPort.Text = config.WebSocketPort;
                 TxtApiUrl.Text = config.ApiUrl;
                 TxtPingInterval.Text = config.PingInterval;
-                TxtTimeout.Text = config.Timeout;
 
                 // Nhóm 2: Vận hành bồn quay
                 TxtDefaultSpeed.Text = config.DefaultSpeed;
@@ -35,11 +34,6 @@ namespace XJProcess.view
                 TxtStepAngle.Text = config.StepAngle;
                 TxtStopDelay.Text = config.StopDelay;
                 TxtDefaultMode.Text = config.DefaultMode;
-
-                // Nhóm 3: Giới hạn an toàn
-                TxtMaxTemp.Text = config.MaxTemp;
-                TxtMaxPressure.Text = config.MaxPressure;
-                TxtMaxWeight.Text = config.MaxWeight;
             }
         }
 
@@ -54,7 +48,6 @@ namespace XJProcess.view
                 WebSocketPort = TxtWebSocketPort.Text,
                 ApiUrl = TxtApiUrl.Text,
                 PingInterval = TxtPingInterval.Text,
-                Timeout = TxtTimeout.Text,
 
                 // Nhóm 2
                 DefaultSpeed = TxtDefaultSpeed.Text,
@@ -63,11 +56,6 @@ namespace XJProcess.view
                 StepAngle = TxtStepAngle.Text,
                 StopDelay = TxtStopDelay.Text,
                 DefaultMode = TxtDefaultMode.Text,
-
-                // Nhóm 3
-                MaxTemp = TxtMaxTemp.Text,
-                MaxPressure = TxtMaxPressure.Text,
-                MaxWeight = TxtMaxWeight.Text
             };
 
             // Gọi service để lưu xuống thư mục Setting/setting.xml

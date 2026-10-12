@@ -40,7 +40,7 @@ namespace XJProcess.services
             if (!response.IsSuccessful || string.IsNullOrWhiteSpace(response.Content))
                 return false;
             using JsonDocument doc = JsonDocument.Parse(response.Content);
-            if (!doc.RootElement.TryGetProperty("data", out var data) ||
+            if (!doc.RootElement.TryGetProperty("data", out var data) || 
                 !data.TryGetProperty("accessToken", out var tokenProp))
             {
                 return false;
@@ -51,28 +51,36 @@ namespace XJProcess.services
 
         public async Task<List<ChemicalDetail>> LoadDataChemical(string orderCode)
         {
+            if (string.IsNullOrWhiteSpace(orderCode))
+                return new List<ChemicalDetail>();
+
             try
             {
-                // TODO: Viết code gọi API thực tế của bạn ở đây (HttpClient, RestSharp, v.v.)
-                // Ví dụ:
-                // using (var client = new HttpClient())
-                // {
-                //     var response = await client.GetAsync($"https://api.yourdomain.com/chemical?code={orderCode}");
-                //     if (response.IsSuccessStatusCode)
-                //     {
-                //         return await response.Content.ReadAsStringAsync();
-                //     }
-                // }
+                var client = new RestClient(_baseUrl);
+                var request = new RestRequest("api/v1/chemical/getByCode", Method.Get);
+                request.AddHeader("Authorization", $"Bearer {AccessToken}");
+                request.AddQueryParameter("orderCode", orderCode);
 
-                Console.WriteLine($"Đang gọi LoadDataChemical với mã đơn: {orderCode}");
-                await Task.Delay(500);
+                var response = await client.ExecuteAsync(request);
 
-                return new List<ChemicalDetail>();
+                if (!response.IsSuccessful || string.IsNullOrWhiteSpace(response.Content))
+                    return new List<ChemicalDetail>();
+
+                using var doc = JsonDocument.Parse(response.Content);
+                if (!doc.RootElement.TryGetProperty("data", out var data))
+                    return new List<ChemicalDetail>();
+
+                var items = JsonSerializer.Deserialize<List<ChemicalDetail>>(
+                    data.GetRawText(),
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                );
+
+                return items ?? new List<ChemicalDetail>();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Lỗi khi gọi LoadDataChemical: {ex.Message}");
-                return null;
+                Console.WriteLine($"Lỗi ApiService LoadDataChemical: {ex.Message}");
+                return new List<ChemicalDetail>();
             }
         }
 

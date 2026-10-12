@@ -16,7 +16,7 @@ namespace XJProcess.services
         private HeaderConfig _headerConfig;
         private DrumConfig _drumConfig;
         private DataGridView _dataGridView;
-
+        private readonly ApiService _apiService;
         private readonly DispatcherTimer _stepTimer;
         private readonly HashSet<ChemicalDetail> _completedItems = new();
 
@@ -494,6 +494,41 @@ namespace XJProcess.services
             {
                 _dataGridView.MainDataGrid.IsEnabled = isEnabled;
             }
+        }
+
+        public async Task ProcessQrCodeAsync(string rawQr)
+        {
+            string billCode = getBillFromQrCode(rawQr);
+            if (string.IsNullOrEmpty(billCode)) return;
+            List<ChemicalDetail> realData = await _apiService.LoadDataChemical(billCode);
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                ChemicalList.Clear();
+                if (realData != null && realData.Count > 0)
+                {
+                    foreach (var item in realData)
+                    {
+                        ChemicalList.Add(item);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"Không tìm thấy dữ liệu hóa chất cho mã: {billCode}", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            });
+        }
+
+        public string? getBillFromQrCode(string scannedResult)
+        {
+            if (string.IsNullOrWhiteSpace(scannedResult) || !scannedResult.Contains("6000CFDH"))
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    MessageBox.Show("Mã QR không hợp lệ! Vui lòng quét đúng đơn bồn quay!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                });
+                return null;
+            }
+            return scannedResult.Split('\\')[0].Trim();
         }
     }
 }
