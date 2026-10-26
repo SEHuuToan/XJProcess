@@ -65,18 +65,18 @@
 
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Mã UID cảm biến nhiệt độ" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBox x:Name="TxtApiUrl" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                                <TextBox x:Name="TxtUid" Height="40" Style="{StaticResource HmiInputStyle}"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="SLAVE" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBox x:Name="TxtPingInterval" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                                <TextBox x:Name="TxtSlave" Height="40" Style="{StaticResource HmiInputStyle}"/>
                             </StackPanel>
                         </Grid>
 
                         <Separator Background="#E2E8F0" Margin="0,0,0,15"/>
 
                         <!-- NHÓM 2: THÔNG SỐ VẬN HÀNH BỒN QUAY -->
-                        <TextBlock Text="2. THÔNG SỐ VẬN HÀNH BỒN QUAY (MOTOR &amp; DRUM)" Style="{StaticResource SectionHeaderStyle}"/>
+                        <!--<TextBlock Text="2. THÔNG SỐ VẬN HÀNH BỒN QUAY (MOTOR &amp; DRUM)" Style="{StaticResource SectionHeaderStyle}"/>
                         <Grid Margin="0,0,0,20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -121,7 +121,7 @@
                                 <TextBlock Text="Chế độ chạy mặc định" Style="{StaticResource FieldLabelStyle}"/>
                                 <TextBox x:Name="TxtDefaultMode" Height="40" Style="{StaticResource HmiInputStyle}"/>
                             </StackPanel>
-                        </Grid>
+                        </Grid>-->
 
                         <Separator Background="#E2E8F0" Margin="0,0,0,15"/>
 

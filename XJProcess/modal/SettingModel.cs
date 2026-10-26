@@ -14,13 +14,8 @@ namespace XJProcess.modal
         public string ApiUrl { get; set; }
         public string PingInterval { get; set; } 
         public string Timeout { get; set; }
+        public short uid { get; set; }
+        public string slaveId { get; set; }
 
-        // Nhóm 2: Vận hành bồn quay
-        public string DefaultSpeed { get; set; } 
-        public string ReverseDelay { get; set; } 
-        public string MotorAccel { get; set; }
-        public string StepAngle { get; set; } 
-        public string StopDelay { get; set; }
-        public string DefaultMode { get; set; } 
     }
 }

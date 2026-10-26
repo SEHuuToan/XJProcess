@@ -530,5 +530,15 @@ namespace XJProcess.services
             }
             return scannedResult.Split('\\')[0].Trim();
         }
+
+        private string CleanHexInput(string input)
+        {
+            input = input.Trim();
+            if (input.StartsWith("16#", StringComparison.OrdinalIgnoreCase))
+                return input.Substring(3);
+            if (input.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+                return input.Substring(2);
+            return input;
+        }
     }
 }

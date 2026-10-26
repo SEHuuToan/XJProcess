@@ -1,6 +1,8 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using XJProcess.modal;
 using XJProcess.Services;
+using XJProcess.ultis;
 
 namespace XJProcess.view
 {
@@ -24,16 +26,10 @@ namespace XJProcess.view
                 TxtDrumId.Text = config.DrumId;
                 TxtIpAddress.Text = config.IpAddress;
                 TxtWebSocketPort.Text = config.WebSocketPort;
-                TxtApiUrl.Text = config.ApiUrl;
-                TxtPingInterval.Text = config.PingInterval;
+                TxtUid.Text = config.uid.ToString("X");
+                TxtSlave.Text = config.slaveId;
 
                 // Nhóm 2: Vận hành bồn quay
-                TxtDefaultSpeed.Text = config.DefaultSpeed;
-                TxtReverseDelay.Text = config.ReverseDelay;
-                TxtMotorAccel.Text = config.MotorAccel;
-                TxtStepAngle.Text = config.StepAngle;
-                TxtStopDelay.Text = config.StopDelay;
-                TxtDefaultMode.Text = config.DefaultMode;
             }
         }
 
@@ -46,21 +42,13 @@ namespace XJProcess.view
                 DrumId = TxtDrumId.Text,
                 IpAddress = TxtIpAddress.Text,
                 WebSocketPort = TxtWebSocketPort.Text,
-                ApiUrl = TxtApiUrl.Text,
-                PingInterval = TxtPingInterval.Text,
+                uid = string.IsNullOrEmpty(TxtUid.Text) ? (short)0 : Convert.ToInt16(TxtUid.Text.Trim(), 16),
+                slaveId = TxtSlave.Text
 
                 // Nhóm 2
-                DefaultSpeed = TxtDefaultSpeed.Text,
-                ReverseDelay = TxtReverseDelay.Text,
-                MotorAccel = TxtMotorAccel.Text,
-                StepAngle = TxtStepAngle.Text,
-                StopDelay = TxtStopDelay.Text,
-                DefaultMode = TxtDefaultMode.Text,
+
             };
-
-            // Gọi service để lưu xuống thư mục Setting/setting.xml
             SettingService.SaveSettings(config);
-
             MessageBox.Show("Đã lưu tất cả thông số cấu hình hệ thống thành công!", "Thông báo HMI",
                             MessageBoxButton.OK, MessageBoxImage.Information);
             this.Close();
