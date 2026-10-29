@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="XJProcess.view.HeaderConfigLeft"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="350">
+
+    <Border BorderBrush="#33FFFFFF" 
+            BorderThickness="0,0,1,1" 
+            Padding="12"
+            Background="Transparent">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Hàng 0: Mã bồn & Logo -->
+            <Grid Grid.Row="0" Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Source="/Images/logonobg.png" Height="35" Width="80" Stretch="Uniform" VerticalAlignment="Center"/>
+                    <TextBlock Text="XIANG JIANG VIETNAM" FontSize="14" FontWeight="Medium" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
+                    <TextBlock x:Name="TxtTankCode" Text="7#" FontSize="38" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Right"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,2">
+                        <TextBlock Text="Thời gian:  " FontSize="12" Foreground="#CBD5E1"/>
+                        <TextBlock x:Name="TxtCurrentTime" Text="2026-08-12 13:30:00" FontSize="12" FontWeight="SemiBold" Foreground="#38BDF8"/>
+                    </StackPanel>
+                </StackPanel>
+
+            </Grid>
+
+            <Separator Grid.Row="0" VerticalAlignment="Bottom" Background="#33FFFFFF" Margin="0,0,0,-4"/>
+
+            <!-- Hàng 1: Thông tin nhân viên & Nhiệt độ / Pin -->
+            <Grid Grid.Row="1" Margin="0,8,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Vertical">
+                    <!--<StackPanel Orientation="Horizontal" Margin="0,2">
+                        <TextBlock Text="Họ và Tên:  " FontSize="12" Foreground="#CBD5E1"/>
+                        <TextBlock x:Name="TxtEmpName" Text="Nguyễn Văn A" FontSize="12" FontWeight="Bold" Foreground="#FFFFFF"/>
+                    </StackPanel>-->
+                    <!--<StackPanel Orientation="Horizontal" Margin="0,2">
+                        <TextBlock Text="Thời gian:  " FontSize="12" Foreground="#CBD5E1"/>
+                        <TextBlock x:Name="TxtCurrentTime" Text="2026-08-12 13:30:00" FontSize="12" FontWeight="SemiBold" Foreground="#38BDF8"/>
+                    </StackPanel>-->
+                    <StackPanel Orientation="Horizontal" Margin="0,2">
+                        <TextBlock Text="Kỹ thuật viên:  " FontSize="12" Foreground="#CBD5E1"/>
+                        <TextBlock x:Name="TxtTechnician" Text="{Binding TechnicianName}" FontSize="12" FontWeight="SemiBold" Foreground="#38BDF8"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,2">
+                        <TextBlock Text="Trọng lượng:  " FontSize="12" Foreground="#CBD5E1"/>
+                        <TextBlock x:Name="TxtWeight" Text="{Binding DrumNo}" FontSize="12" FontWeight="SemiBold" Foreground="#38BDF8"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,2">
+                        <TextBlock Text="Người vận hành:  " FontSize="12" Foreground="#CBD5E1"/>
+                        <TextBlock x:Name="TxtOperator" Text="{Binding OperatorName}" FontSize="12" FontWeight="SemiBold" Foreground="#38BDF8"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center" Margin="10,0,0,0">
+                    <!-- Nhiệt độ -->
+                    <StackPanel Orientation="Horizontal" Margin="0,2">
+                        <TextBlock Text="Nhiệt độ: " FontSize="12" Foreground="#CBD5E1" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TxtTankTemp" Text="-- °C" FontSize="15" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <!-- Phần trăm pin -->
+                    <StackPanel Orientation="Horizontal" Margin="0,2">
+                        <TextBlock Text="Pin: " FontSize="12" Foreground="#CBD5E1" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TxtTankBattery" Text="-- %" FontSize="14" FontWeight="Bold" Foreground="#34D399" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

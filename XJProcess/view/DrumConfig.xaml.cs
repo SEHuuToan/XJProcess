@@ -188,10 +188,12 @@ namespace XJProcess.view
             int totalSeconds = customTotalSeconds ?? 1;
             if (ProgressArc != null && totalSeconds > 0)
             {
-                XJProcess.utils.SystemUtils.UpdateProgressArc(ProgressArc, remainingSeconds, totalSeconds);
+                double progressPercent = ((double)remainingSeconds / totalSeconds) * 100.0;
+
+                ProgressArc.Maximum = 100;
+                ProgressArc.Value = Math.Max(0, Math.Min(100, progressPercent));
             }
 
-            // Khi đang chạy Auto (ô Input đang bị khóa): Tính số phút tròn còn lại bằng phép chia nguyên
             if (Service != null && Service.IsAutoMode && TxtRunTimeInput != null && !TxtRunTimeInput.IsEnabled)
             {
                 int remainingMinutes = remainingSeconds / 60;
@@ -205,7 +207,7 @@ namespace XJProcess.view
         public void ResetCountdownDisplay()
         {
             if (TxtCountdownTime != null) TxtCountdownTime.Text = "00:00";
-            if (ProgressArc != null) XJProcess.utils.SystemUtils.UpdateProgressArc(ProgressArc, 0, 1);
+            if (ProgressArc != null) ProgressArc.Value = 0;
         }
 
         public void UpdateScannedCode(string code)

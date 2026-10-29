@@ -13,7 +13,7 @@ namespace XJProcess.services
 {
     public class MainService
     {
-        private HeaderConfig _headerConfig;
+        private HeaderConfigLeft _headerConfigLeft;
         private DrumConfig _drumConfig;
         private DataGridView _dataGridView;
         private readonly ApiService _apiService;
@@ -87,13 +87,13 @@ namespace XJProcess.services
 
         public bool IsCompleted(ChemicalDetail item) => _completedItems.Contains(item);
 
-        public void RegisterViews(HeaderConfig headerConfig, DrumConfig drumConfig, DataGridView dataGridView)
+        public void RegisterViews(HeaderConfigLeft headerConfigLeft, DrumConfig drumConfig, DataGridView dataGridView)
         {
-            _headerConfig = headerConfig;
+            _headerConfigLeft = headerConfigLeft;
             _drumConfig = drumConfig;
             _dataGridView = dataGridView;
 
-            if (_headerConfig != null) _headerConfig.Service = this;
+            if (_headerConfigLeft != null) _headerConfigLeft.Service = this;
             if (_drumConfig != null) _drumConfig.Service = this;
             if (_dataGridView != null)
             {
@@ -456,7 +456,7 @@ namespace XJProcess.services
                 CurrentOrder.Line1Col1 = CurrentOrder.Line2Col1 = CurrentOrder.Line3Col1 = CurrentOrder.Line4Col1 = string.Empty;
                 CurrentOrder.TechnicianName = CurrentOrder.DrumNo = CurrentOrder.StartTime = CurrentOrder.EndTime = string.Empty;
             }
-            _headerConfig?.ClearOrderHeaderInfo();
+            _headerConfigLeft?.ClearOrderHeaderInfo();
         }
 
         private void UnlockAndEnableNextStep(ChemicalDetail currentItem)

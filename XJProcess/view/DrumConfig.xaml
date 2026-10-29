@@ -45,23 +45,27 @@
     <Border BorderBrush="#33FFFFFF" BorderThickness="0,0,1,0" Padding="12">
         <Grid>
             <Grid.RowDefinitions>
-                <!-- Row 0: Khối 3D & Đồng hồ tự động co giãn theo chiều cao khả dụng -->
+                <!-- Row 0: Khối 3D & Progress Bar đếm thời gian -->
                 <RowDefinition Height="1*"/>
-                <!-- Row 1: Khối phím bấm & nhập liệu cố định kích thước Auto để không bị xén bớt -->
+                <!-- Row 1: Khối phím bấm & nhập liệu -->
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Khối Viewport 3D & Countdown -->
+            <!-- ================= KHỐI 3D & PROGRESS BAR (1 Cột, 2 Hàng) ================= -->
             <Grid Grid.Row="0" Margin="0,0,0,10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <!-- Tiêu đề & Mô hình 3D -->
+                    <RowDefinition Height="*"/>
+                    <!-- Thanh Progress Bar & Text đếm thời gian ở dưới -->
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                <TextBlock Grid.Column="0" Text="ĐIỀU KHIỂN HỆ THỐNG" FontSize="13" FontWeight="Bold" Foreground="#94A3B8" Margin="10,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <TextBlock Grid.Row="0" Text="ĐIỀU KHIỂN HỆ THỐNG" FontSize="13" FontWeight="Bold" Foreground="#94A3B8" Margin="10,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 
+                <!-- Mô hình 3D bồn quay -->
                 <helix:HelixViewport3D x:Name="TankViewport"
-                                       Grid.Column="0"
+                                       Grid.Row="0"
+                                       Margin="0,0,0,0"
                                        ShowFrameRate="False" 
                                        ShowCoordinateSystem="False" 
                                        ShowViewCube="False"
@@ -72,22 +76,37 @@
                     <helix:DefaultLights />
                 </helix:HelixViewport3D>
 
-                <Grid Grid.Column="1" Margin="5,10,10,0" VerticalAlignment="Top">
+                <Grid Grid.Row="1" Margin="10,5,10,5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Height="120">
-                        <Ellipse Stroke="#FFFFFF" StrokeThickness="10" Margin="4"/>
-                        <Path x:Name="ProgressArc" Stroke="#05a630" StrokeThickness="10.5" Margin="4"/>
-                        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBlock x:Name="TxtCountdownTime" Text="00:00" FontSize="16" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Center"/>
-                        </Grid>
-                    </Grid>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,4">
+                        <TextBlock Text="Thời gian: " FontSize="14" Foreground="#CBD5E1" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TxtCountdownTime" Text="00:00" FontSize="18" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <ProgressBar x:Name="ProgressArc" 
+                         Grid.Row="1" 
+                         Height="14" 
+                         Minimum="0" 
+                         Maximum="100" 
+                         Value="0"
+                         BorderBrush="Transparent">     
+                        <ProgressBar.Template>
+                            <ControlTemplate TargetType="ProgressBar">
+                                <Border Background="White">
+                                    <Grid x:Name="PART_Track">
+                                        <Border x:Name="PART_Indicator" Background="#05a630" HorizontalAlignment="Right"/>
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </ProgressBar.Template>
+                    </ProgressBar>
                 </Grid>
             </Grid>
 
-            <!-- Khối Điều khiển & Nút bấm -->
+            <!-- ================= KHỐI ĐIỀU KHIỂN & NÚT BẤM ================= -->
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

@@ -19,7 +19,8 @@ namespace XJProcess
 
         private void InitServicesAndViews()
         {
-            HeaderConfigControl.Service = _mainService;
+            HeaderConfigLeftControl.Service = _mainService;
+            HeaderConfigRightControl.Service = _mainService;
             DataGridViewControl.Service = _mainService;
 
             var initialOrder = DataGridViewService.GetFakeOrderHeaderInfo();
@@ -31,10 +32,10 @@ namespace XJProcess
                 _mainService.ChemicalList.Add(detail);
             }
 
-            _mainService.RegisterViews(HeaderConfigControl, DrumConfig, DataGridViewControl);
+            _mainService.RegisterViews(HeaderConfigLeftControl, DrumConfig, DataGridViewControl);
 
             _mainService.CurrentOrder = initialOrder;
-            HeaderConfigControl.OrderHeaderGrid.DataContext = initialOrder;
+            HeaderConfigRightControl.DataContext = initialOrder;
         }
 
         #region Window LifeCycle & Scanner
@@ -59,7 +60,7 @@ namespace XJProcess
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-            HeaderConfigControl?.StopClockTimer();
+            HeaderConfigLeftControl?.StopClockTimer();
             _mainService?.StopOrder();
         }
 

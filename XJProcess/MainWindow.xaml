@@ -21,11 +21,6 @@
                 <ColumnDefinition Width="65*"/>
             </Grid.ColumnDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="20*"/>
-                <RowDefinition Height="80*"/>
-            </Grid.RowDefinitions>
-
             <!-- Background Image -->
             <Image Source="/Images/background.png" 
                    Stretch="UniformToFill" 
@@ -40,20 +35,37 @@
                 </Image.Effect>
             </Image>
 
-            <!-- HEADER CONFIG -->
-            <Border Grid.Row="0" Grid.ColumnSpan="2">
-                <view:HeaderConfig  x:Name="HeaderConfigControl"/>
-            </Border>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- top left -->
+                <Border Grid.Row="0">
+                    <view:HeaderConfigLeft x:Name="HeaderConfigLeftControl"/>
+                </Border>
+                <!-- bottom left -->
+                <Border Grid.Row="1">
+                    <view:DrumConfig x:Name="DrumConfig"/>
+                </Border>
+            </Grid>
 
-            <!-- BOTTOM-LEFT -->
-            <Border Grid.Row="1" Grid.Column="0">
-                <view:DrumConfig x:Name="DrumConfig"/>
-            </Border>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <!-- BOTTOM-RIGHT -->
-            <Border  Grid.Row="1" Grid.Column="1">
-                <view:DataGridView x:Name="DataGridViewControl"/>
-            </Border>
+                <!-- top right -->
+                <Border Grid.Row="0">
+                    <view:HeaderConfigRight x:Name="HeaderConfigRightControl"/>
+                </Border>
+
+                <!-- bottom right -->
+                <Border Grid.Row="1">
+                    <view:DataGridView x:Name="DataGridViewControl"/>
+                </Border>
+            </Grid>
 
         </Grid>
 
