@@ -18,7 +18,6 @@ namespace XJProcess.view
         private readonly View3DService _view3DService = new View3DService();
         private readonly AxisAngleRotation3D _spinnerRotation = new AxisAngleRotation3D(new Vector3D(1, 0, 0), 0);
 
-        // Biến kiểm soát việc thay đổi Text từ phía người dùng hay từ Code
         private bool _isRunTimeInputChanged = false;
         private bool _isProgrammaticChange = false;
 
@@ -32,7 +31,6 @@ namespace XJProcess.view
                 _service = value;
                 if (_service != null)
                 {
-                    // Đồng bộ mặc định ban đầu giữa Service và UI (false = Xoay Xuống)
                     _service.IsSpinUp = false;
                     UpdateDirectionDisplay(false);
                 }
@@ -46,8 +44,6 @@ namespace XJProcess.view
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) return;
 
             Init3DScene();
-
-            // Đăng ký sự kiện theo dõi khi người dùng tự gõ/chỉnh sửa thời gian
             if (TxtRunTimeInput != null)
             {
                 TxtRunTimeInput.TextChanged += TxtRunTimeInput_TextChanged;
@@ -83,7 +79,6 @@ namespace XJProcess.view
 
         private void TxtRunTimeInput_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // Chỉ đánh dấu người dùng thao tác khi không phải là cập nhật tự động từ Code UI
             if (!_isProgrammaticChange)
             {
                 _isRunTimeInputChanged = true;

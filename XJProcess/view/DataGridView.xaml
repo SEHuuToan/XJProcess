@@ -142,7 +142,7 @@
                     </DataGridTextColumn>
 
                     <!-- CODE -->
-                    <DataGridTextColumn Header="CODE" Binding="{Binding Code}" Width="80">
+                    <DataGridTextColumn Header="CODE" Binding="{Binding Code}" Width="85">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>

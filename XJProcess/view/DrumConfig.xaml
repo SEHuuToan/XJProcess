@@ -70,7 +70,7 @@
                                        Background="Transparent"
                                        IsRotationEnabled="False" 
                                        IsViewCubeEdgeClicksEnabled="False"
-                                       ZoomExtentsWhenLoaded="True">
+                                       ZoomExtentsWhenLoaded="False">
                     <helix:DefaultLights />
                 </helix:HelixViewport3D>
 

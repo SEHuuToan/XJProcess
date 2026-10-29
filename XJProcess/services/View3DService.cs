@@ -79,7 +79,7 @@ namespace XJProcess
                 Position = new Point3D(0, 0, 10),
                 LookDirection = new Vector3D(0, 0, -10),
                 UpDirection = new Vector3D(0, 1, 0),
-                Width = 2.8
+                Width = 2.9
             };
         }
     }
