@@ -60,8 +60,6 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="ĐIỀU KHIỂN HỆ THỐNG" FontSize="13" FontWeight="Bold" Foreground="#94A3B8" Margin="10,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-
                 <!-- Mô hình 3D bồn quay -->
                 <helix:HelixViewport3D x:Name="TankViewport"
                                        Grid.Row="0"
@@ -82,8 +80,8 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,4">
-                        <TextBlock Text="Thời gian: " FontSize="14" Foreground="#CBD5E1" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="TxtCountdownTime" Text="00:00" FontSize="18" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
+                        <TextBlock Text="Thời gian: " FontSize="12" Foreground="#CBD5E1" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TxtCountdownTime" Text="00:00" FontSize="14" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
                     </StackPanel>
 
                     <ProgressBar x:Name="ProgressArc" 
@@ -115,74 +113,91 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" 
-                           Text="ĐIỀU KHIỂN HỆ THỐNG" 
-                           FontSize="13" 
-                           FontWeight="Bold" 
-                           Foreground="#94A3B8" 
-                           Margin="0,5,0,10"
-                           HorizontalAlignment="Center"/>
+               Text="ĐIỀU KHIỂN HỆ THỐNG" 
+               FontSize="13" 
+               FontWeight="Bold" 
+               Foreground="#94A3B8" 
+               Margin="0,5,0,10"
+               HorizontalAlignment="Center"/>
 
                 <Grid Grid.Row="1" Margin="5,0,5,5">
                     <Grid.RowDefinitions>
+                        <!-- Hàng 0: Trạng thái chế độ (trái) & Toggle Switch (phải) -->
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <!-- Hàng 1: Ô Vận hành và Đảo chiều chia 2 cột đều nhau -->
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Toggle Mode Switch -->
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,8">
-                        <ToggleButton x:Name="TglMode" 
-                                      Style="{StaticResource ModernToggleSwitch}" 
-                                      Checked="TglMode_Checked" 
-                                      Unchecked="TglMode_Unchecked"/>
-                    </StackPanel>
-
-                    <!-- Hàng 1: Thời gian vận hành -->
-                    <Grid Grid.Row="1" Margin="0,0,0,8">
+                    <!-- HÀNG 0: Trạng thái chế độ & Toggle Switch nằm ngang -->
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Thời gian vận hành:" FontSize="13" Foreground="#FFFFFF" VerticalAlignment="Center"/>
-                        <TextBox x:Name="TxtRunTimeInput" Grid.Column="1" Height="30" Background="#FFFFFF" Foreground="#000000" BorderBrush="#33FFFFFF" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" FontWeight="Bold"
-                                 InputScope="Number"
-                                 PreviewTextInput="NumberOnly_PreviewTextInput"
-                                 DataObject.Pasting="TextBox_Pasting"/>
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <TextBlock Text="Chế độ: " FontSize="13" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <Border Background="#00C853" CornerRadius="6" Padding="8,4" VerticalAlignment="Center">
+                                <TextBlock x:Name="TxtButtonStatus" Text="" FontSize="13" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                            </Border>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <ToggleButton x:Name="TglMode" 
+                              Style="{StaticResource ModernToggleSwitch}" 
+                              Checked="TglMode_Checked" 
+                              Unchecked="TglMode_Unchecked"/>
+                        </StackPanel>
                     </Grid>
 
-                    <!-- Hàng 2: Thời gian đảo chiều -->
-                    <Grid Grid.Row="2" Margin="0,0,0,10">
+                    <!-- HÀNG 1: Vận hành & Đảo chiều đặt thành 2 cột đều nhau -->
+                    <!-- HÀNG 1: Vận hành & Đảo chiều nằm chung 1 row, chia thành 2 cột đều nhau -->
+                    <Grid Grid.Row="1" Margin="0,0,0,5">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <!-- Khoảng cách giữa 2 cột -->
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Thời gian đảo chiều:" FontSize="13" Foreground="#FFFFFF" VerticalAlignment="Center"/>
-                        <TextBox x:Name="TxtReverseTimeInput" Grid.Column="1" Height="30" Background="#FFFFFF" Foreground="#000000" BorderBrush="#33FFFFFF" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" FontWeight="Bold"
-                                 InputScope="Number"
-                                 PreviewTextInput="NumberOnly_PreviewTextInput"
-                                 DataObject.Pasting="TextBox_Pasting"/>
-                    </Grid>
 
-                    <!-- Hàng 3: Trạng thái bồn quay -->
-                    <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10">
-                        <TextBlock Text="Chế độ: " FontSize="13" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <Border Background="#00C853" CornerRadius="6" Padding="8,4" VerticalAlignment="Center">
-                            <TextBlock x:Name="TxtButtonStatus" Text="" FontSize="13" FontWeight="SemiBold" Foreground="#FFFFFF"/>
-                        </Border>
-                    </StackPanel>
+                        <!-- Cột trái: Vận hành (Chữ và ô Input chung 1 hàng) -->
+                        <Grid Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Vận hành:" FontSize="12" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBox x:Name="TxtRunTimeInput" Grid.Column="1" Height="30" Background="#FFFFFF" Foreground="#000000" BorderBrush="#33FFFFFF" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" FontWeight="Bold"
+                 InputScope="Number"
+                 PreviewTextInput="NumberOnly_PreviewTextInput"
+                 DataObject.Pasting="TextBox_Pasting"/>
+                        </Grid>
+
+                        <!-- Cột phải: Đảo chiều (Chữ và ô Input chung 1 hàng) -->
+                        <Grid Grid.Column="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Đảo chiều:" FontSize="12" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBox x:Name="TxtReverseTimeInput" Grid.Column="1" Height="30" Background="#FFFFFF" Foreground="#000000" BorderBrush="#33FFFFFF" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" FontWeight="Bold"
+                 InputScope="Number"
+                 PreviewTextInput="NumberOnly_PreviewTextInput"
+                 DataObject.Pasting="TextBox_Pasting"/>
+                        </Grid>
+                    </Grid>
                 </Grid>
 
                 <!-- Các nút CHẠY / DỪNG / XOAY -->
                 <UniformGrid Grid.Row="2" Columns="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,5,0,0">
                     <Button x:Name="BtnStart" 
-                            Height="80"
-                            Margin="3"
-                            Background="#00C853" 
-                            Foreground="#FFFFFF" 
-                            BorderBrush="#69F0AE"
-                            Style="{StaticResource OverViewButtonStyle}"
-                            Click="BtnStart_Click">
+                Height="80"
+                Margin="3"
+                Background="#00C853" 
+                Foreground="#FFFFFF" 
+                BorderBrush="#69F0AE"
+                Style="{StaticResource OverViewButtonStyle}"
+                Click="BtnStart_Click">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="▶" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,2"/>
                             <TextBlock Text="CHẠY" FontSize="11" FontWeight="Bold" TextAlignment="Center"/>
@@ -190,13 +205,13 @@
                     </Button>
 
                     <Button x:Name="BtnStop" 
-                            Height="80"
-                            Margin="3"
-                            Background="#C62828" 
-                            Foreground="#FFFFFF" 
-                            BorderBrush="#FF5252"
-                            Style="{StaticResource OverViewButtonStyle}"
-                            Click="BtnStop_Click">
+                Height="80"
+                Margin="3"
+                Background="#C62828" 
+                Foreground="#FFFFFF" 
+                BorderBrush="#FF5252"
+                Style="{StaticResource OverViewButtonStyle}"
+                Click="BtnStop_Click">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="⏹" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,2"/>
                             <TextBlock Text="DỪNG" FontSize="11" FontWeight="Bold" TextAlignment="Center"/>
@@ -204,13 +219,13 @@
                     </Button>
 
                     <Button x:Name="BtnRotateUp" 
-                            Height="80"
-                            Margin="3"
-                            Background="#0284C7" 
-                            Foreground="#FFFFFF" 
-                            BorderBrush="#38BDF8"
-                            Style="{StaticResource OverViewButtonStyle}"
-                            Click="BtnRotateUp_Click">
+                Height="80"
+                Margin="3"
+                Background="#0284C7" 
+                Foreground="#FFFFFF" 
+                BorderBrush="#38BDF8"
+                Style="{StaticResource OverViewButtonStyle}"
+                Click="BtnRotateUp_Click">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="🔼" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,2"/>
                             <TextBlock Text="XOAY" FontSize="11" FontWeight="Bold" TextAlignment="Center"/>
@@ -218,13 +233,13 @@
                     </Button>
 
                     <Button x:Name="BtnRotateDown" 
-                            Height="80"
-                            Margin="3"
-                            Background="#4F46E5" 
-                            Foreground="#FFFFFF" 
-                            BorderBrush="#818CF8"
-                            Style="{StaticResource OverViewButtonStyle}"
-                            Click="BtnRotateDown_Click">
+                Height="80"
+                Margin="3"
+                Background="#4F46E5" 
+                Foreground="#FFFFFF" 
+                BorderBrush="#818CF8"
+                Style="{StaticResource OverViewButtonStyle}"
+                Click="BtnRotateDown_Click">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="🔽" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,2"/>
                             <TextBlock Text="XOAY" FontSize="11" FontWeight="Bold" TextAlignment="Center"/>
