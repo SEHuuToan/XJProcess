@@ -48,10 +48,10 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <!--<StackPanel Orientation="Horizontal" Margin="0,2">
-                        <TextBlock Text="Họ và Tên:  " FontSize="12" Foreground="#CBD5E1"/>
-                        <TextBlock x:Name="TxtEmpName" Text="Nguyễn Văn A" FontSize="12" FontWeight="Bold" Foreground="#FFFFFF"/>
-                    </StackPanel>-->
+                    <StackPanel Orientation="Horizontal" Margin="0,2">
+                        <TextBlock Text="Mã đơn hàng:  " FontSize="12" Foreground="#CBD5E1"/>
+                        <TextBlock x:Name="txtOrderCode" Text="100026070402085-ADDS.1159E" FontSize="12" FontWeight="Bold" Foreground="#FFFFFF"/>
+                    </StackPanel>
                     <!--<StackPanel Orientation="Horizontal" Margin="0,2">
                         <TextBlock Text="Thời gian:  " FontSize="12" Foreground="#CBD5E1"/>
                         <TextBlock x:Name="TxtCurrentTime" Text="2026-08-12 13:30:00" FontSize="12" FontWeight="SemiBold" Foreground="#38BDF8"/>
@@ -67,6 +67,10 @@
                     <StackPanel Orientation="Horizontal" Margin="0,2">
                         <TextBlock Text="Người vận hành:  " FontSize="12" Foreground="#CBD5E1"/>
                         <TextBlock x:Name="TxtOperator" Text="{Binding OperatorName}" FontSize="12" FontWeight="SemiBold" Foreground="#38BDF8"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,2">
+                        <TextBlock Text="Trạng thái:  " FontSize="12" Foreground="#CBD5E1"/>
+                        <TextBlock x:Name="TxtDrumStatus" Text="Sẵn sàng" FontSize="12" FontWeight="SemiBold" Foreground="#34D399"/>
                     </StackPanel>
                 </StackPanel>
 

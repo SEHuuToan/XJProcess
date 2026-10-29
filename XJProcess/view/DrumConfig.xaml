@@ -54,9 +54,9 @@
             <!-- ================= KHỐI 3D & PROGRESS BAR (1 Cột, 2 Hàng) ================= -->
             <Grid Grid.Row="0" Margin="0,0,0,10">
                 <Grid.RowDefinitions>
-                    <!-- Tiêu đề & Mô hình 3D -->
+                    <!-- Mô hình 3D -->
                     <RowDefinition Height="*"/>
-                    <!-- Thanh Progress Bar & Text đếm thời gian ở dưới -->
+                    <!-- Progress timer bar -->
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
@@ -128,7 +128,7 @@
 
                     <Grid Grid.Row="0" Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="160"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
@@ -139,8 +139,8 @@
                             </Border>
                         </StackPanel>
 
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <ToggleButton x:Name="TglMode" 
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ToggleButton x:Name="TglMode"
                               Style="{StaticResource ModernToggleSwitch}" 
                               Checked="TglMode_Checked" 
                               Unchecked="TglMode_Unchecked"/>
@@ -155,25 +155,24 @@
                         </Grid.ColumnDefinitions>
 
                         <Grid Grid.Column="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Vận hành:" FontSize="12" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                            <TextBox x:Name="TxtRunTimeInput" Grid.Column="1" Height="25" Background="#FFFFFF" Foreground="#000000" BorderBrush="#33FFFFFF" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" FontWeight="Bold"
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Vận hành (phút):" FontSize="12" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="0,0,0,4"/>
+                            <TextBox x:Name="TxtRunTimeInput" Grid.Row="1" Height="25" Background="#FFFFFF" Foreground="#000000" BorderBrush="#33FFFFFF" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" FontWeight="Bold"
                              InputScope="Number"
                              PreviewTextInput="NumberOnly_PreviewTextInput"
-                             DataObject.Pasting="TextBox_Pasting"/> 
+                             DataObject.Pasting="TextBox_Pasting"/>
                         </Grid>
 
- 
                         <Grid Grid.Column="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Đảo chiều:" FontSize="12" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                            <TextBox x:Name="TxtReverseTimeInput" Grid.Column="1" Height="25" Background="#FFFFFF" Foreground="#000000" BorderBrush="#33FFFFFF" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" FontWeight="Bold"
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Đảo chiều (phút):" FontSize="12" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="0,0,0,4"/>
+                            <TextBox x:Name="TxtReverseTimeInput" Grid.Row="1" Height="25" Background="#FFFFFF" Foreground="#000000" BorderBrush="#33FFFFFF" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" FontWeight="Bold"
                              InputScope="Number"
                              PreviewTextInput="NumberOnly_PreviewTextInput"
                              DataObject.Pasting="TextBox_Pasting"/>
