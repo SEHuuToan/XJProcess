@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
+using XJProcess.modal;
 using XJProcess.service;
 using XJProcess.services;
 using XJProcess.ultis;
@@ -22,24 +23,14 @@ namespace XJProcess
             HeaderConfigLeftControl.Service = _mainService;
             HeaderConfigRightControl.Service = _mainService;
             DataGridViewControl.Service = _mainService;
-
-            var initialOrder = DataGridViewService.GetFakeOrderHeaderInfo();
-            var initFakeDataDetail = DataGridViewService.GetFakeTechnicalSheetData();
-
-            _mainService.ChemicalList.Clear();
-            foreach (var detail in initFakeDataDetail)
-            {
-                _mainService.ChemicalList.Add(detail);
-            }
-
+            //var initFakeDataDetail = DataGridViewService.GetFakeTechnicalSheetData();
+            //_mainService.ChemicalList.Clear();
+            //foreach (var detail in initFakeDataDetail)
+            //{
+            //    _mainService.ChemicalList.Add(detail);
+            //}
             _mainService.RegisterViews(HeaderConfigLeftControl, DrumConfig, DataGridViewControl);
-
-            _mainService.CurrentOrder = initialOrder;
-            HeaderConfigRightControl.DataContext = initialOrder;
         }
-
-        #region Window LifeCycle & Scanner
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _ = _mainService.ConnectPlcAsync("192.168.2.1");
@@ -66,11 +57,17 @@ namespace XJProcess
 
         private async void ScanService_ScanerEvent(ScanService.ScanerCodes codes)
         {
-            string rawQr = codes.Result;
-            if (string.IsNullOrEmpty(rawQr)) return;
-            await _mainService.ProcessQrCodeAsync(rawQr);
+            string valueQR = _mainService.SplitQRValue(codes.Result);
+            if (string.IsNullOrEmpty(valueQR)) return;
+
+            ChemicalData chemicalData = await _mainService.ProcessQrCodeAsync(valueQR);
+
+            if (chemicalData != null)
+            {
+                HeaderConfigLeftControl.SetData(chemicalData);
+                HeaderConfigRightControl.DataContext = chemicalData;
+            }
         }
 
-        #endregion
     }
 }

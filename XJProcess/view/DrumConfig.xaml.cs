@@ -37,6 +37,16 @@ namespace XJProcess.view
             }
         }
 
+        public void ClearInputs()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                TxtRunTimeInput.Text = string.Empty;
+                TxtReverseTimeInput.Text = string.Empty;
+                TxtCountdownTime.Text = "00:00";
+                if (ProgressArc != null) ProgressArc.Value = 0;
+            });
+        }
         public DrumConfig()
         {
             InitializeComponent();
@@ -288,6 +298,7 @@ namespace XJProcess.view
         private void TglMode_Checked(object sender, RoutedEventArgs e)
         {
             if (TxtRunTimeInput != null) TxtRunTimeInput.Text = string.Empty;
+            if (PanelCountdown != null) PanelCountdown.Visibility = Visibility.Visible;
             if (Service != null)
             {
                 Service.IsAutoMode = true;
@@ -300,6 +311,7 @@ namespace XJProcess.view
 
         private void TglMode_Unchecked(object sender, RoutedEventArgs e)
         {
+            if (PanelCountdown != null) PanelCountdown.Visibility = Visibility.Hidden;
             if (Service != null)
             {
                 Service.IsAutoMode = false;

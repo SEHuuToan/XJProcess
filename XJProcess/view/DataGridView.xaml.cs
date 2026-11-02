@@ -14,7 +14,7 @@ namespace XJProcess.view
             InitializeComponent();
         }
 
-        public void LoadChemicalData(ChemicalHeader currentOrder)
+        public void LoadChemicalData(ChemicalData? currentOrder)
         {
             Service.CurrentOrder = currentOrder;
         }

@@ -51,44 +51,76 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock x:Name="TxtNoOrderMessage" 
-                       Grid.Row="1" 
-                       Text="Chưa quét đơn bồn quay" 
-                       FontSize="32" 
-                       FontWeight="SemiBold" 
-                       Foreground="#FFFFFF" 
+            <!-- EMPTY STATE / CHƯA QUÉT ĐƠN (ĐÃ REDESIGN HIỆN ĐẠI) -->
+            <StackPanel x:Name="TxtNoOrderMessage" 
+                    Grid.Row="1" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Orientation="Vertical"
+                    Visibility="Visible">
+                <Border Width="158" Height="158" 
+                    Background="#150284C7" 
+                    CornerRadius="24" 
+                    HorizontalAlignment="Center" 
+                    Margin="0,0,0,20"
+                    BorderBrush="#3338BDF8"
+                    BorderThickness="1">
+                    <Path Data="M3,3V9H5V5H9V3H3M19,3H15V5H19V9H21V3H19M3,21H9V19H5V15H3V21M21,15H19V19H15V21H21V15M7,7V17H17V7H7Z"
+                      Fill="#38BDF8" 
+                      Width="90" Height="90" 
+                      Stretch="Uniform" 
+                      HorizontalAlignment="Center" 
+                      VerticalAlignment="Center"/>
+                </Border>
+                <TextBlock Text="Chưa quét đơn bồn quay" 
+                       FontSize="30" 
+                       FontWeight="Bold" 
+                       Foreground="#F8FAFC" 
+                       HorizontalAlignment="Center"/>
+                <TextBlock Text="旋转储罐订单尚未扫描" 
+                       FontSize="30" 
+                       FontWeight="Bold" 
+                       Foreground="#F8FAFC" 
                        HorizontalAlignment="Center" 
-                       VerticalAlignment="Center" 
-                       Visibility="Visible"/>
+                       Margin="0,0,0,10"/>
+                <TextBlock Text="Vui lòng quét mã QR trên phiếu để tải quy trình vận hành" 
+                       FontSize="18" 
+                       Foreground="#94A3B8" 
+                       HorizontalAlignment="Center"/>
+                <TextBlock Text="请扫描票上的二维码下载操作流程说明" 
+                       FontSize="18" 
+                       Foreground="#94A3B8" 
+                       HorizontalAlignment="Center"/>
+            </StackPanel>
 
             <!-- OPTIMIZED DATAGRID -->
             <DataGrid Grid.Row="1" 
-                      x:Name="MainDataGrid"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      IsReadOnly="True"
-                      Background="Transparent" 
-                      RowBackground="Transparent"
-                      AlternatingRowBackground="Transparent"
-                      GridLinesVisibility="All"
-                      HorizontalGridLinesBrush="#22FFFFFF" 
-                      VerticalGridLinesBrush="#22FFFFFF"
-                      BorderBrush="#0284C7"
-                      BorderThickness="1"
-                      RowHeight="32"
-                      ColumnHeaderHeight="32"
-                      FontSize="14"
-                      Foreground="#FFFFFF"
-                      SelectionMode="Single"
-                      VirtualizingStackPanel.IsVirtualizing="True"
-                      VirtualizingStackPanel.VirtualizationMode="Recycling"
-                      VirtualizingStackPanel.CacheLength="2,2"
-                      VirtualizingStackPanel.CacheLengthUnit="Page"
-                      ScrollViewer.CanContentScroll="True"
-                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto"
-                      EnableRowVirtualization="True"
-                      EnableColumnVirtualization="True">
+              x:Name="MainDataGrid"
+              AutoGenerateColumns="False"
+              CanUserAddRows="False"
+              IsReadOnly="True"
+              Background="Transparent" 
+              RowBackground="Transparent"
+              AlternatingRowBackground="Transparent"
+              GridLinesVisibility="All"
+              HorizontalGridLinesBrush="#22FFFFFF" 
+              VerticalGridLinesBrush="#22FFFFFF"
+              BorderBrush="#0284C7"
+              BorderThickness="1"
+              RowHeight="32"
+              ColumnHeaderHeight="32"
+              FontSize="14"
+              Foreground="#FFFFFF"
+              SelectionMode="Single"
+              EnableRowVirtualization="True"
+              EnableColumnVirtualization="True"
+              VirtualizingPanel.IsVirtualizing="True"
+              VirtualizingPanel.VirtualizationMode="Recycling"
+              VirtualizingPanel.CacheLength="2,2"
+              VirtualizingPanel.CacheLengthUnit="Page"
+              ScrollViewer.CanContentScroll="True"
+              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+              ScrollViewer.VerticalScrollBarVisibility="Auto">
 
                 <DataGrid.Resources>
                     <Style TargetType="DataGridColumnHeader">

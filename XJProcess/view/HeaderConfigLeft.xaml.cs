@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Windows.Media;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
+using XJProcess.modal;
 using XJProcess.services;
 using XJProcess.ultis;
 
@@ -37,6 +38,26 @@ namespace XJProcess.view
                 TxtCurrentTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         }
 
+        public void SetData(ChemicalData data)
+        {
+            if (data == null) return;
+
+            Dispatcher.Invoke(() =>
+            {
+                if (txtOrderCode != null)
+                    txtOrderCode.Text = data.Mobill ?? string.Empty;
+
+                if (TxtTechnician != null)
+                    TxtTechnician.Text = data.Tech ?? string.Empty;
+
+                if (TxtOperator != null)
+                    TxtOperator.Text = data.User ?? string.Empty;
+
+                if (TxtWeight != null)
+                    TxtWeight.Text = data.Weight ?? string.Empty;
+            });
+        }
+
         private void Timer_Tick(object sender, EventArgs e)
         {
             try
@@ -49,27 +70,20 @@ namespace XJProcess.view
                 if (TxtTankTemp != null) TxtTankTemp.Text = $"{displayTemp:F1} °C";
                 if (TxtTankBattery != null) TxtTankBattery.Text = $"{batteryValue} %";
 
-                // --- LOGIC XÁC ĐỊNH TRẠNG THÁI THEO MÃ ĐƠN HÀNG ---
-                // Lấy mã đơn hàng từ DataContext hiện tại (hoặc từ Service tùy cấu trúc view model của bro)
                 string orderCode = string.Empty;
-
-                // Nếu DataContext của UserControl này đang bind với object đơn hàng
                 if (this.DataContext != null)
                 {
-                    // Thử lấy thuộc tính OrderCode (hoặc tên property chứa mã đơn hàng bên bro, ví dụ: Code, OrderNo,...)
                     var prop = this.DataContext.GetType().GetProperty("OrderCode") ?? this.DataContext.GetType().GetProperty("Code");
                     if (prop != null)
                     {
                         orderCode = prop.GetValue(this.DataContext)?.ToString() ?? string.Empty;
                     }
                 }
-
-                // Hoặc kiểm tra phòng hờ qua Service nếu có lưu trữ đơn hiện tại
                 bool hasOrder = !string.IsNullOrEmpty(orderCode) && orderCode != "0";
 
                 if (Service != null && Service.CurrentRunningItem != null)
                 {
-                    hasOrder = true; // Nếu service đang có item chạy thì chắc chắn có đơn
+                    hasOrder = true;
                 }
 
                 if (TxtDrumStatus != null)
@@ -105,7 +119,10 @@ namespace XJProcess.view
 
         public void ClearOrderHeaderInfo()
         {
-            if (DataContext != null) DataContext = null;
+     
+            if (txtOrderCode != null) txtOrderCode.Text = string.Empty;
+            if (TxtTechnician != null) TxtTechnician.Text = string.Empty;
+            if (TxtOperator != null) TxtOperator.Text = string.Empty;
         }
     }
 }

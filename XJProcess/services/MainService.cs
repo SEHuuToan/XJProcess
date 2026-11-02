@@ -17,6 +17,7 @@ namespace XJProcess.services
         private DrumConfig _drumConfig;
         private DataGridView _dataGridView;
         private readonly ApiService _apiService;
+        private readonly ChemicalService _chemicalService;
         private readonly DispatcherTimer _stepTimer;
         private readonly HashSet<ChemicalDetail> _completedItems = new();
 
@@ -28,6 +29,7 @@ namespace XJProcess.services
         /// 3 = Finish (Hoàn thành chu trình quay)
         /// 4 = User Manual Override (Can thiệp thời gian -> Bước DataGridView chuyển "Hoàn tất" & Unlock bước tiếp)
         /// </summary>
+        public string CurrentBillNo { get; set; } = string.Empty;
         public int IsRunning { get; set; } = 0;
 
         public int Timer { get; set; }
@@ -46,13 +48,15 @@ namespace XJProcess.services
 
         public ObservableCollection<ChemicalDetail> ChemicalList { get; private set; } = new ObservableCollection<ChemicalDetail>();
         public ChemicalDetail? CurrentRunningItem { get; set; }
-        public ChemicalHeader CurrentOrder { get; set; }
+        public ChemicalData? CurrentOrder { get; set; }
         public bool IsManualRunning { get; set; } = true;
 
         public MainService()
         {
+            _apiService = new ApiService();
             _stepTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _stepTimer.Tick += StepTimer_Tick;
+            _chemicalService = new ChemicalService(_apiService);
         }
 
         public async Task ConnectPlcAsync(string ipAddress)
@@ -279,16 +283,13 @@ namespace XJProcess.services
         {
             if (ChemicalList == null || ChemicalList.Count == 0) return;
 
-            bool isFirstActionFound = false;
-
             foreach (var item in ChemicalList)
             {
-                if (!isFirstActionFound && item.HasAction && !IsCompleted(item) && item.Status != "Hoàn tất")
+                if (item.HasAction && item.Status != "Hoàn tất")
                 {
                     item.IsEnabled = true;
                     item.IsRunning = 0;
                     item.IsPaused = false;
-                    isFirstActionFound = true;
                 }
                 else
                 {
@@ -435,10 +436,9 @@ namespace XJProcess.services
             ReversePlcTimer = 0;
             CurrentRunningItem = null;
             _completedItems.Clear();
-
-            _drumConfig.ResetCountdownDisplay();
+            _drumConfig?.ResetCountdownDisplay();
+            _drumConfig?.ClearInputs();
             ClearOrderHeaderInfo();
-
             if (_dataGridView?.MainDataGrid != null)
             {
                 _dataGridView.MainDataGrid.Visibility = Visibility.Collapsed;
@@ -450,13 +450,17 @@ namespace XJProcess.services
 
         public void ClearOrderHeaderInfo()
         {
-            if (CurrentOrder != null)
+            if (_headerConfigLeft != null)
             {
-                CurrentOrder.Line1Col0 = CurrentOrder.Line2Col0 = CurrentOrder.Line3Col0 = CurrentOrder.Line4Col0 = string.Empty;
-                CurrentOrder.Line1Col1 = CurrentOrder.Line2Col1 = CurrentOrder.Line3Col1 = CurrentOrder.Line4Col1 = string.Empty;
-                CurrentOrder.TechnicianName = CurrentOrder.DrumNo = CurrentOrder.StartTime = CurrentOrder.EndTime = string.Empty;
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _headerConfigLeft.txtOrderCode.Text = string.Empty;
+                    _headerConfigLeft.TxtTechnician.Text = string.Empty;
+                    _headerConfigLeft.TxtOperator.Text = string.Empty;
+                    _headerConfigLeft.TxtWeight.Text = string.Empty;
+                    _headerConfigLeft.TxtDrumStatus.Text = "Sẵn sàng";
+                });
             }
-            _headerConfigLeft?.ClearOrderHeaderInfo();
         }
 
         private void UnlockAndEnableNextStep(ChemicalDetail currentItem)
@@ -496,31 +500,9 @@ namespace XJProcess.services
             }
         }
 
-        public async Task ProcessQrCodeAsync(string rawQr)
+        public string SplitQRValue(string scannedResult)
         {
-            string billCode = getBillFromQrCode(rawQr);
-            if (string.IsNullOrEmpty(billCode)) return;
-            List<ChemicalDetail> realData = await _apiService.LoadDataChemical(billCode);
-            await Application.Current.Dispatcher.InvokeAsync(() =>
-            {
-                ChemicalList.Clear();
-                if (realData != null && realData.Count > 0)
-                {
-                    foreach (var item in realData)
-                    {
-                        ChemicalList.Add(item);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show($"Không tìm thấy dữ liệu hóa chất cho mã: {billCode}", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-            });
-        }
-
-        public string? getBillFromQrCode(string scannedResult)
-        {
-            if (string.IsNullOrWhiteSpace(scannedResult) || !scannedResult.Contains("6000CFDH"))
+            if (!scannedResult.Contains("6000CFDH"))
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -528,7 +510,49 @@ namespace XJProcess.services
                 });
                 return null;
             }
-            return scannedResult.Split('\\')[0].Trim();
+            var parts = scannedResult.Split(new[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length >= 2)
+            {
+                CurrentBillNo = parts[0].Trim();
+                return parts[1].Trim();
+            }
+            else if (parts.Length == 1)
+            {
+                CurrentBillNo = parts[0].Trim();
+                return CurrentBillNo;
+            }
+            return null;
+        }
+
+        public async Task<ChemicalData?> ProcessQrCodeAsync(string billCode)
+        {
+            if (string.IsNullOrEmpty(billCode)) return null;
+            var chemicalData = await _apiService.LoadDataChemical(billCode);
+            CurrentOrder = chemicalData;
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                ChemicalList.Clear();
+                if (chemicalData != null && chemicalData.List != null && chemicalData.List.Count > 0)
+                {
+                    foreach (var item in chemicalData.List)
+                    {
+                        ChemicalList.Add(item);
+                    }
+                    InitializeStepStates();
+                    if (_dataGridView?.MainDataGrid != null)
+                    {
+                        _dataGridView.MainDataGrid.Visibility = Visibility.Visible;
+                        _dataGridView.MainDataGrid.ItemsSource = ChemicalList;
+                        if (_dataGridView.TxtNoOrderMessage != null)
+                            _dataGridView.TxtNoOrderMessage.Visibility = Visibility.Collapsed;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"Không tìm thấy dữ liệu hóa chất cho mã đơn: {billCode}", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            });
+            return chemicalData;
         }
 
         private string CleanHexInput(string input)

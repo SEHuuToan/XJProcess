@@ -21,10 +21,10 @@ namespace XJProcess.services
         /// </summary>
         public async Task<List<ChemicalStepItem>> GetChemicalStepsAsync(string orderId)
         {
-            var rawList = await _apiService.LoadDataChemical(orderId) ?? new List<ChemicalDetail>();
+            var chemicalData = await _apiService.LoadDataChemical(orderId);
+            var rawList = chemicalData?.List ?? new List<ChemicalDetail>();
             var stepItems = new List<ChemicalStepItem>();
             bool isFirstActionEnabled = false;
-
             foreach (var detail in rawList)
             {
                 var item = new ChemicalStepItem(detail)
@@ -33,7 +33,6 @@ namespace XJProcess.services
                     Status = "Chờ thực hiện",
                     IsEnabled = false
                 };
-
                 if (item.HasAction && !isFirstActionEnabled)
                 {
                     item.IsEnabled = true;
@@ -42,7 +41,6 @@ namespace XJProcess.services
 
                 stepItems.Add(item);
             }
-
             return stepItems;
         }
 

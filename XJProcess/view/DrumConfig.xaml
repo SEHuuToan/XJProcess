@@ -79,7 +79,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,4">
+                    <StackPanel x:Name="PanelCountdown" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,4" Visibility="Hidden">
                         <TextBlock Text="Thời gian: " FontSize="12" Foreground="#CBD5E1" VerticalAlignment="Center"/>
                         <TextBlock x:Name="TxtCountdownTime" Text="00:00" FontSize="14" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
                     </StackPanel>
