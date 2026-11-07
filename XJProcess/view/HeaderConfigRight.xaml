@@ -8,6 +8,7 @@
 
     <UserControl.Resources>
         <Style x:Key="OverViewButtonStyle" TargetType="Button">
+            <Setter Property="Focusable" Value="False"/>
             <Setter Property="Foreground" Value="#FFFFFF"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>

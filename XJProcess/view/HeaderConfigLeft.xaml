@@ -28,7 +28,8 @@
                     <TextBlock Text="XIANG JIANG VIETNAM" FontSize="14" FontWeight="Medium" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="10,0,0,0"/>
                 </StackPanel>-->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock x:Name="TxtTankCode" Text="7#" FontSize="38" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Right"/>
+                    <TextBlock Text="BỒN: " FontSize="34" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Right"/>
+                    <TextBlock x:Name="TxtTankCode" Text="--" FontSize="34" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Right"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">

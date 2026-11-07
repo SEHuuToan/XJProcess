@@ -69,6 +69,8 @@
                                        ShowViewCube="False"
                                        Background="Transparent"
                                        IsRotationEnabled="False" 
+                                       IsZoomEnabled="False"
+                                       IsPanEnabled="False"
                                        IsViewCubeEdgeClicksEnabled="False"
                                        ZoomExtentsWhenLoaded="False">
                     <helix:DefaultLights />
@@ -90,6 +92,7 @@
                          Minimum="0" 
                          Maximum="100" 
                          Value="0"
+                         Visibility="Hidden"
                          BorderBrush="Transparent">     
                         <ProgressBar.Template>
                             <ControlTemplate TargetType="ProgressBar">

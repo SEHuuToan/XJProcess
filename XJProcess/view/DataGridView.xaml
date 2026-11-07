@@ -49,6 +49,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="12"/>
             </Grid.RowDefinitions>
 
             <!-- EMPTY STATE / CHƯA QUÉT ĐƠN (ĐÃ REDESIGN HIỆN ĐẠI) -->
@@ -174,7 +175,7 @@
                     </DataGridTextColumn>
 
                     <!-- CODE -->
-                    <DataGridTextColumn Header="CODE" Binding="{Binding Code}" Width="85">
+                    <DataGridTextColumn Header="CODE" Binding="{Binding ShortCode}" Width="85">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -274,6 +275,14 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
+            <TextBlock x:Name="TxtAppVersion" 
+                   Grid.Row="2" 
+                   Text="v1.0.0.0" 
+                   FontSize="12" 
+                   Foreground="White" 
+                   HorizontalAlignment="Right" 
+                   VerticalAlignment="Center" 
+                   Margin="0,2,4,0"/>
         </Grid>
     </Border>
 </UserControl>

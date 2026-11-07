@@ -15,7 +15,16 @@ namespace XJProcess.view
 
         private void BtnStopOrder_Click(object sender, RoutedEventArgs e)
         {
-            Service?.StopOrder();
+            MessageBoxResult result = MessageBox.Show(
+                "Bạn có muốn kết thúc đơn này không?",
+                "Xác nhận kết thúc đơn",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                Service?.StopOrder();
+            }
         }
 
         private void btn_Setting_Click(object sender, RoutedEventArgs e)

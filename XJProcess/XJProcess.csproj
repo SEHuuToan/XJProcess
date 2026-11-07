@@ -23,6 +23,7 @@
   <ItemGroup>
     <PackageReference Include="HelixToolkit.Geometry" Version="3.1.2" />
     <PackageReference Include="HelixToolkit.Wpf" Version="3.1.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="RestSharp" Version="113.0.0" />
     <PackageReference Include="S7netplus" Version="0.20.0" />
   </ItemGroup>

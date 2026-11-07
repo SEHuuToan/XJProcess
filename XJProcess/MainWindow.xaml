@@ -68,6 +68,7 @@
             </Grid>
 
         </Grid>
+      
 
         <Grid x:Name="OverlayBlurGrid" Visibility="Collapsed">
             <Border Background="#A0FFFFFF" />

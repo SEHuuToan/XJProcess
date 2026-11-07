@@ -125,6 +125,8 @@ namespace XJProcess.modal
 
         [JsonPropertyName("isComplete")]
         public bool? IsComplete { get; set; }
+        [JsonPropertyName("shortCode")]
+        public string? ShortCode { get; set; }
 
         // --- CÁC PROPERTY TRUNG GIAN ĐỂ BINDING VÀO CỘT XAML ---
 
@@ -148,6 +150,25 @@ namespace XJProcess.modal
         }
 
         public int h => TimeMinutes ?? 0;
+        //public int DurationMinutes
+        //{
+        //    get
+        //    {
+        //        int originalMinutes = TimeMinutes ?? 0;
+        //        // FAKE GIẢM THỜI GIAN: Chia 3 (chia cho 3). 
+        //        // Đảm bảo tối thiểu là 1 phút nếu step đó có thời gian (> 0) để vẫn chạy được, hoặc trả về 0 nếu không có thời gian.
+        //        if (originalMinutes <= 0) return 0;
+        //        int reduced = originalMinutes / 3;
+        //        return reduced > 0 ? reduced : 1;
+        //    }
+        //    set
+        //    {
+        //        TimeMinutes = value;
+        //        OnPropertyChanged();
+        //        OnPropertyChanged(nameof(h));
+        //    }
+        //}
+        //public int h => DurationMinutes; // Gọi lại DurationMinutes để đồng bộ giá trị đã chia 3
 
         public string CheckInfo => Check;
 

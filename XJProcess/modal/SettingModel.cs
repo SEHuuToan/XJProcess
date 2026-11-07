@@ -8,7 +8,7 @@ namespace XJProcess.modal
 {
     public class SettingModel
     {
-        public string DrumId { get; set; } 
+        public string DrumNumber { get; set; } 
         public string IpAddress { get; set; }
         public string WebSocketPort { get; set; } 
         public string ApiUrl { get; set; }
@@ -16,6 +16,8 @@ namespace XJProcess.modal
         public string Timeout { get; set; }
         public short uid { get; set; }
         public string slaveId { get; set; }
+        public int ReverseTime { get; set; }
+        public bool IsReverse { get; set; }
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using XJProcess.modal;
+using XJProcess.services;
 using XJProcess.Services;
 using XJProcess.ultis;
 
@@ -8,6 +9,7 @@ namespace XJProcess.view
 {
     public partial class SettingView : Window
     {
+        public static event Action? OnSettingsSaved;
         public SettingView()
         {
             InitializeComponent();
@@ -23,32 +25,52 @@ namespace XJProcess.view
             if (config != null)
             {
                 // Nhóm 1: Thiết bị & Mạng
-                TxtDrumId.Text = config.DrumId;
+                TxtDrumNumber.Text = config.DrumNumber;
                 TxtIpAddress.Text = config.IpAddress;
                 TxtWebSocketPort.Text = config.WebSocketPort;
                 TxtUid.Text = config.uid.ToString("X");
                 TxtSlave.Text = config.slaveId;
-
                 // Nhóm 2: Vận hành bồn quay
+                TxtReverseDelay.Text = config.ReverseTime.ToString();
+                // Mặc định là false nếu config chưa có
+                if (TglIsReverse != null)
+                {
+                    TglIsReverse.IsChecked = config.IsReverse;
+                }
+            }
+            else
+            {
+                if (TglIsReverse != null)
+                {
+                    TglIsReverse.IsChecked = false;
+                }
             }
         }
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            // Gom dữ liệu từ các TextBox vào Model
+            int revTime = 0;
+            if (int.TryParse(TxtReverseDelay.Text.Trim(), out int parsedVal))
+            {
+                revTime = parsedVal;
+            }
             SettingModel config = new SettingModel()
             {
-                // Nhóm 1
-                DrumId = TxtDrumId.Text,
+                DrumNumber = TxtDrumNumber.Text,
                 IpAddress = TxtIpAddress.Text,
                 WebSocketPort = TxtWebSocketPort.Text,
                 uid = string.IsNullOrEmpty(TxtUid.Text) ? (short)0 : Convert.ToInt16(TxtUid.Text.Trim(), 16),
-                slaveId = TxtSlave.Text
-
-                // Nhóm 2
-
+                slaveId = TxtSlave.Text,
+                ReverseTime = revTime,
+                IsReverse = TglIsReverse?.IsChecked ?? false
             };
             SettingService.SaveSettings(config);
+            if (config != null)
+            {
+                PlcUtils.TempSlave(config.slaveId);
+                PlcUtils.TempUID(config.uid);
+            }
+            OnSettingsSaved?.Invoke();
             MessageBox.Show("Đã lưu tất cả thông số cấu hình hệ thống thành công!", "Thông báo HMI",
                             MessageBoxButton.OK, MessageBoxImage.Information);
             this.Close();

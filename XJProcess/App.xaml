@@ -2,10 +2,11 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:XJProcess"
-             StartupUri="MainWindow.xaml">
+             >
     <Application.Resources>
         <!-- STYLE NÚT BẤM HIỆN ĐẠI (OVERVIEW BUTTON) -->
         <Style x:Key="OverViewButtonStyle" TargetType="Button">
+            <Setter Property="Focusable" Value="False"/>
             <Setter Property="Foreground" Value="#FFFFFF"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -116,6 +117,82 @@
                             <Trigger Property="IsChecked" Value="False">
                                 <Setter TargetName="TxtFull" Property="Foreground" Value="#FFFFFF"/>
                                 <Setter TargetName="TxtAuto" Property="Foreground" Value="#94A3B8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ReverseToggleSwitch" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid Width="220" Height="30" Cursor="Hand">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Chữ bên trái: Quay Xuống (IsChecked = False) -->
+                            <TextBlock Grid.Column="0" Text="Quay Xuống" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Right"
+                               Margin="0,0,12,0" 
+                               FontSize="13" 
+                               Foreground="#94A3B8" 
+                               x:Name="TxtLeft"/>
+
+                            <!-- Nút gạt ở giữa -->
+                            <Grid Grid.Column="1" Width="46" Height="24" VerticalAlignment="Center">
+                                <Border x:Name="SwitchBorder" 
+                                Background="#334155" 
+                                BorderBrush="#475569" 
+                                BorderThickness="1" 
+                                CornerRadius="12"/>
+                                <Border x:Name="SwitchThumb" 
+                                Width="18" Height="18" 
+                                Background="#FFFFFF" 
+                                CornerRadius="8" 
+                                HorizontalAlignment="Left" 
+                                Margin="3,0,0,0"/>
+                            </Grid>
+
+                            <!-- Chữ bên phải: Quay Lên (IsChecked = True) -->
+                            <TextBlock Grid.Column="2" Text="Quay Lên" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Left"
+                               Margin="12,0,0,0" 
+                               FontSize="13" 
+                               Foreground="#94A3B8" 
+                               x:Name="TxtRight"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <!-- Khi gạt sang Phải -> True (Đang chọn QUAY LÊN) -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="SwitchBorder" Property="Background" Value="#0284C7"/>
+                                <Setter TargetName="SwitchBorder" Property="BorderBrush" Value="#0284C7"/>
+                                <Setter TargetName="SwitchThumb" Property="Margin" Value="25,0,0,0"/>
+                                <!-- Chữ Phải đậm nét, đen rõ -->
+                                <Setter TargetName="TxtRight" Property="Foreground" Value="#0F172A"/>
+                                <Setter TargetName="TxtRight" Property="FontWeight" Value="Bold"/>
+                                <!-- Chữ Trái mờ xám -->
+                                <Setter TargetName="TxtLeft" Property="Foreground" Value="#94A3B8"/>
+                                <Setter TargetName="TxtLeft" Property="FontWeight" Value="Normal"/>
+                            </Trigger>
+
+                            <!-- Khi gạt về Trái -> False (Đang chọn QUAY XUỐNG - Mặc định) -->
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="SwitchBorder" Property="Background" Value="#334155"/>
+                                <Setter TargetName="SwitchBorder" Property="BorderBrush" Value="#475569"/>
+                                <Setter TargetName="SwitchThumb" Property="Margin" Value="3,0,0,0"/>
+                                <!-- Chữ Trái đậm nét, đen rõ -->
+                                <Setter TargetName="TxtLeft" Property="Foreground" Value="#0F172A"/>
+                                <Setter TargetName="TxtLeft" Property="FontWeight" Value="Bold"/>
+                                <!-- Chữ Phải mờ xám -->
+                                <Setter TargetName="TxtRight" Property="Foreground" Value="#94A3B8"/>
+                                <Setter TargetName="TxtRight" Property="FontWeight" Value="Normal"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

@@ -4,6 +4,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using XJProcess.modal;
 using XJProcess.services;
+using XJProcess.Services;
 using XJProcess.ultis;
 
 namespace XJProcess.view
@@ -16,6 +17,16 @@ namespace XJProcess.view
         public HeaderConfigLeft()
         {
             InitializeComponent();
+            LoadConfig();
+            SettingView.OnSettingsSaved += LoadConfig;
+            var settings = XJProcess.Services.SettingService.LoadSettings();
+            string drumNumber = settings.DrumNumber?.ToString() ?? "--"; 
+
+            if (TxtTankCode != null)
+            {
+                TxtTankCode.Text = drumNumber.EndsWith("#") ? drumNumber : drumNumber + "#";
+            }
+
             _clockTimer = new DispatcherTimer();
             _clockTimer.Interval = TimeSpan.FromSeconds(1);
             _clockTimer.Tick += StartRealTimeClock;
@@ -29,9 +40,19 @@ namespace XJProcess.view
             this.Unloaded += (s, e) =>
             {
                 if (_clockTimer != null) _clockTimer.Stop();
+                SettingView.OnSettingsSaved -= LoadConfig;
             };
         }
+        public void LoadConfig()
+        {
+            var settings = SettingService.LoadSettings();
+            string drumNumber = settings.DrumNumber?.ToString() ?? "--";
 
+            if (TxtTankCode != null)
+            {
+                TxtTankCode.Text = drumNumber.EndsWith("#") ? drumNumber : drumNumber + "#";
+            }
+        }
         private void StartRealTimeClock(object sender, EventArgs e)
         {
             if (TxtCurrentTime != null)
@@ -49,9 +70,9 @@ namespace XJProcess.view
 
                 if (TxtTechnician != null)
                     TxtTechnician.Text = data.Tech ?? string.Empty;
-
-                if (TxtOperator != null)
-                    TxtOperator.Text = data.User ?? string.Empty;
+                //người vận hành ( thêm sau )
+                //if (TxtOperator != null)
+                //    TxtOperator.Text = data.User ?? string.Empty;
 
                 if (TxtWeight != null)
                     TxtWeight.Text = data.Weight ?? string.Empty;
@@ -62,14 +83,11 @@ namespace XJProcess.view
         {
             try
             {
-                // Đọc nhiệt độ và pin từ PLC
                 ushort tempValue = PlcUtils.ReadUInt16("VW750");
                 float displayTemp = tempValue / 10.0f;
                 byte batteryValue = PlcUtils.ReadByte("VB760");
-
                 if (TxtTankTemp != null) TxtTankTemp.Text = $"{displayTemp:F1} °C";
                 if (TxtTankBattery != null) TxtTankBattery.Text = $"{batteryValue} %";
-
                 string orderCode = string.Empty;
                 if (this.DataContext != null)
                 {
@@ -79,26 +97,26 @@ namespace XJProcess.view
                         orderCode = prop.GetValue(this.DataContext)?.ToString() ?? string.Empty;
                     }
                 }
-                bool hasOrder = !string.IsNullOrEmpty(orderCode) && orderCode != "0";
-
-                if (Service != null && Service.CurrentRunningItem != null)
+                bool hasDatabaseOrder = !string.IsNullOrEmpty(orderCode) && orderCode != "0";
+                bool isEngineActive = false;
+                if (Service != null)
                 {
-                    hasOrder = true;
+                    if (Service.IsDrumSpinning || (Service.CurrentRunningItem != null && Service.IsRunning == 1))
+                    {
+                        isEngineActive = true;
+                    }
                 }
-
                 if (TxtDrumStatus != null)
                 {
-                    if (!hasOrder)
+                    if (!hasDatabaseOrder && !isEngineActive)
                     {
-                        // Mã đơn bằng 0, null hoặc empty -> Sẵn sàng (Xanh lá)
                         TxtDrumStatus.Text = "Sẵn sàng";
-                        TxtDrumStatus.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#34D399"));
+                        TxtDrumStatus.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#34D399")); // Xanh lá
                     }
                     else
                     {
-                        // Có mã đơn hàng -> Đang vận hành (Màu cam)
                         TxtDrumStatus.Text = "Đang vận hành";
-                        TxtDrumStatus.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FB923C"));
+                        TxtDrumStatus.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FB923C")); // Màu cam
                     }
                 }
             }

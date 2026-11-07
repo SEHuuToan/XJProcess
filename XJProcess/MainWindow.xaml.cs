@@ -52,7 +52,7 @@ namespace XJProcess
         {
             base.OnClosed(e);
             HeaderConfigLeftControl?.StopClockTimer();
-            _mainService?.StopOrder();
+            //_mainService?.StopOrder();
         }
 
         private async void ScanService_ScanerEvent(ScanService.ScanerCodes codes)

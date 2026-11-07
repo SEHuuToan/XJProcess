@@ -42,7 +42,7 @@
 
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Mã bồn quay" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBox x:Name="TxtDrumId" Height="40" Style="{StaticResource HmiInputStyle}"/>
+                                <TextBox x:Name="TxtDrumNumber" Height="40" Style="{StaticResource HmiInputStyle}"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="Địa chỉ IP" Style="{StaticResource FieldLabelStyle}"/>
@@ -75,8 +75,8 @@
 
                         <Separator Background="#E2E8F0" Margin="0,0,0,15"/>
 
-                        <!-- NHÓM 2: THÔNG SỐ VẬN HÀNH BỒN QUAY -->
-                        <!--<TextBlock Text="2. THÔNG SỐ VẬN HÀNH BỒN QUAY (MOTOR &amp; DRUM)" Style="{StaticResource SectionHeaderStyle}"/>
+                        <!--NHÓM 2: THÔNG SỐ VẬN HÀNH BỒN QUAY-->
+                        <TextBlock Text="2. THÔNG SỐ VẬN HÀNH BỒN QUAY (MOTOR &amp; DRUM)" Style="{StaticResource SectionHeaderStyle}"/>
                         <Grid Margin="0,0,0,20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -87,44 +87,34 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="Tốc độ xoay mặc định (RPM)" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBox x:Name="TxtDefaultSpeed" Height="40" Style="{StaticResource HmiInputStyle}"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="Thời gian đảo chiều (giây)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock Text="Thời gian đảo chiều (phút)" Style="{StaticResource FieldLabelStyle}"/>
                                 <TextBox x:Name="TxtReverseDelay" Height="40" Style="{StaticResource HmiInputStyle}"/>
                             </StackPanel>
-                            <StackPanel Grid.Column="4">
-                                <TextBlock Text="Gia tốc Motor (Acceleration)" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBox x:Name="TxtMotorAccel" Height="40" Style="{StaticResource HmiInputStyle}"/>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Đảo chiều" Style="{StaticResource FieldLabelStyle}" Margin="0,0,0,6" HorizontalAlignment="Center"/>
+                                <ToggleButton x:Name="TglIsReverse" 
+                                  IsChecked="False" 
+                                  Style="{StaticResource ReverseToggleSwitch}" 
+                                  HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center"/>
                             </StackPanel>
+                            <StackPanel Grid.Column="4"/>
                         </Grid>
 
                         <Grid Margin="0,0,0,20">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="295*"/>
                                 <ColumnDefinition Width="15"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="102*"/>
+                                <ColumnDefinition Width="193*"/>
                                 <ColumnDefinition Width="15"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="295*"/>
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Text="Góc xoay thủ công Up/Down (°)" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBox x:Name="TxtStepAngle" Height="40" Style="{StaticResource HmiInputStyle}"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="Thời gian dừng khẩn cấp (s)" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBox x:Name="TxtStopDelay" Height="40" Style="{StaticResource HmiInputStyle}"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="4">
-                                <TextBlock Text="Chế độ chạy mặc định" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBox x:Name="TxtDefaultMode" Height="40" Style="{StaticResource HmiInputStyle}"/>
-                            </StackPanel>
-                        </Grid>-->
 
+                        </Grid>
                         <Separator Background="#E2E8F0" Margin="0,0,0,15"/>
-
                     </StackPanel>
                 </ScrollViewer>
             </Border>

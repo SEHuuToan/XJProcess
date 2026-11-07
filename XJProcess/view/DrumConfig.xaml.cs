@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HelixToolkit.Wpf;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -7,9 +8,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
-using HelixToolkit.Wpf;
 using XJProcess.service;
 using XJProcess.services;
+using XJProcess.Services;
 
 namespace XJProcess.view
 {
@@ -31,8 +32,10 @@ namespace XJProcess.view
                 _service = value;
                 if (_service != null)
                 {
-                    _service.IsSpinUp = false;
-                    UpdateDirectionDisplay(false);
+                    var settings = SettingService.LoadSettings();
+                    bool isReverse = settings?.IsReverse ?? false;
+                    _service.IsSpinUp = isReverse;
+                    UpdateDirectionDisplay(_service.IsSpinUp);
                 }
             }
         }
@@ -232,28 +235,25 @@ namespace XJProcess.view
         {
             if (Service == null) return;
             if (Service.IsDrumSpinning) return;
-            if (Service.IsAutoMode)
+            bool isAutoModeUI = TglMode?.IsChecked ?? Service.IsAutoMode;
+            if (isAutoModeUI)
             {
-                // 1. Kiểm tra Thời gian vận hành (Phải là số nguyên >= 2 phút)
                 if (!int.TryParse(TxtRunTimeInput?.Text, out int runMinutes) || runMinutes < 2)
                 {
                     string msg = (runMinutes == 1)
                         ? "Thời gian vận hành 1 phút quá ngắn cho Auto! Vui lòng chuyển sang chế độ Thủ công (Manual)."
                         : "Vui lòng nhập thời gian vận hành hợp lệ (từ 2 phút trở lên)!";
-
                     MessageBox.Show(msg, "Cảnh báo vận hành", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-                // 2. Kiểm tra Thời gian đảo chiều (Bắt buộc nhập, >= 1 phút và < Thời gian vận hành)
                 if (!int.TryParse(TxtReverseTimeInput?.Text, out int revMinutes) || revMinutes < 1)
                 {
-                    MessageBox.Show("Thời gian đảo chiều không được để trống và phải từ 1 phút trở lên!", "Cảnh báo cài đặt", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Vui lòng nhập 'Thời gian đảo chiều' hợp lệ (từ 1 phút trở lên)!", "Cảnh báo cài đặt", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-
                 if (revMinutes >= runMinutes)
                 {
-                    MessageBox.Show($"Thời gian đảo chiều phải nhỏ hơn thời gian vận hành của bồn!", "Cảnh báo cài đặt", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Thời gian đảo chiều phải nhỏ hơn thời gian vận hành của bồn!", "Cảnh báo cài đặt", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 reverseTime = revMinutes;
@@ -299,6 +299,7 @@ namespace XJProcess.view
         {
             if (TxtRunTimeInput != null) TxtRunTimeInput.Text = string.Empty;
             if (PanelCountdown != null) PanelCountdown.Visibility = Visibility.Visible;
+            if (ProgressArc != null) ProgressArc.Visibility = Visibility.Visible;
             if (Service != null)
             {
                 Service.IsAutoMode = true;
@@ -312,6 +313,7 @@ namespace XJProcess.view
         private void TglMode_Unchecked(object sender, RoutedEventArgs e)
         {
             if (PanelCountdown != null) PanelCountdown.Visibility = Visibility.Hidden;
+            if (ProgressArc != null) ProgressArc.Visibility = Visibility.Hidden;
             if (Service != null)
             {
                 Service.IsAutoMode = false;
@@ -357,6 +359,17 @@ namespace XJProcess.view
             else
             {
                 e.CancelCommand();
+            }
+        }
+
+        public void SetReverseTimeUI(int revMinutes)
+        {
+            if (TxtReverseTimeInput != null)
+            {
+                _isProgrammaticChange = true;
+                TxtReverseTimeInput.Text = revMinutes.ToString();
+                _isProgrammaticChange = false;
+                reverseTime = revMinutes;
             }
         }
 
