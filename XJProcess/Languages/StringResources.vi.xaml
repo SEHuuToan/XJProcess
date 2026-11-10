@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    <s:String x:Key="cfr_Title">THÔNG TIN ĐƠN THUỐC</s:String>
+    <s:String x:Key="cfr_StopOrder">Dừng Đơn</s:String>
+    <s:String x:Key="cfr_Setting">Cài đặt</s:String>
+    <s:String x:Key="cfr_History">Lịch sử</s:String>
+
+    <s:String x:Key="cfl_DrumNo">Bồn: </s:String>
+    <s:String x:Key="cfl_Bill">Đơn hàng:</s:String>
+    <s:String x:Key="cfl_Technician">Kỹ thuật viên:</s:String>
+    <s:String x:Key="cfl_Weight">Trọng lượng:</s:String>
+    <s:String x:Key="cfl_Operator">Người vận hành:</s:String>
+    <s:String x:Key="cfl_Status">Trạng thái: </s:String>
+    <s:String x:Key="cfl_Temp">Nhiệt độ: </s:String>
+    <s:String x:Key="cfl_Battery">Pin:</s:String>
+
+    <s:String x:Key="Str_Ready">Sẵn sàng</s:String>
+    <s:String x:Key="Str_Running">Đang vận hành</s:String>
+    <s:String x:Key="Str_ErrRead">Lỗi đọc</s:String>
+    
+
+
+</ResourceDictionary>

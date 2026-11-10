@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using XJProcess.services;
+using XJProcess.Services;
 
 namespace XJProcess
 {
@@ -40,10 +41,8 @@ namespace XJProcess
                 {
                     localVersion = File.ReadAllText(localVersionFile).Trim();
                 }
-
                 //bool hasUpdate = MainService.AutoUpdater.CheckFormUpdate(localVersion);
                 bool hasUpdate = false;
-
                 if (hasUpdate)
                 {
                     string updaterPath = Path.Combine(baseDir, "UpdaterXJProcess.exe");
@@ -55,9 +54,13 @@ namespace XJProcess
                     {
                         MessageBox.Show("Không tìm thấy file UpdaterXJProcess.exe để cập nhật!", "Lỗi cập nhật", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-
                     Current.Shutdown();
                     return;
+                }
+                var settings = SettingService.LoadSettings();
+                if (settings != null && !string.IsNullOrEmpty(settings.Language))
+                {
+                    MainService.ChangeAppLanguage(settings.Language);
                 }
                 var mainWindow = new MainWindow();
                 mainWindow.Show();
@@ -67,6 +70,9 @@ namespace XJProcess
                 MessageBox.Show("Lỗi khởi động ứng dụng: " + ex.Message, "Lỗi hệ thống", MessageBoxButton.OK, MessageBoxImage.Error);
                 Current.Shutdown();
             }
+
         }
+
+        
     }
 }

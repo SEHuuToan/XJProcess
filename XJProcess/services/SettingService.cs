@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Xml.Serialization;
 using XJProcess.modal;
 
@@ -9,7 +10,6 @@ namespace XJProcess.Services
     {
         private static readonly string FolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Setting");
         private static readonly string FilePath = Path.Combine(FolderPath, "setting.xml");
-
         public static SettingModel LoadSettings()
         {
             try
@@ -25,18 +25,31 @@ namespace XJProcess.Services
                     return defaultConfig;
                 }
                 XmlSerializer serializer = new XmlSerializer(typeof(SettingModel));
-                using (FileStream fs = new FileStream(FilePath, FileMode.Open, FileAccess.Read))
+                using (FileStream fs = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     return (SettingModel)serializer.Deserialize(fs) ?? new SettingModel();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                System.Windows.MessageBox.Show($"Lỗi đọc file cấu hình");
+                try
+                {
+                    Thread.Sleep(200);
+                    using (FileStream fs = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        XmlSerializer serializer = new XmlSerializer(typeof(SettingModel));
+                        var config = (SettingModel)serializer.Deserialize(fs);
+                        if (config != null) return config;
+                    }
+                }
+                catch
+                {
+                   
+                }
+                System.Windows.MessageBox.Show("Lỗi đọc file cấu hình");
                 return new SettingModel();
             }
         }
-        /// <summary>Lưu cấu hình hiện tại vào file XML.</summary>
         public static void SaveSettings(SettingModel config)
         {
             try
@@ -45,16 +58,15 @@ namespace XJProcess.Services
                 {
                     Directory.CreateDirectory(FolderPath);
                 }
-
                 XmlSerializer serializer = new XmlSerializer(typeof(SettingModel));
-                using (FileStream fs = new FileStream(FilePath, FileMode.Create, FileAccess.Write))
+                using (FileStream fs = new FileStream(FilePath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     serializer.Serialize(fs, config);
                 }
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show($"Lỗi lưu file cấu hình");
+                System.Windows.MessageBox.Show($"Lỗi lưu file cấu hình: {ex.Message}");
             }
         }
     }

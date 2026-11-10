@@ -201,7 +201,7 @@ namespace XJProcess.ultis
 {
     internal class PlcUtils
     {
-        private static Plc plc = null;
+        private static Plc plc = null; 
 
         // Bật cờ này lên true là tự động chạy chế độ giả lập (Fake kết nối)
         public static bool IsSimulationMode { get; set; } = true; // Mặc định bật true để test

@@ -18,6 +18,7 @@ namespace XJProcess.modal
         public string slaveId { get; set; }
         public int ReverseTime { get; set; }
         public bool IsReverse { get; set; }
+        public string Language { get; set; } = "vi";
 
     }
 }

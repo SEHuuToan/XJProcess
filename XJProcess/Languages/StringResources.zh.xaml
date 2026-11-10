@@ -1,0 +1,23 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    <s:String x:Key="Str_OrderInfo">处方信息</s:String>
+    <s:String x:Key="Str_StopOrder">停止订单</s:String>
+    <s:String x:Key="Str_Setting">设置</s:String>
+    <s:String x:Key="Str_History">历史记录</s:String>
+
+    <s:String x:Key="cfl_DrumNo">滚筒：</s:String>
+    <s:String x:Key="cfl_Bill">订单：</s:String>
+    <s:String x:Key="cfl_Technician">技术员：</s:String>
+    <s:String x:Key="cfl_Weight">重量：</s:String>
+    <s:String x:Key="cfl_Operator">操作员：</s:String>
+    <s:String x:Key="cfl_Status">状态：</s:String>
+    <s:String x:Key="cfl_Temp">温度：</s:String>
+    <s:String x:Key="cfl_Battery">电量：</s:String>
+    <s:String x:Key="cfl_StatusRun">准备就绪</s:String>
+    <s:String x:Key="cfl_StatusStop">正在运行</s:String>
+
+    <s:String x:Key="Str_Ready">就绪</s:String>
+    <s:String x:Key="Str_Running">运行中</s:String>
+    <s:String x:Key="Str_ErrRead">读取错误</s:String>
+</ResourceDictionary>

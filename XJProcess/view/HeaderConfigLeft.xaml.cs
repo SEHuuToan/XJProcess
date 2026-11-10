@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -110,19 +111,19 @@ namespace XJProcess.view
                 {
                     if (!hasDatabaseOrder && !isEngineActive)
                     {
-                        TxtDrumStatus.Text = "Sẵn sàng";
+                        TxtDrumStatus.Text = Application.Current.FindResource("Str_Ready") as string ?? "Sẵn sàng";
                         TxtDrumStatus.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#34D399")); // Xanh lá
                     }
                     else
                     {
-                        TxtDrumStatus.Text = "Đang vận hành";
+                        TxtDrumStatus.Text = Application.Current.FindResource("Str_Running") as string ?? "Đang vận hành";
                         TxtDrumStatus.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FB923C")); // Màu cam
                     }
                 }
             }
             catch (Exception)
             {
-                if (TxtTankTemp != null) TxtTankTemp.Text = "Lỗi đọc";
+                if (TxtTankTemp != null) TxtTankTemp.Text = Application.Current.FindResource("Str_ErrRead") as string ?? "Sẵn sàng";
                 if (TxtTankBattery != null) TxtTankBattery.Text = "-- %";
             }
         }

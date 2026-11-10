@@ -54,8 +54,8 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" 
-                       Text="THÔNG TIN ĐƠN THUỐC" 
-                       FontSize="18" 
+                       Text="{DynamicResource Str_OrderInfo}" 
+                       FontSize="16" 
                        FontWeight="SemiBold" 
                        Foreground="#FFFFFF" 
                        HorizontalAlignment="Left" 
@@ -67,8 +67,8 @@
                         VerticalAlignment="Center">
 
                 <Button x:Name="BtnStopOrder" 
-                        Width="150" Height="32" 
-                        Margin="0,0,8,0"
+                        Width="130" Height="32" 
+                        Margin="0,0,6,0"
                         Background="#C62828" 
                         Foreground="#FFFFFF" 
                         BorderBrush="#FF5252"
@@ -80,10 +80,143 @@
                     </StackPanel>
                 </Button>
 
+                <Grid>
+                    <Button x:Name="btn_Language"
+                            Width="90" Height="32"
+                            Margin="0,0,6,0"
+                            HorizontalAlignment="Left"
+                            Background="#30264F"
+                            BorderBrush="#A78BFA"
+                            Foreground="White"
+                            Style="{StaticResource OverViewButtonStyle}"
+                            Click="btn_Language_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image x:Name="CurrentFlagImage" VerticalAlignment="Center" HorizontalAlignment="Center" Source="/images/vietnam.png" Stretch="UniformToFill"/>
+                            <TextBlock x:Name="CurrentLangText" Text="Vi" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Popup x:Name="LanguagePopup"
+                           PlacementTarget="{Binding ElementName=btn_Language}"
+                           Placement="Bottom"
+                           VerticalOffset="7"
+                           HorizontalOffset="0"
+                           StaysOpen="False"
+                           AllowsTransparency="True"
+                           PopupAnimation="Fade">
+                        <Border Width="190"
+                                Background="#211B32"
+                                BorderBrush="#8065B5"
+                                BorderThickness="1"
+                                CornerRadius="12"
+                                Padding="7">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#000000"
+                                    BlurRadius="18"
+                                    ShadowDepth="5"
+                                    Opacity="0.45"/>
+                            </Border.Effect>
+                            <StackPanel>
+                                <Button x:Name="btn_Chinese"
+                                    Click="btn_Chinese_Click"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Padding="9,10"
+                                    HorizontalContentAlignment="Stretch"
+                                    Cursor="Hand">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="itemBorder"
+                                                Background="{TemplateBinding Background}"
+                                                CornerRadius="8"
+                                                Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="itemBorder" Property="Background" Value="#493875"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="32"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="20"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Width="24" Height="17" CornerRadius="2" VerticalAlignment="Center" HorizontalAlignment="Center" ClipToBounds="True">
+                                            <Image Source="/images/china.png" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="Tiếng Trung" Foreground="White" FontSize="13" FontWeight="SemiBold"/>
+                                            <TextBlock Text="中文 · Chinese" Foreground="#AFA3CE" FontSize="10"/>
+                                        </StackPanel>
+                                        <TextBlock x:Name="ChineseCheck"
+                                           Grid.Column="2"
+                                           Text="✓"
+                                           Foreground="#C4A7FF"
+                                           FontSize="15"
+                                           VerticalAlignment="Center"
+                                           Visibility="Collapsed"/>
+                                    </Grid>
+                                </Button>
+                                <Border Height="1" Background="#443956" Margin="7,5"/>
+                                <Button x:Name="btn_Vietnamese"
+                                    Click="btn_Vietnamese_Click"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Padding="9,10"
+                                    HorizontalContentAlignment="Stretch"
+                                    Cursor="Hand">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="itemBorder" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="itemBorder" Property="Background" Value="#493875"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="32"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="20"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Width="24" Height="17" CornerRadius="2" VerticalAlignment="Center" HorizontalAlignment="Center" ClipToBounds="True">
+                                            <Image Source="/images/vietnam.png" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="Tiếng Việt"
+                                               Foreground="White"
+                                               FontSize="13"
+                                               FontWeight="SemiBold"/>
+                                            <TextBlock Text="Tiếng Việt · Vietnamese"
+                                               Foreground="#AFA3CE"
+                                               FontSize="10"/>
+                                        </StackPanel>
+                                        <TextBlock x:Name="VietnameseCheck"
+                                           Grid.Column="2"
+                                           Text="✓"
+                                           Foreground="#C4A7FF"
+                                           FontSize="15"
+                                           VerticalAlignment="Center"
+                                           Visibility="Visible"/>
+                                    </Grid>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                    </Popup>
+                </Grid>
+
                 <Button x:Name="btn_Setting" 
-                        Width="90" Height="32" 
-                        Margin="0,0,8,0"
-                        Background="#0284C7" 
+                        Width="80" Height="32" 
+                        Margin="0,0,6,0"
+                        Background="#0E3746" 
                         Foreground="#FFFFFF" 
                         BorderBrush="#38BDF8" 
                         Style="{StaticResource OverViewButtonStyle}" 
@@ -95,10 +228,10 @@
                 </Button>
 
                 <Button x:Name="btn_History" 
-                        Width="90" Height="32" 
-                        Background="#4F46E5" 
+                        Width="80" Height="32" 
+                        Background="#0F382B" 
                         Foreground="#FFFFFF" 
-                        BorderBrush="#818CF8" 
+                        BorderBrush="#34D399" 
                         Style="{StaticResource OverViewButtonStyle}" 
                         Click="btn_History_Click">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">

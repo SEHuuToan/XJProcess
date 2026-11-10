@@ -24,29 +24,22 @@ namespace XJProcess.services
         private readonly ChemicalService _chemicalService;
         private readonly DispatcherTimer _stepTimer;
         private readonly HashSet<ChemicalDetail> _completedItems = new();
-
         public string CurrentBillNo { get; set; } = string.Empty;
         public string CurrentBillId { get; set; } = string.Empty;
         public int IsRunning { get; set; } = 0;
-
         public int Timer { get; set; }
         public int TotalTimer { get; set; }
-
         public int ReversePlcTimer { get; set; }
         private int _reverseCounter = 0;
-
         public bool IsPlcConnected { get; set; } = false;
-
         public bool IsDrumSpinning => IsRunning == 1 || IsRunning == 4;
         public bool IsSpinUp { get; set; } = true;
         public bool IsAutoMode { get; set; }
         public bool IsAutoPaused => IsRunning == 2;
-
         public ObservableCollection<ChemicalDetail> ChemicalList { get; private set; } = new ObservableCollection<ChemicalDetail>();
         public ChemicalDetail? CurrentRunningItem { get; set; }
         public ChemicalData? CurrentOrder { get; set; }
         public bool IsManualRunning { get; set; } = true;
-
         public MainService()
         {
             _apiService = new ApiService();
@@ -54,7 +47,6 @@ namespace XJProcess.services
             _stepTimer.Tick += StepTimer_Tick;
             _chemicalService = new ChemicalService(_apiService);
         }
-
         public async Task ConnectPlcAsync(string ipAddress)
         {
             while (true)
@@ -71,7 +63,6 @@ namespace XJProcess.services
                 });
             }
         }
-
         private bool ConfirmPlcConnection()
         {
             if (!IsPlcConnected)
@@ -82,14 +73,11 @@ namespace XJProcess.services
             }
             return true;
         }
-
         public bool HasAction(ChemicalDetail item)
         {
             return item != null && (item.DurationMinutes > 0 || !string.IsNullOrEmpty(item.CheckInfo));
         }
-
         public bool IsCompleted(ChemicalDetail item) => _completedItems.Contains(item);
-
         public void RegisterViews(HeaderConfigLeft headerConfigLeft, DrumConfig drumConfig, DataGridView dataGridView)
         {
             _headerConfigLeft = headerConfigLeft;
@@ -115,7 +103,6 @@ namespace XJProcess.services
             SettingView.OnSettingsSaved += OnSettingsSaved_Handler;
             _ = TryAutoRestoreOnStartupAsync();
         }
-
         private void OnSettingsSaved_Handler()
         {
             var settings = SettingService.LoadSettings();
@@ -143,9 +130,7 @@ namespace XJProcess.services
                 });
             }
         }
-
         public int ConvertTime(int minutes) => minutes * 60;
-
         private void StartEngine()
         {
             var settings = SettingService.LoadSettings();
@@ -160,7 +145,6 @@ namespace XJProcess.services
                 PlcUtils.Down();
             }
             PlcUtils.Start();
-
             if (IsDrumSpinning)
             {
                 _drumConfig.StartSpinAnimation(IsSpinUp, IsAutoMode);
@@ -171,7 +155,6 @@ namespace XJProcess.services
                 }
             }
         }
-
         private void StopEngine()
         {
             if (!ConfirmPlcConnection()) return;
@@ -181,7 +164,6 @@ namespace XJProcess.services
 
             if (_stepTimer.IsEnabled) _stepTimer.Stop();
         }
-
         private void ReverseDrum()
         {
             IsSpinUp = !IsSpinUp;
@@ -199,7 +181,6 @@ namespace XJProcess.services
             PlcUtils.Reverse(true);
             _drumConfig.StartSpinAnimation(IsSpinUp, IsAutoMode);
         }
-
         public void ToggleDirection(bool isForward)
         {
             if (!ConfirmPlcConnection()) return;
@@ -211,12 +192,10 @@ namespace XJProcess.services
             {
                 if (actualSpinUp) PlcUtils.Up();
                 else PlcUtils.Down();
-
                 PlcUtils.Reverse(true);
                 _drumConfig.StartSpinAnimation(IsSpinUp, IsAutoMode);
             }
         }
-
         public void StartManual()
         {
             if (!ConfirmPlcConnection()) return;
@@ -224,14 +203,11 @@ namespace XJProcess.services
             IsManualRunning = true;
             IsAutoMode = false;
             IsRunning = 1;
-
             CurrentRunningItem = null;
             Timer = TotalTimer = ReversePlcTimer = _reverseCounter = 0;
-
             _drumConfig.ResetCountdownDisplay();
             StartEngine();
         }
-
         public void StartAuto(int inputMinutes, int reverseIntervalMinutes = 0)
         {
             if (!ConfirmPlcConnection()) return;
@@ -240,7 +216,6 @@ namespace XJProcess.services
             _reverseCounter = 0;
             ReversePlcTimer = ConvertTime(reverseIntervalMinutes);
             TotalTimer = Timer = ConvertTime(inputMinutes);
-
             if (CurrentRunningItem != null && !IsCompleted(CurrentRunningItem) && (IsRunning == 1 || IsRunning == 4))
             {
                 IsRunning = 4;
@@ -261,7 +236,6 @@ namespace XJProcess.services
                 LogService.SaveRunningState(this);
             }
         }
-
         public void ResumeAuto()
         {
             if (IsRunning != 2) return;
@@ -274,7 +248,6 @@ namespace XJProcess.services
             }
             StartEngine();
         }
-
         public void StartCurrentStep()
         {
             if (CurrentRunningItem != null)
@@ -293,7 +266,6 @@ namespace XJProcess.services
                 }
             }
         }
-
         public void InitializeStepStates()
         {
             if (ChemicalList == null || ChemicalList.Count == 0) return;
@@ -311,7 +283,6 @@ namespace XJProcess.services
                 else
                 {
                     bool isAboveRunningOrCompleted = false;
-
                     if (CurrentRunningItem != null)
                     {
                         int currentIndex = ChemicalList.IndexOf(item);
@@ -351,7 +322,6 @@ namespace XJProcess.services
                 }
             }
         }
-
         public void ToggleStepAction(ChemicalDetail clickedItem)
         {
             if (clickedItem == null || !clickedItem.HasAction) return;
@@ -377,14 +347,12 @@ namespace XJProcess.services
                 {
                     item.IsEnabled = (item == clickedItem);
                 }
-
                 if (Timer <= 0)
                 {
                     int runMinutes = clickedItem.DurationMinutes;
                     TotalTimer = Timer = ConvertTime(runMinutes);
                 }
                 _drumConfig?.UpdateCountdownDisplay(Timer, TotalTimer);
-
                 if (CurrentOrder != null && !string.IsNullOrEmpty(CurrentOrder.OrderCode))
                 {
                     LogService.SaveRunningState(this);
@@ -398,19 +366,15 @@ namespace XJProcess.services
                 CurrentRunningItem.IsRunning = 0;
                 CurrentRunningItem = null;
             }
-
             IsAutoMode = true;
             IsManualRunning = false;
             CurrentRunningItem = clickedItem;
-
             foreach (var item in ChemicalList)
             {
                 item.IsEnabled = (item == clickedItem);
             }
-
             int normalRunMinutes = clickedItem.DurationMinutes;
             _drumConfig.SetAutoModeUI(true, normalRunMinutes);
-
             int revTime = _drumConfig.reverseTime;
             if (revTime < 1)
             {
@@ -418,20 +382,17 @@ namespace XJProcess.services
                 revTime = settings.ReverseTime;
                 _drumConfig?.SetReverseTimeUI(revTime);
             }
-
             if (revTime < 1)
             {
                 IsRunning = 0;
-                MessageBox.Show($"Vui lòng nhập 'Thời gian đảo chiều' trong phần cài đặt hoặc trên giao diện rồi bấm Bắt đầu!",
-                                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Vui lòng nhập 'Thời gian đảo chiều' trong phần cài đặt hoặc trên giao diện rồi bấm Bắt đầu!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 InitializeStepStates();
                 return;
             }
             if (revTime >= normalRunMinutes)
             {
                 IsRunning = 0;
-                MessageBox.Show($"Thời gian đảo chiều phải nhỏ hơn thời gian chạy!",
-                                "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show($"Thời gian đảo chiều phải nhỏ hơn thời gian chạy!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 InitializeStepStates();
                 return;
             }
@@ -450,7 +411,6 @@ namespace XJProcess.services
                 LogService.SaveRunningState(this);
             }
         }
-
         private void StepTimer_Tick(object? sender, EventArgs e)
         {
             bool hasActiveOrder = CurrentOrder != null && !string.IsNullOrEmpty(CurrentOrder.OrderCode);
@@ -482,21 +442,17 @@ namespace XJProcess.services
                 OnTimerFinished();
             }
         }
-
         private void OnTimerFinished()
         {
             _reverseCounter = 0;
             StopEngine();
-
             if (IsRunning == 1 && CurrentRunningItem != null)
             {
                 UnlockAndEnableNextStep(CurrentRunningItem);
             }
-
             IsRunning = 3;
             LogService.SaveRunningState(this);
         }
-
         public void StopCurrentStep()
         {
             IsRunning = 2;
@@ -510,7 +466,6 @@ namespace XJProcess.services
                 LogService.SaveRunningState(this);
             }
         }
-
         public void StopOrder()
         {
             if (CurrentOrder != null && ChemicalList != null)
@@ -539,7 +494,6 @@ namespace XJProcess.services
                     _dataGridView.TxtNoOrderMessage.Visibility = Visibility.Visible;
             }
         }
-
         public void ClearOrderHeaderInfo()
         {
             if (_headerConfigLeft != null)
@@ -554,23 +508,18 @@ namespace XJProcess.services
                 });
             }
         }
-
         private void UnlockAndEnableNextStep(ChemicalDetail currentItem)
         {
             if (ChemicalList == null || currentItem == null) return;
-
             currentItem.Status = "Hoàn tất";
             currentItem.IsRunning = 3;
             _completedItems.Add(currentItem);
-
             int currentIndex = ChemicalList.IndexOf(currentItem);
             if (currentIndex < 0) return;
-
             for (int i = 0; i <= currentIndex; i++)
             {
                 ChemicalList[i].IsEnabled = false;
             }
-
             for (int i = currentIndex + 1; i < ChemicalList.Count; i++)
             {
                 var nextItem = ChemicalList[i];
@@ -580,10 +529,8 @@ namespace XJProcess.services
                     nextItem.IsRunning = 0;
                 }
             }
-
             CurrentRunningItem = null;
         }
-
         public void SetDataGridEnabledState(bool isEnabled)
         {
             if (_dataGridView.MainDataGrid != null)
@@ -591,7 +538,6 @@ namespace XJProcess.services
                 _dataGridView.MainDataGrid.IsEnabled = isEnabled;
             }
         }
-
         public string SplitQRValue(string scannedResult)
         {
             if (!scannedResult.Contains("6000CFDH"))
@@ -616,7 +562,6 @@ namespace XJProcess.services
             }
             return null;
         }
-
         public async Task<ChemicalData?> ProcessQrCodeAsync(string billCode)
         {
             if (string.IsNullOrEmpty(billCode)) return null;
@@ -631,7 +576,6 @@ namespace XJProcess.services
                     return null;
                 }
             }
-
             var chemicalData = await _apiService.LoadDataChemical(billCode);
             CurrentOrder = chemicalData;
             await Application.Current.Dispatcher.InvokeAsync(() =>
@@ -659,7 +603,6 @@ namespace XJProcess.services
             });
             return chemicalData;
         }
-
         private async Task TryAutoRestoreOnStartupAsync()
         {
             try
@@ -671,7 +614,6 @@ namespace XJProcess.services
                 {
                     chemicalData = await _apiService.LoadDataChemical(savedState.OrderCode);
                 }
-
                 if (chemicalData == null || chemicalData.List == null || chemicalData.List.Count == 0)
                 {
                     MessageBox.Show($"Không thể tải lại dữ liệu đơn hàng từ API khi khôi phục!", "Lỗi khôi phục", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -699,7 +641,6 @@ namespace XJProcess.services
                         var targetStep = ChemicalList[i];
                         var snapStep = savedState.Steps[i];
                         targetStep.Status = snapStep.Status;
-
                         if (snapStep.IsCompleted || snapStep.Status == "Hoàn tất")
                         {
                             targetStep.IsEnabled = false;
@@ -719,7 +660,6 @@ namespace XJProcess.services
                             CurrentRunningItem = runningStep;
                             Timer = adjustedRemainingSeconds;
                             TotalTimer = savedState.TotalSeconds;
-
                             if (isPlcRunning)
                             {
                                 IsRunning = 1;
@@ -745,7 +685,6 @@ namespace XJProcess.services
                                     "Khôi phục tiến trình bồn quay",
                                     MessageBoxButton.YesNo,
                                     MessageBoxImage.Question);
-
                                 if (result == MessageBoxResult.Yes)
                                 {
                                     runningStep.IsRunning = 2; // Chờ bấm Tiếp tục
@@ -769,8 +708,7 @@ namespace XJProcess.services
                             if (isPlcRunning)
                             {
                                 PlcUtils.Stop();
-                                MessageBox.Show($"Cảnh báo: Step {runningStep.Sn} đã quá thời gian chạy trong lúc mất kết nối! Hệ thống đã tự động dừng.",
-                                                "An toàn vận hành", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                MessageBox.Show($"Cảnh báo: Step {runningStep.Sn} đã quá thời gian chạy trong lúc mất kết nối! Hệ thống đã tự động dừng.",  "An toàn vận hành", MessageBoxButton.OK, MessageBoxImage.Warning);
                             }
                             runningStep.Status = "Hoàn tất";
                             runningStep.IsRunning = 3;
@@ -795,7 +733,6 @@ namespace XJProcess.services
                 MessageBox.Show("Lỗi tự động khôi phục: " + ex.Message, "Lỗi hệ thống", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         public void RefreshSettings()
         {
             Application.Current.Dispatcher.Invoke(() =>
@@ -803,7 +740,6 @@ namespace XJProcess.services
                 _headerConfigLeft?.LoadConfig();
             });
         }
-
         public void CheckPlcRunningOnStartup()
         {
             try
@@ -828,8 +764,43 @@ namespace XJProcess.services
                 System.Diagnostics.Debug.WriteLine("Lỗi check trạng thái PLC khi khởi động: " + ex.Message);
             }
         }
+        public static void ChangeAppLanguage(string langCode)
+        {
+            try
+            {
+                string uriPath = langCode == "zh" ? "Languages/StringResources.zh.xaml" : "Languages/StringResources.vi.xaml";
+                var newDict = new System.Windows.ResourceDictionary
+                {
+                    Source = new Uri(uriPath, UriKind.Relative)
+                };
 
+                var mergedDictionaries = System.Windows.Application.Current.Resources.MergedDictionaries;
+                System.Windows.ResourceDictionary langDict = null;
 
+                foreach (var dict in mergedDictionaries)
+                {
+                    if (dict.Source != null && dict.Source.OriginalString.Contains("StringResources"))
+                    {
+                        langDict = dict;
+                        break;
+                    }
+                }
+
+                if (langDict != null)
+                {
+                    int index = mergedDictionaries.IndexOf(langDict);
+                    mergedDictionaries[index] = newDict;
+                }
+                else
+                {
+                    mergedDictionaries.Add(newDict);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Lỗi đổi ngôn ngữ: {ex.Message}");
+            }
+        }
         public static class AutoUpdater
         {
             public static bool CheckFormUpdate(string localVersion)

@@ -28,7 +28,7 @@
                     <TextBlock Text="XIANG JIANG VIETNAM" FontSize="14" FontWeight="Medium" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="10,0,0,0"/>
                 </StackPanel>-->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="BỒN: " FontSize="34" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{DynamicResource cfl_DrumNo}" FontSize="34" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Right"/>
                     <TextBlock x:Name="TxtTankCode" Text="--" FontSize="34" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Right"/>
                 </StackPanel>
 
@@ -53,41 +53,41 @@
 
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" Margin="0,2">
-                        <TextBlock Text="Đơn hàng:  " FontSize="12" Foreground="#CBD5E1"/>
-                        <TextBlock x:Name="txtOrderCode" FontSize="12" FontWeight="Bold" Foreground="#FFFFFF"/>
+                        <TextBlock Text="{DynamicResource cfl_Bill}" FontSize="12" Foreground="#CBD5E1"/>
+                        <TextBlock x:Name="txtOrderCode" Margin="6,0,0,0" FontSize="12" FontWeight="Bold" Foreground="#FFFFFF"/>
                     </StackPanel>
                     <!--<StackPanel Orientation="Horizontal" Margin="0,2">
-                        <TextBlock Text="Thời gian:  " FontSize="12" Foreground="#CBD5E1"/>
+                        <TextBlock Text="{DynamicResource cfl_Time}" FontSize="12" Foreground="#CBD5E1"/>
                         <TextBlock x:Name="TxtCurrentTime" Text="2026-08-12 13:30:00" FontSize="12" FontWeight="SemiBold" Foreground="#38BDF8"/>
                     </StackPanel>-->
                     <StackPanel Orientation="Horizontal" Margin="0,2">
-                        <TextBlock Text="Kỹ thuật viên:  " FontSize="12" Foreground="#CBD5E1"/>
-                        <TextBlock x:Name="TxtTechnician" FontSize="12" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                        <TextBlock Text="{DynamicResource cfl_Technician}" FontSize="12" Foreground="#CBD5E1"/>
+                        <TextBlock x:Name="TxtTechnician" Margin="6,0,0,0" FontSize="12" FontWeight="SemiBold" Foreground="#FFFFFF"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,2">
-                        <TextBlock Text="Trọng lượng:  " FontSize="12" Foreground="#CBD5E1"/>
-                        <TextBlock x:Name="TxtWeight" FontSize="12" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                        <TextBlock Text="{DynamicResource cfl_Weight}" FontSize="12" Foreground="#CBD5E1"/>
+                        <TextBlock x:Name="TxtWeight" Margin="6,0,0,0" FontSize="12" FontWeight="SemiBold" Foreground="#FFFFFF"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,2">
-                        <TextBlock Text="Người vận hành:  " FontSize="12" Foreground="#CBD5E1"/>
-                        <TextBlock x:Name="TxtOperator"  FontSize="12" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                        <TextBlock Text="{DynamicResource cfl_Operator}" FontSize="12" Foreground="#CBD5E1"/>
+                        <TextBlock x:Name="TxtOperator" Margin="6,0,0,0" FontSize="12" FontWeight="SemiBold" Foreground="#FFFFFF"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,2">
-                        <TextBlock Text="Trạng thái:  " FontSize="12" Foreground="#CBD5E1"/>
-                        <TextBlock x:Name="TxtDrumStatus" Text="Sẵn sàng" FontSize="12" FontWeight="SemiBold" Foreground="#34D399"/>
+                        <TextBlock Text="{DynamicResource cfl_Status}" FontSize="12" Foreground="#CBD5E1"/>
+                        <TextBlock x:Name="TxtDrumStatus" Margin="6,0,0,0" FontSize="12" FontWeight="SemiBold" Foreground="#34D399"/>
                     </StackPanel>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center" Margin="10,0,0,0">
                     <!-- Nhiệt độ -->
                     <StackPanel Orientation="Horizontal" Margin="0,2">
-                        <TextBlock Text="Nhiệt độ: " FontSize="12" Foreground="#CBD5E1" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="TxtTankTemp" Text="-- °C" FontSize="15" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource cfl_Temp}" FontSize="12" Foreground="#CBD5E1" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TxtTankTemp" Margin="6,0,0,0" Text="-- °C" FontSize="15" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
                     </StackPanel>
                     <!-- Phần trăm pin -->
                     <StackPanel Orientation="Horizontal" Margin="0,2">
-                        <TextBlock Text="Pin: " FontSize="12" Foreground="#CBD5E1" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="TxtTankBattery" Text="-- %" FontSize="14" FontWeight="Bold" Foreground="#34D399" VerticalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource cfl_Battery}" FontSize="12" Foreground="#CBD5E1" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TxtTankBattery" Margin="6,0,0,0" Text="-- %" FontSize="14" FontWeight="Bold" Foreground="#34D399" VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
