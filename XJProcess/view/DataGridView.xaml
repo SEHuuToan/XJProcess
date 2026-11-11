@@ -73,22 +73,13 @@
                       HorizontalAlignment="Center" 
                       VerticalAlignment="Center"/>
                 </Border>
-                <TextBlock Text="Chưa quét đơn bồn quay" 
+                <TextBlock Text="{DynamicResource dgv_Nodata1}" 
                        FontSize="30" 
                        FontWeight="Bold" 
                        Foreground="#F8FAFC" 
-                       HorizontalAlignment="Center"/>
-                <TextBlock Text="旋转储罐订单尚未扫描" 
-                       FontSize="30" 
-                       FontWeight="Bold" 
-                       Foreground="#F8FAFC" 
-                       HorizontalAlignment="Center" 
+                       HorizontalAlignment="Center"
                        Margin="0,0,0,10"/>
-                <TextBlock Text="Vui lòng quét mã QR trên phiếu để tải quy trình vận hành" 
-                       FontSize="18" 
-                       Foreground="#94A3B8" 
-                       HorizontalAlignment="Center"/>
-                <TextBlock Text="请扫描票上的二维码下载操作流程说明" 
+                <TextBlock Text="{DynamicResource dgv_Nodata2}" 
                        FontSize="18" 
                        Foreground="#94A3B8" 
                        HorizontalAlignment="Center"/>
@@ -163,7 +154,7 @@
 
                 <DataGrid.Columns>
                     <!-- NO -->
-                    <DataGridTextColumn Header="NO" Binding="{Binding StepNo}" Width="60">
+                    <DataGridTextColumn Header="{DynamicResource dgv_no}" Binding="{Binding StepNo}" Width="60">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -175,7 +166,7 @@
                     </DataGridTextColumn>
 
                     <!-- CODE -->
-                    <DataGridTextColumn Header="CODE" Binding="{Binding ShortCode}" Width="85">
+                    <DataGridTextColumn Header="{DynamicResource dgv_code}" Binding="{Binding ShortCode}" Width="85">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -185,7 +176,7 @@
                     </DataGridTextColumn>
 
                     <!-- CHEM -->
-                    <DataGridTextColumn Header="CHEM" Binding="{Binding ChemicalName}" Width="170">
+                    <DataGridTextColumn Header="{DynamicResource dgv_chem}" Binding="{Binding ChemicalName}" Width="170">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="Padding" Value="8,0"/>
@@ -196,7 +187,7 @@
                     </DataGridTextColumn>
 
                     <!-- KG -->
-                    <DataGridTextColumn Header="KG" Binding="{Binding Weight}" Width="60">
+                    <DataGridTextColumn Header="{DynamicResource dgv_kg}" Binding="{Binding Weight}" Width="60">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -218,7 +209,7 @@
                     </DataGridTextColumn>
 
                     <!-- h -->
-                    <DataGridTextColumn Header="h" Binding="{Binding DurationMinutes}" Width="40">
+                    <DataGridTextColumn Header="{DynamicResource dgv_time}" Binding="{Binding DurationMinutes}" Width="40">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -230,7 +221,7 @@
                     </DataGridTextColumn>
 
                     <!-- CHECK -->
-                    <DataGridTextColumn Header="CHECK" Binding="{Binding CheckInfo}" Width="70">
+                    <DataGridTextColumn Header="{DynamicResource dgv_check}" Binding="{Binding CheckInfo}" Width="70">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -258,7 +249,7 @@
                     </DataGridTemplateColumn>-->
 
                     <!-- THAO TÁC -->
-                    <DataGridTemplateColumn Header="THAO TÁC" Width="90">
+                    <DataGridTemplateColumn Header="{DynamicResource dgv_button}" Width="90">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="{Binding ActionButtonText}" 

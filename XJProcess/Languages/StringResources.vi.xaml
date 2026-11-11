@@ -15,10 +15,110 @@
     <s:String x:Key="cfl_Temp">Nhiệt độ: </s:String>
     <s:String x:Key="cfl_Battery">Pin:</s:String>
 
+    <s:String x:Key="dcf_Title">ĐIỀU KHIỂN HỆ THỐNG</s:String>
+    <s:String x:Key="dcf_ProgressTime">Thời gian:</s:String>
+    <s:String x:Key="dcf_RotateMode">Chế độ:</s:String>
+    <s:String x:Key="dcf_RunningTime">Vận hành (phút):</s:String>
+    <s:String x:Key="dcf_RotateTime">Đảo chiều (phút):</s:String>
+    <s:String x:Key="dcf_tgManual">Thủ công</s:String>
+    <s:String x:Key="dcf_tgAuto">Tự động</s:String>
+    <s:String x:Key="dcf_BtnRun">Chạy</s:String>
+    <s:String x:Key="dcf_BtnStop">Dừng</s:String>
+    <s:String x:Key="dcf_BtnRotate">Xoay</s:String>
+
+    <s:String x:Key="dgv_Nodata1">Chưa quét đơn bồn quay</s:String>
+    <s:String x:Key="dgv_Nodata2">Vui lòng quét mã QR trên phiếu để tải quy trình vận hành</s:String>
+    <s:String x:Key="dgv_no">STT</s:String>
+    <s:String x:Key="dgv_code">Mã</s:String>
+    <s:String x:Key="dgv_chem">Hóa chất</s:String>
+    <s:String x:Key="dgv_kg">KG</s:String>
+    <s:String x:Key="dgv_temp">°C</s:String>
+    <s:String x:Key="dgv_time">Phút</s:String>
+    <s:String x:Key="dgv_check">Kiểm tra</s:String>
+    <s:String x:Key="dgv_button">Thao tác</s:String>
+    <s:String x:Key="dgv_buttonStart">Bắt đầu</s:String>
+    <s:String x:Key="dgv_buttonStop">Tạm dừng</s:String>
+    <s:String x:Key="dgv_buttonContinue">Tiếp tục</s:String>
+    <s:String x:Key="dgv_buttonFinish">Hoàn thành</s:String>
+
+    <s:String x:Key="St_SystemConfig">CẤU HÌNH HỆ THỐNG</s:String>
+    <s:String x:Key="St_PasswordConfirmation">XÁC NHẬN MẬT KHẨU</s:String>
+    <s:String x:Key="St_EnterAdminPassword">Nhập mật khẩu quản trị để tiếp tục</s:String>
+    <s:String x:Key="St_SettingPasswordLabel">Mật khẩu cài đặt:</s:String>
+    <s:String x:Key="St_WrongPassword">⚠️ Mật khẩu không đúng!</s:String>
+    <s:String x:Key="St_Cancel">Hủy</s:String>
+    <s:String x:Key="St_Confirm">Xác nhận</s:String>
+    <s:String x:Key="St_DetailConfigTitle">THÔNG SỐ CÀI ĐẶT HỆ THỐNG BỒN QUAY</s:String>
+    <s:String x:Key="St_GroupConnectivity">1. CẤU HÌNH THIẾT BỊ &amp; MẠNG (CONNECTIVITY)</s:String>
+    <s:String x:Key="St_DrumNumber">Mã bồn quay</s:String>
+    <s:String x:Key="St_IpAddress">Địa chỉ IP</s:String>
+    <s:String x:Key="St_WebSocketPort">WebSocket (Port)</s:String>
+    <s:String x:Key="St_UidTempSensor">Mã UID cảm biến nhiệt độ</s:String>
+    <s:String x:Key="St_Slave">SLAVE</s:String>
+    <s:String x:Key="St_GroupMotorDrum">2. THÔNG SỐ VẬN HÀNH BỒN QUAY (MOTOR &amp; DRUM)</s:String>
+    <s:String x:Key="St_ReverseDelay">Thời gian đảo chiều (phút)</s:String>
+    <s:String x:Key="St_ReverseDirection">Đảo chiều</s:String>
+    <s:String x:Key="St_SaveConfig">💾 Lưu cấu hình</s:String>
+
+    <s:String x:Key="Ht_Title">LỊCH SỬ VẬN HÀNH &amp; SỰ KIỆN HỆ THỐNG</s:String>
+    <s:String x:Key="Ht_FromDate">Từ ngày</s:String>
+    <s:String x:Key="Ht_ToDate">Đến ngày</s:String>
+    <s:String x:Key="Ht_DrumId">Mã bồn</s:String>
+    <s:String x:Key="Ht_Employee">Nhân viên thực hiện</s:String>
+    <s:String x:Key="Ht_Status">Trạng Thái</s:String>
+    <s:String x:Key="Ht_Search">Tìm kiếm</s:String>
+    <s:String x:Key="Ht_Close">Đóng</s:String>
+    <s:String x:Key="Ht_ColTimestamp">Thời gian</s:String>
+    <s:String x:Key="Ht_ColDrumId">Mã Bồn</s:String>
+    <s:String x:Key="Ht_ColAction">Sự kiện / Thao tác</s:String>
+    <s:String x:Key="Ht_ColSpeed">Tốc độ (RPM)</s:String>
+    <s:String x:Key="Ht_ColStatus">Trạng thái</s:String>
+    <s:String x:Key="Ht_ColUser">Người thực hiện</s:String>
+
     <s:String x:Key="Str_Ready">Sẵn sàng</s:String>
     <s:String x:Key="Str_Running">Đang vận hành</s:String>
     <s:String x:Key="Str_ErrRead">Lỗi đọc</s:String>
+    <s:String x:Key="Str_Down">Xoay xuống</s:String>
+    <s:String x:Key="Str_Up">Xoay lên</s:String>
+    <s:String x:Key="Str_Nodata">Chưa có dữ liệu...</s:String>
+    <s:String x:Key="Str_SpinWarning1">Thời gian vận hành 1 phút quá ngắn cho Tự động! Vui lòng chuyển sang chế độ Thủ công.</s:String>
+    <s:String x:Key="Str_SpinWarning2">Vui lòng nhập thời gian vận hành hợp lệ (từ 2 phút trở lên)!</s:String>
+    <s:String x:Key="Str_SpinWarning3">Vui lòng nhập 'Thời gian đảo chiều' hợp lệ (từ 1 phút trở lên)!</s:String>
+    <s:String x:Key="Str_SpinWarning4">Thời gian đảo chiều phải nhỏ hơn thời gian vận hành của bồn!</s:String>
+    <s:String x:Key="Str_Load3dModal">Lỗi load mô hình 3D</s:String>
+    <s:String x:Key="Str_PlcConnectError">Lỗi kết nối đến PLC, vui lòng kiểm tra lại thiết bị</s:String>
+    <s:String x:Key="Str_PlcReConnectError">Chưa thể kết nối PLC, vui lòng thử lại thao tác này sau</s:String>
+    <s:String x:Key="Str_StepAction1">Vui lòng nhập 'Thời gian đảo chiều' trong phần cài đặt hoặc trên giao diện rồi bấm Bắt đầu!</s:String>
+    <s:String x:Key="Str_StepAction2">Thời gian đảo chiều phải nhỏ hơn thời gian chạy!</s:String>
+    <s:String x:Key="Str_StepAction3">Mã QR không hợp lệ! Vui lòng quét đúng đơn bồn quay!</s:String>
+    <s:String x:Key="Str_StepAction4">Nếu muốn quét đơn khác vui lòng Hủy đơn hiện tại</s:String>
+    <s:String x:Key="Str_StepAction5">Không tìm thấy dữ liệu hóa chất cho mã đơn: </s:String>
+    <s:String x:Key="Str_RestoreError">Không thể tải lại dữ liệu đơn hàng từ API khi khôi phục!</s:String>
+    <s:String x:Key="Str_Continue1">Phát hiện tiến trình đang chạy dở dang: </s:String>
+    <s:String x:Key="Str_Continue2">Thời gian còn lại: </s:String>
+    <s:String x:Key="Str_Continue3">Bạn có muốn tiếp tục tiến trình hiện tại hay không?</s:String>
+    <s:String x:Key="Str_Min"> phút </s:String>
+    <s:String x:Key="Str_Sec"> giây </s:String>
+    <s:String x:Key="Str_Step">Tiến trình: </s:String>
+    <s:String x:Key="Str_Overtime">đã quá thời gian chạy trong lúc mất kết nối! Hệ thống đã tự động dừng.</s:String>
+    <s:String x:Key="Str_ErrorAutoRecover">Lỗi tự động khôi phục: </s:String>
+    <s:String x:Key="Str_ErrorLanguage">Lỗi đổi ngôn ngữ: </s:String>
+    <s:String x:Key="Str_ErrorUpdate">Lỗi kiểm tra cập nhật: </s:String>
+    <s:String x:Key="Str_ConfirmEndOrder">Bạn có muốn kết thúc đơn này không?</s:String>
+
+    <s:String x:Key="Wd_Error">Lỗi</s:String>
+    <s:String x:Key="Wd_RunWarning">Cảnh báo vận hành</s:String>
+    <s:String x:Key="Wd_PlcError">Lỗi kết nối PLC</s:String>
+    <s:String x:Key="Wd_Notice">Thông báo</s:String>
+    <s:String x:Key="Wd_Warning">Cảnh báo</s:String>
+    <s:String x:Key="Wd_RestoreError">Lỗi khôi phục</s:String>
+    <s:String x:Key="Wd_RestoreSpin">Khôi phục tiến trình bồn quay</s:String>
+    <s:String x:Key="Wd_Safe">An toàn vận hành</s:String>
+    <s:String x:Key="Wd_SystemError">Lỗi hệ thống</s:String>
+    <s:String x:Key="Wd_ConfirmEndOrder">Xác nhận kết thúc đơn</s:String>
     
-
-
+    <s:String x:Key="Msg_Notice">Thông báo</s:String>
+    <s:String x:Key="Msg_Cancel">Hủy</s:String>
+    <s:String x:Key="Msg_Yes">Có</s:String>
+    <s:String x:Key="Msg_No">Không</s:String>
 </ResourceDictionary>

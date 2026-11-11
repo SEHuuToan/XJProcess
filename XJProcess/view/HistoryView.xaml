@@ -29,7 +29,7 @@
             <Grid Grid.Row="0" Margin="0,0,0,15">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <Border Width="8" Height="26" Background="#0284C7" Margin="0,0,10,0"/>
-                    <TextBlock Text="LỊCH SỬ VẬN HÀNH &amp; SỰ KIỆN HỆ THỐNG" Foreground="#0F172A" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="{DynamicResource Ht_Title}" Foreground="#0F172A" FontSize="20" FontWeight="Bold"/>
                 </StackPanel>
             </Grid>
 
@@ -38,37 +38,37 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <!-- Từ ngày -->
                     <StackPanel Margin="0,0,20,0">
-                        <TextBlock Text="Từ ngày" Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBlock Text="{DynamicResource Ht_FromDate}" Style="{StaticResource FieldLabelStyle}"/>
                         <DatePicker x:Name="DpFromDate" Width="320" Height="40"/>
                     </StackPanel>
 
                     <!-- Đến ngày -->
                     <StackPanel Margin="0,0,20,0">
-                        <TextBlock Text="Đến ngày" Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBlock Text="{DynamicResource Ht_ToDate}" Style="{StaticResource FieldLabelStyle}"/>
                         <DatePicker x:Name="DpToDate" Width="320" Height="40"/>
                     </StackPanel>
 
                     <!-- Mã bồn -->
                     <StackPanel Margin="0,0,20,0">
-                        <TextBlock Text="Mã bồn" Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBlock Text="{DynamicResource Ht_DrumId}" Style="{StaticResource FieldLabelStyle}"/>
                         <TextBox x:Name="TxtFilterDrumId" Width="300" Height="40" Style="{StaticResource HmiInputStyle}" Text="7"/>
                     </StackPanel>
 
                     <!-- Mã bồn -->
                     <StackPanel Margin="0,0,20,0">
-                        <TextBlock Text="Nhân viên thực hiện" Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBlock Text="{DynamicResource Ht_Employee}" Style="{StaticResource FieldLabelStyle}"/>
                         <TextBox x:Name="TxtFilterEmp" Width="300" Height="40" Style="{StaticResource HmiInputStyle}" Text="2000000"/>
                     </StackPanel>
 
                     <!-- Mã bồn -->
                     <StackPanel Margin="0,0,20,0">
-                        <TextBlock Text="Trạng Thái" Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBlock Text="{DynamicResource Ht_Status}" Style="{StaticResource FieldLabelStyle}"/>
                         <TextBox x:Name="TxtStatus" Width="300" Height="40" Style="{StaticResource HmiInputStyle}" Text="Hoàn Thành"/>
                     </StackPanel>
 
                     <!-- Nút Tìm kiếm căn chỉnh ngay ngắn bên cạnh -->
                     <StackPanel VerticalAlignment="Bottom">
-                        <Button Content="Tìm kiếm" Width="140" Height="40" 
+                        <Button Content="{DynamicResource Ht_Search}" Width="140" Height="40" 
                                 Background="#0284C7" BorderBrush="#38BDF8" Foreground="#FFFFFF" 
                                 FontSize="16" FontWeight="SemiBold"
                                 Style="{StaticResource OverViewButtonStyle}"/>
@@ -83,12 +83,12 @@
                           ColumnHeaderHeight="40" FontSize="14" FontWeight="Medium"
                           GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#F1F5F9">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Thời gian" Binding="{Binding Timestamp}" Width="180"/>
-                        <DataGridTextColumn Header="Mã Bồn" Binding="{Binding DrumId}" Width="100"/>
-                        <DataGridTextColumn Header="Sự kiện / Thao tác" Binding="{Binding ActionName}" Width="*"/>
-                        <DataGridTextColumn Header="Tốc độ (RPM)" Binding="{Binding Speed}" Width="120"/>
-                        <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status}" Width="150"/>
-                        <DataGridTextColumn Header="Người thực hiện" Binding="{Binding User}" Width="150"/>
+                        <DataGridTextColumn Header="{DynamicResource Ht_ColTimestamp}" Binding="{Binding Timestamp}" Width="180"/>
+                        <DataGridTextColumn Header="{DynamicResource Ht_ColDrumId}" Binding="{Binding DrumId}" Width="100"/>
+                        <DataGridTextColumn Header="{DynamicResource Ht_ColAction}" Binding="{Binding ActionName}" Width="*"/>
+                        <DataGridTextColumn Header="{DynamicResource Ht_ColSpeed}" Binding="{Binding Speed}" Width="120"/>
+                        <DataGridTextColumn Header="{DynamicResource Ht_ColStatus}" Binding="{Binding Status}" Width="150"/>
+                        <DataGridTextColumn Header="{DynamicResource Ht_ColUser}" Binding="{Binding User}" Width="150"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>

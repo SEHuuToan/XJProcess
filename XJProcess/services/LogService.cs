@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Windows;
 using XJProcess.modal;
+using XJProcess.view;
 
 namespace XJProcess.services
 {
@@ -55,7 +56,7 @@ namespace XJProcess.services
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khởi tạo thư mục log: " + ex.Message, "Lỗi hệ thống", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show("Lỗi khởi tạo thư mục log: " + ex.Message, "Lỗi hệ thống", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -95,19 +96,19 @@ namespace XJProcess.services
 
                 if (service == null)
                 {
-                    MessageBox.Show("Lỗi SaveRunningState: MainService đang null!", "Debug", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    CustomMessageBox.Show("Lỗi SaveRunningState: MainService đang null!", "Debug", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
                 if (service.CurrentOrder == null)
                 {
-                    MessageBox.Show("Lỗi SaveRunningState: CurrentOrder đang null! (API tải đơn hàng có thể bị lỗi khi chạy file .exe độc lập)", "Debug", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    CustomMessageBox.Show("Lỗi SaveRunningState: CurrentOrder đang null! (API tải đơn hàng có thể bị lỗi khi chạy file .exe độc lập)", "Debug", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
                 if (string.IsNullOrEmpty(service.CurrentOrder.OrderCode))
                 {
-                    MessageBox.Show("Lỗi SaveRunningState: OrderCode đang trống!", "Debug", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    CustomMessageBox.Show("Lỗi SaveRunningState: OrderCode đang trống!", "Debug", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -135,7 +136,7 @@ namespace XJProcess.services
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi ngoại lệ khi lưu trạng thái phục hồi: " + ex.Message, "Lỗi Log", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show("Lỗi ngoại lệ khi lưu trạng thái phục hồi: " + ex.Message, "Lỗi Log", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -151,7 +152,7 @@ namespace XJProcess.services
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi đọc trạng thái phục hồi: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show("Lỗi đọc trạng thái phục hồi: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return null;
         }
@@ -167,7 +168,7 @@ namespace XJProcess.services
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi xóa file phục hồi: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show("Lỗi xóa file phục hồi: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

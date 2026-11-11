@@ -18,7 +18,9 @@ namespace XJProcess.view
 
         private void BtnStopOrder_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("Bạn có muốn kết thúc đơn này không?", "Xác nhận kết thúc đơn", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            string notice = Application.Current.FindResource("Str_ConfirmEndOrder") as string ?? "Bạn có muốn kết thúc đơn này không?";
+            string confirm = Application.Current.FindResource("Wd_ConfirmEndOrder") as string ?? "Xác nhận kết thúc đơn";
+            MessageBoxResult result = CustomMessageBox.Show(notice, confirm, MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
                 Service?.StopOrder();

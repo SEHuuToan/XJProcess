@@ -21,7 +21,7 @@
             <Grid Grid.Row="0" Margin="0,0,0,15">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <Border Width="8" Height="26" Background="#0284C7" Margin="0,0,10,0"/>
-                    <TextBlock Text="THÔNG SỐ CÀI ĐẶT HỆ THỐNG BỒN QUAY" Foreground="#0F172A" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="{DynamicResource St_DetailConfigTitle}" Foreground="#0F172A" FontSize="20" FontWeight="Bold"/>
                 </StackPanel>
             </Grid>
 
@@ -30,7 +30,7 @@
                     <StackPanel>
 
                         <!-- NHÓM 1: CẤU HÌNH THIẾT BỊ & KẾT NỐI -->
-                        <TextBlock Text="1. CẤU HÌNH THIẾT BỊ &amp; MẠNG (CONNECTIVITY)" Style="{StaticResource SectionHeaderStyle}"/>
+                        <TextBlock Text="{DynamicResource St_GroupConnectivity}" Style="{StaticResource SectionHeaderStyle}"/>
                         <Grid Margin="0,0,0,20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -41,15 +41,15 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="Mã bồn quay" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock Text="{DynamicResource St_DrumNumber}" Style="{StaticResource FieldLabelStyle}"/>
                                 <TextBox x:Name="TxtDrumNumber" Height="40" Style="{StaticResource HmiInputStyle}"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="Địa chỉ IP" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock Text="{DynamicResource St_IpAddress}" Style="{StaticResource FieldLabelStyle}"/>
                                 <TextBox x:Name="TxtIpAddress" Height="40" Style="{StaticResource HmiInputStyle}"/>
                             </StackPanel>
                             <StackPanel Grid.Column="4">
-                                <TextBlock Text="WebSocket (Port)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock Text="{DynamicResource St_WebSocketPort}" Style="{StaticResource FieldLabelStyle}"/>
                                 <TextBox x:Name="TxtWebSocketPort" Height="40" Style="{StaticResource HmiInputStyle}"/>
                             </StackPanel>
                         </Grid>
@@ -64,11 +64,11 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="Mã UID cảm biến nhiệt độ" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock Text="{DynamicResource St_UidTempSensor}" Style="{StaticResource FieldLabelStyle}"/>
                                 <TextBox x:Name="TxtUid" Height="40" Style="{StaticResource HmiInputStyle}"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="SLAVE" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock Text="{DynamicResource St_Slave}" Style="{StaticResource FieldLabelStyle}"/>
                                 <TextBox x:Name="TxtSlave" Height="40" Style="{StaticResource HmiInputStyle}"/>
                             </StackPanel>
                         </Grid>
@@ -76,7 +76,7 @@
                         <Separator Background="#E2E8F0" Margin="0,0,0,15"/>
 
                         <!--NHÓM 2: THÔNG SỐ VẬN HÀNH BỒN QUAY-->
-                        <TextBlock Text="2. THÔNG SỐ VẬN HÀNH BỒN QUAY (MOTOR &amp; DRUM)" Style="{StaticResource SectionHeaderStyle}"/>
+                        <TextBlock Text="{DynamicResource St_GroupMotorDrum}" Style="{StaticResource SectionHeaderStyle}"/>
                         <Grid Margin="0,0,0,20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -87,12 +87,12 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="Thời gian đảo chiều (phút)" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock Text="{DynamicResource St_ReverseDelay}" Style="{StaticResource FieldLabelStyle}"/>
                                 <TextBox x:Name="TxtReverseDelay" Height="40" Style="{StaticResource HmiInputStyle}"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="Đảo chiều" Style="{StaticResource FieldLabelStyle}" Margin="0,0,0,6" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{DynamicResource St_ReverseDirection}" Style="{StaticResource FieldLabelStyle}" Margin="0,0,0,6" HorizontalAlignment="Center"/>
                                 <ToggleButton x:Name="TglIsReverse" 
                                   IsChecked="False" 
                                   Style="{StaticResource ReverseToggleSwitch}" 
@@ -120,9 +120,9 @@
             </Border>
 
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
-                <Button Content="Hủy" Width="120" Height="42" Margin="0,0,10,0" FontSize="14" FontWeight="SemiBold"
+                <Button Content="{DynamicResource St_Cancel}" Width="120" Height="42" Margin="0,0,10,0" FontSize="14" FontWeight="SemiBold"
                         Background="#C62828" Style="{StaticResource OverViewButtonStyle}" Click="BtnClose_Click"/>
-                <Button Content="💾 Lưu cấu hình" Width="180" Height="42" FontSize="14" FontWeight="SemiBold"
+                <Button Content="{DynamicResource St_SaveConfig}" Width="180" Height="42" FontSize="14" FontWeight="SemiBold"
                         Background="#FF4169E1" Style="{StaticResource OverViewButtonStyle}" Click="BtnSave_Click"/>
             </StackPanel>
         </Grid>

@@ -86,7 +86,9 @@ namespace XJProcess.view
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi load mô hình 3D: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                string error = Application.Current.FindResource("Wd_Error") as string ?? "Lỗi";
+                string load3d = Application.Current.FindResource("Str_Load3dModal") as string ?? "Lỗi load mô hình 3D";
+                MessageBox.Show($"{load3d}: {ex.Message}", error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -105,7 +107,9 @@ namespace XJProcess.view
         {
             if (TxtButtonStatus != null)
             {
-                TxtButtonStatus.Text = isForward ? "Xoay Lên" : "Xoay Xuống";
+                string textup = Application.Current.FindResource("Str_Up") as string ?? "Xoay lên";
+                string textdown = Application.Current.FindResource("Str_Down") as string ?? "Xoay xuống";
+                TxtButtonStatus.Text = isForward ? textup : textdown;
             }
         }
 
@@ -223,7 +227,8 @@ namespace XJProcess.view
             var txt = FindName("txtScannedResult") as TextBlock ?? FindName("TxtScannedResult") as TextBlock;
             if (txt != null)
             {
-                txt.Text = string.IsNullOrEmpty(code) ? "Chưa có dữ liệu..." : code;
+                string textNodata = Application.Current.FindResource("Str_Nodata") as string ?? "Chưa có dữ liệu...";
+                txt.Text = string.IsNullOrEmpty(code) ? textNodata : code;
             }
         }
 
@@ -238,22 +243,27 @@ namespace XJProcess.view
             bool isAutoModeUI = TglMode?.IsChecked ?? Service.IsAutoMode;
             if (isAutoModeUI)
             {
+                string warning = Application.Current.FindResource("Wd_RunWarning") as string ?? "Cảnh báo vận hành";
                 if (!int.TryParse(TxtRunTimeInput?.Text, out int runMinutes) || runMinutes < 2)
                 {
+                    string text1 = Application.Current.FindResource("Str_SpinWarning1") as string ?? "Thời gian vận hành 1 phút quá ngắn cho Tự động! Vui lòng chuyển sang chế độ Thủ công.";
+                    string text2 = Application.Current.FindResource("Str_SpinWarning2") as string ?? "Vui lòng nhập thời gian vận hành hợp lệ (từ 2 phút trở lên)!";
                     string msg = (runMinutes == 1)
-                        ? "Thời gian vận hành 1 phút quá ngắn cho Auto! Vui lòng chuyển sang chế độ Thủ công (Manual)."
-                        : "Vui lòng nhập thời gian vận hành hợp lệ (từ 2 phút trở lên)!";
-                    MessageBox.Show(msg, "Cảnh báo vận hành", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        ? text1
+                        : text2;
+                    CustomMessageBox.Show(msg, warning, MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 if (!int.TryParse(TxtReverseTimeInput?.Text, out int revMinutes) || revMinutes < 1)
                 {
-                    MessageBox.Show("Vui lòng nhập 'Thời gian đảo chiều' hợp lệ (từ 1 phút trở lên)!", "Cảnh báo cài đặt", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    string text3 = Application.Current.FindResource("Str_SpinWarning3") as string ?? "Vui lòng nhập 'Thời gian đảo chiều' hợp lệ (từ 1 phút trở lên)!";
+                    CustomMessageBox.Show(text3, warning, MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 if (revMinutes >= runMinutes)
                 {
-                    MessageBox.Show("Thời gian đảo chiều phải nhỏ hơn thời gian vận hành của bồn!", "Cảnh báo cài đặt", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    string text4 = Application.Current.FindResource("Str_SpinWarning4") as string ?? "Thời gian đảo chiều phải nhỏ hơn thời gian vận hành của bồn!";
+                    CustomMessageBox.Show(text4, warning, MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 reverseTime = revMinutes;

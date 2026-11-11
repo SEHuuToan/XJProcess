@@ -13,8 +13,6 @@ namespace XJProcess.view
         public SettingView()
         {
             InitializeComponent();
-
-            // Tự động nạp dữ liệu từ file XML lên các TextBox khi mở form
             LoadDataToUI();
         }
 
@@ -71,7 +69,7 @@ namespace XJProcess.view
                 PlcUtils.TempUID(config.uid);
             }
             OnSettingsSaved?.Invoke();
-            MessageBox.Show("Đã lưu tất cả thông số cấu hình hệ thống thành công!", "Thông báo HMI",
+            CustomMessageBox.Show("Đã lưu tất cả thông số cấu hình hệ thống thành công!", "Thông báo HMI",
                             MessageBoxButton.OK, MessageBoxImage.Information);
             this.Close();
         }

@@ -55,7 +55,7 @@
                 <Grid Grid.Row="0" Margin="0,0,0,15">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <Border Width="6" Height="22" Background="#0284C7" Margin="0,0,10,0"/>
-                        <TextBlock Text="CẤU HÌNH HỆ THỐNG" Foreground="#0F172A" FontSize="18" FontWeight="Bold"/>
+                        <TextBlock Text="{DynamicResource St_SystemConfig}" Foreground="#0F172A" FontSize="18" FontWeight="Bold"/>
                     </StackPanel>
 
                     <Button Content="✕" Width="36" Height="36" HorizontalAlignment="Right"
@@ -71,19 +71,19 @@
 
                     <Border Grid.Row="0" Background="#FFFFFF" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="6" Padding="30" VerticalAlignment="Stretch">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="420">
-                            <TextBlock Text="XÁC NHẬN MẬT KHẨU" 
+                            <TextBlock Text="{DynamicResource St_PasswordConfirmation}" 
                                        Foreground="#0F172A" FontSize="16" FontWeight="Bold" 
                                        HorizontalAlignment="Center" Margin="0,0,0,4"/>
-                            <TextBlock Text="Nhập mật khẩu quản trị để tiếp tục" 
+                            <TextBlock Text="{DynamicResource St_EnterAdminPassword}" 
                                        Foreground="#64748B" FontSize="13" 
                                        HorizontalAlignment="Center" Margin="0,0,0,25"/>
 
-                            <TextBlock Text="Mật khẩu cài đặt:" Foreground="#334155" FontSize="13" FontWeight="Bold" Margin="0,0,0,6"/>
+                            <TextBlock Text="{DynamicResource St_SettingPasswordLabel}" Foreground="#334155" FontSize="13" FontWeight="Bold" Margin="0,0,0,6"/>
                             <PasswordBox x:Name="TxtPassword" Height="44" 
                                          Style="{StaticResource HmiInputStyle}"
                                          KeyDown="TxtPassword_KeyDown"/>
                             <TextBlock x:Name="TxtErrorMessage" 
-                                       Text="⚠️ Mật khẩu không đúng!" 
+                                       Text="{DynamicResource St_WrongPassword}" 
                                        Foreground="#DC2626" 
                                        FontSize="13" 
                                        FontWeight="Bold" 
@@ -95,10 +95,10 @@
                         </StackPanel>
                     </Border>
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
-                        <Button Content="Hủy" Width="100" Height="40" Margin="0,0,10,0" FontSize="14" FontWeight="SemiBold"
+                        <Button Content="{DynamicResource St_Cancel}" Width="100" Height="40" Margin="0,0,10,0" FontSize="14" FontWeight="SemiBold"
                                 Background="#C62828" Foreground="#FFFFFF"
                                 Style="{StaticResource OverViewButtonStyle}" Click="BtnCancel_Click"/>
-                        <Button Content="Xác nhận" Width="120" Height="40"  FontSize="14" FontWeight="SemiBold"
+                        <Button Content="{DynamicResource St_Confirm}" Width="120" Height="40"  FontSize="14" FontWeight="SemiBold"
                                 Background="#FF4169E1" Foreground="#FFFFFF" 
                                 Style="{StaticResource OverViewButtonStyle}" Click="BtnLogin_Click"/>
                     </StackPanel>

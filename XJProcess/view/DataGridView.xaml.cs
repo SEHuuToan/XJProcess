@@ -14,6 +14,11 @@ namespace XJProcess.view
         {
             InitializeComponent();
             LoadAppVersion();
+            MainService.LanguageChanged += RefreshHeaderLanguage;
+
+            this.Unloaded += (s, e) => {
+                MainService.LanguageChanged -= RefreshHeaderLanguage;
+            };
         }
         private void LoadAppVersion()
         {
@@ -37,7 +42,24 @@ namespace XJProcess.view
                 TxtAppVersion.Text = "v1.0.0.0";
             }
         }
-
+        public void RefreshHeaderLanguage()
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(RefreshHeaderLanguage);
+                return;
+            }
+            if (MainDataGrid != null)
+            {
+                var columns = MainDataGrid.Columns.ToList();
+                MainDataGrid.Columns.Clear();
+                foreach (var col in columns)
+                {
+                    MainDataGrid.Columns.Add(col);
+                }
+                MainDataGrid.UpdateLayout();
+            }
+        }
         public void LoadChemicalData(ChemicalData? currentOrder)
         {
             Service.CurrentOrder = currentOrder;

@@ -40,6 +40,8 @@ namespace XJProcess.services
         public ChemicalDetail? CurrentRunningItem { get; set; }
         public ChemicalData? CurrentOrder { get; set; }
         public bool IsManualRunning { get; set; } = true;
+        public static event Action? LanguageChanged;
+        
         public MainService()
         {
             _apiService = new ApiService();
@@ -59,7 +61,9 @@ namespace XJProcess.services
                 }
                 await Application.Current.Dispatcher.InvokeAsync(() =>
                 {
-                    MessageBox.Show("Lỗi kết nối đến PLC, vui lòng kiểm tra lại thiết bị", "Lỗi kết nối PLC", MessageBoxButton.OK, MessageBoxImage.Error);
+                    string PlcConnectError = Application.Current.FindResource("Str_PlcConnectError") as string ?? "Lỗi kết nối đến PLC, vui lòng kiểm tra lại thiết bị";
+                    string PlcError = Application.Current.FindResource("Wd_PlcError") as string ?? "Lỗi kết nối PLC";
+                    CustomMessageBox.Show(PlcConnectError, PlcError, MessageBoxButton.OK, MessageBoxImage.Error);
                 });
             }
         }
@@ -67,8 +71,9 @@ namespace XJProcess.services
         {
             if (!IsPlcConnected)
             {
-                MessageBox.Show("Chưa thể kết nối PLC, vui lòng thử lại thao tác này sau",
-                                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                string reConnect = Application.Current.FindResource("Str_PlcReConnectError") as string ?? "Chưa thể kết nối PLC, vui lòng thử lại thao tác này sau";
+                string notice = Application.Current.FindResource("Wd_Notice") as string ?? "Thông báo";
+                CustomMessageBox.Show(reConnect, notice, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             return true;
@@ -384,15 +389,19 @@ namespace XJProcess.services
             }
             if (revTime < 1)
             {
+                string Str_StepAction1 = Application.Current.FindResource("Str_StepAction1") as string ?? "Vui lòng nhập 'Thời gian đảo chiều' trong phần cài đặt hoặc trên giao diện rồi bấm Bắt đầu!";
+                string notice = Application.Current.FindResource("Wd_Notice") as string ?? "Thông báo";
                 IsRunning = 0;
-                MessageBox.Show($"Vui lòng nhập 'Thời gian đảo chiều' trong phần cài đặt hoặc trên giao diện rồi bấm Bắt đầu!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                CustomMessageBox.Show(Str_StepAction1, notice, MessageBoxButton.OK, MessageBoxImage.Information);
                 InitializeStepStates();
                 return;
             }
             if (revTime >= normalRunMinutes)
             {
+                string notice = Application.Current.FindResource("Str_StepAction2") as string ?? "Thời gian đảo chiều phải nhỏ hơn thời gian chạy!";
+                string warning = Application.Current.FindResource("Wd_Warning") as string ?? "Cảnh báo";
                 IsRunning = 0;
-                MessageBox.Show($"Thời gian đảo chiều phải nhỏ hơn thời gian chạy!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                CustomMessageBox.Show(notice, warning, MessageBoxButton.OK, MessageBoxImage.Warning);
                 InitializeStepStates();
                 return;
             }
@@ -504,7 +513,7 @@ namespace XJProcess.services
                     _headerConfigLeft.TxtTechnician.Text = string.Empty;
                     _headerConfigLeft.TxtOperator.Text = string.Empty;
                     _headerConfigLeft.TxtWeight.Text = string.Empty;
-                    _headerConfigLeft.TxtDrumStatus.Text = "Sẵn sàng";
+                    _headerConfigLeft.TxtDrumStatus.Text = Application.Current.FindResource("Str_Ready") as string ?? "Sẵn sàng";
                 });
             }
         }
@@ -544,7 +553,9 @@ namespace XJProcess.services
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    MessageBox.Show("Mã QR không hợp lệ! Vui lòng quét đúng đơn bồn quay!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    string errorScanQR = Application.Current.FindResource("Str_StepAction3") as string ?? "Mã QR không hợp lệ! Vui lòng quét đúng đơn bồn quay!";
+                    string warning = Application.Current.FindResource("Wd_Warning") as string ?? "Cảnh báo";
+                        CustomMessageBox.Show(errorScanQR, warning, MessageBoxButton.OK, MessageBoxImage.Warning);
                 });
                 return null;
             }
@@ -571,7 +582,9 @@ namespace XJProcess.services
                 {
                     await Application.Current.Dispatcher.InvokeAsync(() =>
                     {
-                        MessageBox.Show("Nếu muốn quét đơn khác vui lòng Hủy đơn hiện tại", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        string errorScanQR = Application.Current.FindResource("Str_StepAction4") as string ?? "Nếu muốn quét đơn khác vui lòng Hủy đơn hiện tại";
+                        string warning = Application.Current.FindResource("Wd_Warning") as string ?? "Cảnh báo";
+                        CustomMessageBox.Show(errorScanQR, warning, MessageBoxButton.OK, MessageBoxImage.Warning);
                     });
                     return null;
                 }
@@ -598,7 +611,9 @@ namespace XJProcess.services
                 }
                 else
                 {
-                    MessageBox.Show($"Không tìm thấy dữ liệu hóa chất cho mã đơn: {billCode}", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    string noDataMessage = Application.Current.FindResource("Str_StepAction5") as string ?? "Không tìm thấy dữ liệu hóa chất cho mã đơn: ";
+                    string notice = Application.Current.FindResource("Wd_Notice") as string ?? "Thông báo";
+                    CustomMessageBox.Show($"{noDataMessage}{billCode}", notice, MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             });
             return chemicalData;
@@ -616,7 +631,9 @@ namespace XJProcess.services
                 }
                 if (chemicalData == null || chemicalData.List == null || chemicalData.List.Count == 0)
                 {
-                    MessageBox.Show($"Không thể tải lại dữ liệu đơn hàng từ API khi khôi phục!", "Lỗi khôi phục", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    string noDataMessage = Application.Current.FindResource("Str_RestoreError") as string ?? "Không thể tải lại dữ liệu đơn hàng từ API khi khôi phục!";
+                    string notice = Application.Current.FindResource("Wd_RestoreError") as string ?? "Lỗi khôi phục";
+                    CustomMessageBox.Show(noDataMessage, notice, MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 CurrentOrder = chemicalData;
@@ -678,11 +695,17 @@ namespace XJProcess.services
                             }
                             else
                             {
-                                var result = MessageBox.Show(
-                                    $"Phát hiện step đang chạy dở dang: [Step {runningStep.Sn}]\n" +
-                                    $"Thời gian còn lại: {Timer / 60} phút {Timer % 60} giây.\n\n" +
-                                    $"Bạn có muốn tiếp tục tiến trình hiện tại hay không?\n",
-                                    "Khôi phục tiến trình bồn quay",
+                                string Str_Continue1 = Application.Current.FindResource("Str_Continue1") as string ?? "Phát hiện tiến trình đang chạy dở dang: ";
+                                string Str_Continue2 = Application.Current.FindResource("Str_Continue2") as string ?? "Thời gian còn lại: ";
+                                string Str_Continue3 = Application.Current.FindResource("Str_Continue3") as string ?? "Bạn có muốn tiếp tục tiến trình hiện tại hay không?";
+                                string Str_Min = Application.Current.FindResource("Str_Min") as string ?? "phút";
+                                string Str_Sec = Application.Current.FindResource("Str_Sec") as string ?? "giây";
+                                string noticeRetore = Application.Current.FindResource("Wd_RestoreSpin") as string ?? "Khôi phục tiến trình bồn quay";
+                                var result = CustomMessageBox.Show(
+                                    $"{Str_Continue1} [{runningStep.Sn}]\n" +
+                                    $"{Str_Continue2} {Timer / 60} {Str_Min} {Timer % 60} {Str_Sec}.\n\n" +
+                                    $"{Str_Continue3}\n",
+                                    noticeRetore,
                                     MessageBoxButton.YesNo,
                                     MessageBoxImage.Question);
                                 if (result == MessageBoxResult.Yes)
@@ -707,8 +730,11 @@ namespace XJProcess.services
                         {
                             if (isPlcRunning)
                             {
+                                string step = Application.Current.FindResource("Str_Step") as string ?? "Tiến trình: ";
+                                string overtime = Application.Current.FindResource("Str_Overtime") as string ?? "đã quá thời gian chạy trong lúc mất kết nối! Hệ thống đã tự động dừng.";
+                                string noticeSafe = Application.Current.FindResource("Wd_Safe") as string ?? "An toàn vận hành";
                                 PlcUtils.Stop();
-                                MessageBox.Show($"Cảnh báo: Step {runningStep.Sn} đã quá thời gian chạy trong lúc mất kết nối! Hệ thống đã tự động dừng.",  "An toàn vận hành", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                CustomMessageBox.Show($"{step} {runningStep.Sn} {overtime}", noticeSafe, MessageBoxButton.OK, MessageBoxImage.Warning);
                             }
                             runningStep.Status = "Hoàn tất";
                             runningStep.IsRunning = 3;
@@ -730,7 +756,9 @@ namespace XJProcess.services
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tự động khôi phục: " + ex.Message, "Lỗi hệ thống", MessageBoxButton.OK, MessageBoxImage.Error);
+                string overtime = Application.Current.FindResource("Str_ErrorAutoRecover") as string ?? "Lỗi tự động khôi phục: ";
+                string noticeSafe = Application.Current.FindResource("Wd_Safe") as string ?? "An toàn vận hành";
+                CustomMessageBox.Show(overtime + ex.Message, noticeSafe, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         public void RefreshSettings()
@@ -795,10 +823,12 @@ namespace XJProcess.services
                 {
                     mergedDictionaries.Add(newDict);
                 }
+                LanguageChanged?.Invoke();
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show($"Lỗi đổi ngôn ngữ: {ex.Message}");
+                string errorLanguage = Application.Current.FindResource("Str_ErrorLanguage") as string ?? "Lỗi đổi ngôn ngữ: ";
+                CustomMessageBox.Show($"{errorLanguage} {ex.Message}");
             }
         }
         public static class AutoUpdater
@@ -823,7 +853,8 @@ namespace XJProcess.services
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Lỗi check update: " + ex.Message);
+                    string errorUpdate = Application.Current.FindResource("Str_ErrorUpdate") as string ?? "Lỗi kiểm tra cập nhật: ";
+                    CustomMessageBox.Show($"{errorUpdate} {ex.Message}");
                 }
 
                 return false;

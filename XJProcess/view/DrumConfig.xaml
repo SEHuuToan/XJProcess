@@ -82,8 +82,8 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <StackPanel x:Name="PanelCountdown" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,4" Visibility="Hidden">
-                        <TextBlock Text="Thời gian: " FontSize="12" Foreground="#CBD5E1" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="TxtCountdownTime" Text="00:00" FontSize="14" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource dcf_ProgressTime}" FontSize="12" Foreground="#CBD5E1" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TxtCountdownTime" Text="00:00" Margin="4,0,0,0" FontSize="14" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
                     </StackPanel>
 
                     <ProgressBar x:Name="ProgressArc" 
@@ -116,7 +116,7 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" 
-               Text="ĐIỀU KHIỂN HỆ THỐNG" 
+               Text="{DynamicResource dcf_Title}" 
                FontSize="13" 
                FontWeight="Bold" 
                Foreground="#94A3B8" 
@@ -136,7 +136,7 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                            <TextBlock Text="Chế độ: " FontSize="11" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="{DynamicResource dcf_RotateMode}" FontSize="11" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="0,0,10,0"/>
                             <Border Background="#00C853" CornerRadius="6" Padding="8,4" VerticalAlignment="Center">
                                 <TextBlock x:Name="TxtButtonStatus" Text="" FontSize="11" FontWeight="SemiBold" Foreground="#FFFFFF"/>
                             </Border>
@@ -162,7 +162,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="Vận hành (phút):" FontSize="12" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="0,0,0,4"/>
+                            <TextBlock Grid.Row="0" Text="{DynamicResource dcf_RunningTime}" FontSize="12" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="0,0,0,4"/>
                             <TextBox x:Name="TxtRunTimeInput" Grid.Row="1" Height="25" Background="#FFFFFF" Foreground="#000000" BorderBrush="#33FFFFFF" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" FontWeight="Bold"
                              InputScope="Number"
                              PreviewTextInput="NumberOnly_PreviewTextInput"
@@ -174,7 +174,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="Đảo chiều (phút):" FontSize="12" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="0,0,0,4"/>
+                            <TextBlock Grid.Row="0" Text="{DynamicResource dcf_RotateTime}" FontSize="12" Foreground="#FFFFFF" VerticalAlignment="Center" Margin="0,0,0,4"/>
                             <TextBox x:Name="TxtReverseTimeInput" Grid.Row="1" Height="25" Background="#FFFFFF" Foreground="#000000" BorderBrush="#33FFFFFF" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" FontWeight="Bold"
                              InputScope="Number"
                              PreviewTextInput="NumberOnly_PreviewTextInput"
@@ -195,7 +195,7 @@
                     Click="BtnStart_Click">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="▶" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,2"/>
-                            <TextBlock Text="CHẠY" FontSize="11" FontWeight="Bold" TextAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource dcf_BtnRun}" FontSize="11" FontWeight="Bold" TextAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
@@ -209,7 +209,7 @@
                     Click="BtnStop_Click">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="⏹" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,2"/>
-                            <TextBlock Text="DỪNG" FontSize="11" FontWeight="Bold" TextAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource dcf_BtnStop}" FontSize="11" FontWeight="Bold" TextAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
@@ -223,7 +223,7 @@
                     Click="BtnRotateUp_Click">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="🔼" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,2"/>
-                            <TextBlock Text="XOAY" FontSize="11" FontWeight="Bold" TextAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource dcf_BtnRotate}" FontSize="11" FontWeight="Bold" TextAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
@@ -237,7 +237,7 @@
                     Click="BtnRotateDown_Click">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="🔽" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,2"/>
-                            <TextBlock Text="XOAY" FontSize="11" FontWeight="Bold" TextAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource dcf_BtnRotate}" FontSize="11" FontWeight="Bold" TextAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </UniformGrid>

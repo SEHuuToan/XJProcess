@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
+using System.Windows;
 using System.Windows.Media;
 
 namespace XJProcess.modal
@@ -230,10 +231,14 @@ namespace XJProcess.modal
         {
             get
             {
-                if (IsRunning == 1 || IsRunning == 4) return "Tạm dừng";
-                if (IsRunning == 2) return "Tiếp tục";
-                if (IsRunning == 3 || Status == "Đã hoàn thành") return "Hoàn thành";
-                return "Bắt đầu";
+                string startText = Application.Current.FindResource("dgv_buttonStart") as string ?? "Bắt đầu";
+                string pauseText = Application.Current.FindResource("dgv_buttonStop") as string ?? "Tạm dừng";
+                string resumeText = Application.Current.FindResource("dgv_buttonContinue") as string ?? "Tiếp tục";
+                string completeText = Application.Current.FindResource("dgv_buttonFinish") as string ?? "Hoàn thành";
+                if (IsRunning == 1 || IsRunning == 4) return pauseText;
+                if (IsRunning == 2) return resumeText;
+                if (IsRunning == 3 || Status == "Đã hoàn thành") return completeText;
+                return startText;
             }
         }
 
